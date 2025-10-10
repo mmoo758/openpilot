@@ -48,6 +48,7 @@ private:
   ParamControl *torqueLateralControlToggle;
   PushButtonSP *torqueLateralControlSettingsButton;
   TorqueLateralControlSettings *torqueLateralControlWidget = nullptr;
+  ParamControl *overridePauseLateralToggle = nullptr;
 
   const QString MADS_BASE_DESC = tr("Enables independent engagements of Automatic Lane Centering (ALC) and Adaptive Cruise Control (ACC).");
 
