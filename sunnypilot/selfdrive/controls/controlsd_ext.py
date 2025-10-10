@@ -11,6 +11,7 @@ from opendbc.car import structs
 from openpilot.common.params import Params
 from openpilot.common.swaglog import cloudlog
 from openpilot.sunnypilot.selfdrive.controls.lib.blinker_pause_lateral import BlinkerPauseLateral
+from openpilot.sunnypilot.selfdrive.controls.lib.override_pause_lateral import OverridePauseLateral
 
 
 class ControlsExt:
@@ -18,6 +19,7 @@ class ControlsExt:
     self.CP = CP
     self.params = params
     self.blinker_pause_lateral = BlinkerPauseLateral()
+    self.override_pause_lateral = OverridePauseLateral()
     self.get_params_sp()
 
     cloudlog.info("controlsd_ext is waiting for CarParamsSP")
@@ -29,9 +31,10 @@ class ControlsExt:
 
   def get_params_sp(self) -> None:
     self.blinker_pause_lateral.get_params()
+    self.override_pause_lateral.get_params()
 
   def get_lat_active(self, sm: messaging.SubMaster) -> bool:
-    if self.blinker_pause_lateral.update(sm['carState']):
+    if self.blinker_pause_lateral.update(sm['carState']) or self.override_pause_lateral.update(sm['carState']):
       return False
 
     ss_sp = sm['selfdriveStateSP']
