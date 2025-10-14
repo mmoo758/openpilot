@@ -2827,7 +2827,7 @@ Data</source>
     <message>
     <source>Note: This chime is only designed as a notification. It is the driver&apos;s responsibility to observe their environment and make decisions accordingly.</source>
     <translation>注意：此提示音仅作为通知用途。驾驶员有责任观察周围环境并做出相应决策。</translation>
-</message>
+    </message>
     <message>
         <source>Lead Departure Alert (Beta)</source>
         <translation>前车起步提示 (Beta)</translation>
@@ -2877,6 +2877,14 @@ Bottom</source>
     <message>
         <source>Display real-time parameters and metrics from various sources.</source>
         <translation>在屏幕底部及(或)右侧显示实时参数指标。</translation>
+    </message>
+    <message>
+        <source>Display useful metrics below the chevron that tracks the lead car (only applicable to cars with openpilot longitudinal control).</source>
+        <translation>在跟踪前车的三角标识下方显示相关指标（仅适用于开启了openpilot纵向控制功能时）。</translation>
+    </message>
+    <message>
+        <source>This feature requires openpilot longitudinal control to be available.</source>
+        <translation>此功能需要车辆具备并开启openpilot纵向控制。</translation>
     </message>
 </context>
 <context>
