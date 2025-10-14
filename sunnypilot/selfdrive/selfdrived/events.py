@@ -40,7 +40,7 @@ def speed_limit_pre_active_alert(CP: car.CarParams, CS: car.CarState, sm: messag
     pcm_long_required_max = cst_low if speed_limit_final_last_conv < CONFIRM_SPEED_THRESHOLD[metric] else cst_high
     pcm_long_required_max_set_speed_conv = round(pcm_long_required_max * speed_conv)
     speed_unit = "km/h" if metric else "mph"
-    alert_2_str = f"Manually change set speed to {pcm_long_required_max_set_speed_conv} {speed_unit} to activate"
+    alert_2_str = f"手动将设定速度更改为 {pcm_long_required_max_set_speed_conv} {speed_unit} 以激活"
   else:
     # Non PCM long
     v_cruise_cluster = CS.vCruiseCluster * CV.KPH_TO_MS
@@ -55,7 +55,7 @@ def speed_limit_pre_active_alert(CP: car.CarParams, CS: car.CarState, sm: messag
     alert_2_str = f"Operate the {arrow_str} cruise control button to activate"
 
   return Alert(
-    "Speed Limit Assist: Activation Required",
+    "限速辅助：需要激活",
     alert_2_str,
     AlertStatus.normal, AlertSize.mid,
     Priority.LOW, VisualAlert.none, AudibleAlert.none, .1)
