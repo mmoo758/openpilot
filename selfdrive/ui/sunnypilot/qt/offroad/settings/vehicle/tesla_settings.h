@@ -22,5 +22,7 @@ public:
   void updateSettings() override;
 
 private:
+  ParamControlSP *lkasSteeringToggle = nullptr;
   ParamControlSP *coopSteeringToggle = nullptr;
+  ParamControlSP *lowSpeedSteerPauseToggle = nullptr;
 };

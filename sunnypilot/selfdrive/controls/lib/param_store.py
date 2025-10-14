@@ -21,7 +21,9 @@ class ParamStore:
 
     if CP.brand == "tesla":
       brand_params.extend([
+        "TeslaLkasSteering",
         "TeslaCoopSteering",
+        "TeslaLowSpeedSteerPause",
       ])
 
     self.keys = universal_params + brand_params
