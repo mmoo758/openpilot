@@ -2777,10 +2777,6 @@ Data</source>
         <translation>前车数据显示</translation>
     </message>
     <message>
-        <source>Display useful metrics below the chevron that tracks the lead car (only applicable to cars with openpilot longitudinal control).</source>
-        <translation>在跟踪前车的箭头下方显示有用指标（仅适用于具有openpilot纵向控制的车辆）。</translation>
-    </message>
-    <message>
         <source>Enable Tesla Rainbow Mode</source>
         <translation>启用特斯拉彩虹大道模式</translation>
     </message>
