@@ -1,3 +1,12 @@
+Version 0.10.1 (2025-10-14)
+========================
+* 根据dzid26的分支3fm-vtb-lkas-disconnect-rebased修改C3版本
+* 同步master更新
+* 相关菜单及提示汉化
+* 特斯拉车速文件修改0.08至0.0805
+
+
+
 Version 0.10.1 (2025-09-08)
 ========================
 * Record driving feedback using LKAS button
