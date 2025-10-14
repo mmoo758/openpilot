@@ -644,7 +644,7 @@ void HudRendererSP::drawSetSpeedSP(QPainter &p, const QRect &surface_rect) {
     icbm_active_counter = 0;
   }
   int max_str_size = (icbm_active_counter != 0) ? 60 : 40;
-  int max_str_y = (icbm_active_counter != 0) ? 15 : 27;
+  int max_str_y = (icbm_active_counter != 0) ? 15 : 20;
   QString max_str = (icbm_active_counter != 0) ? QString::number(std::nearbyint(speedCluster)) : tr("MAX");
 
   p.setFont(InterFont(max_str_size, QFont::DemiBold));
