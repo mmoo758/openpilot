@@ -33,7 +33,7 @@ class ParamStore:
 
   def update(self, params: Params) -> None:
     self.frame += 1
-    if self.frame % 300 != 0:
+    if self.frame % 30 != 0:
       return
 
     for key in self.keys:
