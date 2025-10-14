@@ -268,6 +268,7 @@ EVENTS: dict[int, dict[str, Alert | AlertCallbackType]] = {
 
   EventName.invalidLkasSetting: {
     ET.PERMANENT: invalid_lkas_setting_alert,
+    ET.SOFT_DISABLE: invalid_lkas_setting_alert,
     ET.NO_ENTRY: NoEntryAlert("车道保持辅助系统设置无效"),
   },
 
