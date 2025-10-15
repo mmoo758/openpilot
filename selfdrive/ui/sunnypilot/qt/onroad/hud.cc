@@ -671,7 +671,7 @@ void HudRendererSP::drawE2eAlert(QPainter &p, const QRect &surface_rect, const Q
   if (not alert_alt_text.isEmpty()) frameColor = QColor(255, 255, 255, 75);
   else frameColor = pulseElement(e2eAlertFrame) ? QColor(255, 255, 255, 75) : QColor(0, 255, 0, 75);
   p.setPen(QPen(frameColor, 15));
-  p.setBrush(QColor(0, 0, 0, 190));
+  p.setBrush(QColor(0, 0, 0, 128));
   p.drawEllipse(center, size, size);
 
   // Alert Text
