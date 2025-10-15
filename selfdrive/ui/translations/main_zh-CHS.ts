@@ -1072,7 +1072,7 @@ DEPARTING</source>
     </message>
     <message>
         <source>Device will automatically shutdown after set time once the engine is turned off.&lt;br/&gt;(30h is the default)</source>
-        <translation>设备离线后会在设定时间后自动关机。&lt;br/&gt;（默认 30 小时）</translation>
+        <translation>设备离线后会在设定时间后自动关机。&lt;br/&gt;(默认30小时)</translation>
     </message>
     <message>
         <source>Always On</source>
@@ -1088,7 +1088,7 @@ DEPARTING</source>
     </message>
     <message>
         <source> (default)</source>
-        <translation> （默认）</translation>
+        <translation> (默认)</translation>
     </message>
 </context>
 <context>
@@ -2168,23 +2168,23 @@ Warning: You are on a metered connection!</source>
     </message>
     <message>
         <source>⦿ Car Only: Use Speed Limit data only from Car</source>
-        <translation>⦿ Car Only(仅车辆)：仅使用车辆提供的限速数据</translation>
+        <translation>⦿ 仅车辆(Car Only)：仅使用车辆提供的限速数据</translation>
     </message>
     <message>
         <source>⦿ Map Only: Use Speed Limit data only from OpenStreetMaps</source>
-        <translation>⦿ Map Only(仅地图)：仅使用OpenStreetMaps提供的限速数据</translation>
+        <translation>⦿ 仅地图(Map Only)：仅使用OpenStreetMaps提供的限速数据</translation>
     </message>
     <message>
         <source>⦿ Car First: Use Speed Limit data from Car if available, else use from OpenStreetMaps</source>
-        <translation>⦿ Car First(车辆优先)：优先使用车辆限速数据，不可用时采用OpenStreetMaps数据</translation>
+        <translation>⦿ 车辆优先(Car First)：优先使用车辆限速数据，不可用时采用OpenStreetMaps数据</translation>
     </message>
     <message>
         <source>⦿ Map First: Use Speed Limit data from OpenStreetMaps if available, else use from Car</source>
-        <translation>⦿ Map First(地图优先)：优先使用OpenStreetMaps限速数据，不可用时采用车辆数据</translation>
+        <translation>⦿ 地图优先(Map First)：优先使用OpenStreetMaps限速数据，不可用时采用车辆数据</translation>
     </message>
     <message>
         <source>⦿ Combined: Use combined Speed Limit data from Car &amp; OpenStreetMaps</source>
-        <translation>⦿ Combined(融合数据)：综合使用车辆与OpenStreetMaps的限速数据</translation>
+        <translation>⦿ 融合数据(Combined)：综合使用车辆与OpenStreetMaps的限速数据</translation>
     </message>
     <message>
         <source>Car
@@ -2237,31 +2237,31 @@ Data</source>
     </message>
     <message>
         <source>⦿ None: No Offset</source>
-        <translation>⦿ None(无)：不设置偏移量</translation>
+        <translation>⦿ 无(None)：不设置偏移量</translation>
     </message>
     <message>
         <source>⦿ Fixed: Adds a fixed offset [Speed Limit + Offset]</source>
-        <translation>⦿ Fixed(固定值)：添加固定偏移量 [限速值 + 偏移量]</translation>
+        <translation>⦿ 固定值(Fixed)：添加固定偏移量 [限速值 + 偏移量]</translation>
     </message>
     <message>
         <source>⦿ Percent: Adds a percent offset [Speed Limit + (Offset % Speed Limit)]</source>
-        <translation>⦿ Percent(百分比)：添加百分比偏移量 [限速值 + (偏移量 % × 限速值)]</translation>
+        <translation>⦿ 百分比(Percent)：添加百分比偏移量 [限速值 + (限速值 × 偏移量 %)]</translation>
     </message>
     <message>
         <source>⦿ Off: Disables the Speed Limit functions.</source>
-        <translation>⦿ Off(关闭)：停用限速功能。</translation>
+        <translation>⦿ 关闭(Off)：停用限速功能。</translation>
     </message>
     <message>
         <source>⦿ Information: Displays the current road&apos;s speed limit.</source>
-        <translation>⦿ Information(信息提示)：显示当前道路限速。</translation>
+        <translation>⦿ 信息提示(Information)：显示当前道路限速。</translation>
     </message>
     <message>
         <source>⦿ Warning: Provides a warning when exceeding the current road&apos;s speed limit.</source>
-        <translation>⦿ Warning(超速警告)：超过当前道路限速时发出警告。</translation>
+        <translation>⦿ 超速警告(Warning)：超过当前道路限速时发出警告。</translation>
     </message>
     <message>
         <source>⦿ Assist: Adjusts the vehicle&apos;s cruise speed based on the current road&apos;s speed limit when operating the +/- buttons.</source>
-        <translation>⦿ Assist(辅助调节)：操作+/-按钮时，根据当前道路限速自动调整巡航车速。</translation>
+        <translation>⦿ 辅助调节(Assist)：操作+/-按钮时，根据当前道路限速自动调整巡航车速。</translation>
     </message>
     <message>
         <source>None</source>
@@ -2269,7 +2269,7 @@ Data</source>
     </message>
     <message>
         <source>Fixed</source>
-        <translation>固定</translation>
+        <translation>固定值</translation>
     </message>
     <message>
         <source>Percent</source>
@@ -2281,15 +2281,15 @@ Data</source>
     </message>
     <message>
         <source>Information</source>
-        <translation>信息</translation>
+        <translation>信息提示</translation>
     </message>
     <message>
         <source>Warning</source>
-        <translation>警告</translation>
+        <translation>超速警告</translation>
     </message>
     <message>
         <source>Assist</source>
-        <translation>辅助</translation>
+        <translation>辅助调节</translation>
     </message>
 </context>
 <context>
