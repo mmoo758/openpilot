@@ -1822,59 +1822,6 @@ Warning: You are on a metered connection!</source>
         <source>sunnypilot</source>
         <translation>sunnypilot</translation>
     </message>
-    <message>
-        <source>None</source>
-        <translation>无</translation>
-    </message>
-    <message>
-        <source>Fixed</source>
-        <translation>固定</translation>
-    </message>
-    <message>
-        <source>Percent</source>
-        <translation>百分比</translation>
-    </message>
-    <message>
-        <source>Car
-Only</source>
-        <translation>仅车辆</translation>
-    </message>
-    <message>
-        <source>Map
-Only</source>
-        <translation>仅地图</translation>
-    </message>
-    <message>
-        <source>Car
-First</source>
-        <translation>车辆优先</translation>
-    </message>
-    <message>
-        <source>Map
-First</source>
-        <translation>地图优先</translation>
-    </message>
-    <message>
-        <source>Combined
-Data</source>
-        <translation>组合数据</translation>
-    </message>
-    <message>
-        <source>Off</source>
-        <translation>关闭</translation>
-    </message>
-    <message>
-        <source>Information</source>
-        <translation>信息</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation>警告</translation>
-    </message>
-    <message>
-        <source>Assist</source>
-        <translation>辅助</translation>
-    </message>
 </context>
 <context>
     <name>SettingsWindow</name>
@@ -2239,6 +2186,36 @@ Data</source>
         <source>⦿ Combined: Use combined Speed Limit data from Car &amp; OpenStreetMaps</source>
         <translation>⦿ Combined(融合数据)：综合使用车辆与OpenStreetMaps的限速数据</translation>
     </message>
+    <message>
+        <source>Car
+Only</source>
+        <translation>仅
+车辆</translation>
+    </message>
+    <message>
+        <source>Map
+Only</source>
+        <translation>仅
+地图</translation>
+    </message>
+    <message>
+        <source>Car
+First</source>
+        <translation>车辆
+优先</translation>
+    </message>
+    <message>
+        <source>Map
+First</source>
+        <translation>地图
+优先</translation>
+    </message>
+    <message>
+        <source>Combined
+Data</source>
+        <translation>融合
+数据</translation>
+    </message>
 </context>
 <context>
     <name>SpeedLimitSettings</name>
@@ -2285,6 +2262,34 @@ Data</source>
     <message>
         <source>⦿ Assist: Adjusts the vehicle&apos;s cruise speed based on the current road&apos;s speed limit when operating the +/- buttons.</source>
         <translation>⦿ Assist(辅助调节)：操作+/-按钮时，根据当前道路限速自动调整巡航车速。</translation>
+    </message>
+    <message>
+        <source>None</source>
+        <translation>无</translation>
+    </message>
+    <message>
+        <source>Fixed</source>
+        <translation>固定</translation>
+    </message>
+    <message>
+        <source>Percent</source>
+        <translation>百分比</translation>
+    </message>
+    <message>
+        <source>Off</source>
+        <translation>关闭</translation>
+    </message>
+    <message>
+        <source>Information</source>
+        <translation>信息</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation>警告</translation>
+    </message>
+    <message>
+        <source>Assist</source>
+        <translation>辅助</translation>
     </message>
 </context>
 <context>
