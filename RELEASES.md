@@ -1,3 +1,12 @@
+Version 0.10.1 (2025-10-16)
+========================
+* 此版本为AmyJeanes的coop-steering修改C3版本
+* 同步master的更新
+
+
+
+
+
 Version 0.10.1 (2025-09-08)
 ========================
 * Record driving feedback using LKAS button
