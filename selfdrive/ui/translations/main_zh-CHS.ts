@@ -992,6 +992,14 @@ DEPARTING</source>
         <source>Speed Limit</source>
         <translation>速度限制设置</translation>
     </message>
+    <message>
+        <source>Dynamic Experimental Control (DEC)</source>
+        <translation>启用动态实验控制 (DEC)</translation>
+    </message>
+    <message>
+        <source>Enable toggle to allow the model to determine when to use sunnypilot ACC or sunnypilot End to End Longitudinal.</source>
+        <translation>启用开关，让模型决定何时使用sunnypilot ACC或sunnypilot端到端纵向控制。</translation>
+    </message>
 </context>
 <context>
     <name>MadsSettings</name>
@@ -2636,14 +2644,6 @@ Data</source>
     <message>
         <source>Use the sunnypilot system for adaptive cruise control and lane keep driver assistance. Your attention is required at all times to use this feature.</source>
         <translation>使用sunnypilot进行自适应巡航和车道保持辅助。使用此功能时您必须时刻保持注意力。</translation>
-    </message>
-    <message>
-        <source>Enable Dynamic Experimental Control</source>
-        <translation>启用动态实验控制</translation>
-    </message>
-    <message>
-        <source>Enable toggle to allow the model to determine when to use sunnypilot ACC or sunnypilot End to End Longitudinal.</source>
-        <translation>启用开关，让模型决定何时使用sunnypilot ACC或sunnypilot端到端纵向控制。</translation>
     </message>
     <message>
         <source>When enabled, pressing the accelerator pedal will disengage sunnypilot.</source>
