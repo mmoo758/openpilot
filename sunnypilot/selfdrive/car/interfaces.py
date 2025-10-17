@@ -86,9 +86,7 @@ def _cleanup_unsupported_params(CP: structs.CarParams, CP_SP: structs.CarParamsS
     params.remove("CustomAccIncrementsEnabled")
     params.remove("SmartCruiseControlVision")
     params.remove("SmartCruiseControlMap")
-
-    if params.get("SpeedLimitMode", return_default=True) == SpeedLimitMode.assist:
-      params.put("SpeedLimitMode", int(SpeedLimitMode.warning))
+    params.put("SpeedLimitMode", int(SpeedLimitMode.warning))
 
 
 def setup_interfaces(CI: CarInterfaceBase, params: Params = None) -> None:
