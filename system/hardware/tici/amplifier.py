@@ -124,7 +124,7 @@ class Amplifier:
 
   def set_configs(self, configs: list[AmpConfig]) -> bool:
     # retry in case panda is using the amp
-    tries = 1
+    tries = 15
     backoff = 0.
     for i in range(tries):
       try:
