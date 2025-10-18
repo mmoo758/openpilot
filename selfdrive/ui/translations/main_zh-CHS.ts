@@ -1752,28 +1752,12 @@ Warning: You are on a metered connection!</source>
 <context>
     <name>TeslaSettings</name>
     <message>
-        <source>LKAS Steering Control</source>
-        <translation>LKAS 转向控制<</translation>
+        <source>Cooperative Steering</source>
+        <translation>合作转向（测试功能）</translation>
     </message>
     <message>
-        <source>Enables LKAS steering control interface. Provides OEM-like torque blending for speeds above %1 %2.</source>
-        <translation>启用该选项后，车速在高于 %1 %2 时提供类似原厂的扭矩协调控制。</translation>
-    </message>
-    <message>
-        <source>Extended Cooperative Steering</source>
-        <translation>协作转向-扩展</translation>
-    </message>
-    <message>
-        <source>Converts light driver input to steering angle at all speeds. It will blend with LKAS torque blending if enabled.</source>
-        <translation>在所有车速下将轻微的驾驶员转向力转换为车辆的转向角度。如果启用，将与LKAS扭矩协调控制共同作用。</translation>
-    </message>
-    <message>
-        <source>Low Speed Steering Pause - alpha</source>
-        <translation>低速转向暂停(测试)</translation>
-    </message>
-    <message>
-        <source>Lateral control will be paused at low speeds depending on the driver's torque and steering angle and will resume when the steering stops rotating</source>
-        <translation>横向控制将在低速时根据驾驶员的控制而暂停，并在方向盘停止转动时恢复</translation>
+        <source>Allows the driver to provide limited steering input while openpilot is engaged. Only works above %1 %2.</source>
+        <translation>允许驾驶员在启用 openpilot 时提供有限的转向控制。仅在车速超过 %1 %2 时有效。</translation>
     </message>
 </context>
 <context>
