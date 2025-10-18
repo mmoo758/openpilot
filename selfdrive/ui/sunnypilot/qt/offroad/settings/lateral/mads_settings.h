@@ -17,7 +17,7 @@ inline bool madsLimitedSettings(const cereal::CarParams::Reader &CP, const cerea
     return true;
   }
   if (CP.getBrand() == "tesla") {
-    return !(CP_SP.getFlags() & 1);  // 1 == TeslaFlagsSP.HAS_VEHICLE_BUS
+    return false; // !(CP_SP.getFlags() & 1);  // 1 == TeslaFlagsSP.HAS_VEHICLE_BUS
   }
 
   return false;

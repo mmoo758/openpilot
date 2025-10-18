@@ -10,31 +10,62 @@
 #include "common/util.h"
 
 TeslaSettings::TeslaSettings(QWidget *parent) : BrandSettingsInterface(parent) {
-  constexpr int coopSteeringMinKmh = 23; // minimum speed for cooperative steering (enforced by Tesla firmware)
+  // Cooperative steering - use LKAS mode
+  constexpr int lkasMinSpeedKmh = 24; // minimum speed for LKAS (enforced by Tesla firmware)
   Params params;
   bool is_metric = params.getBool("IsMetric");
   QString unit = is_metric ? "km/h" : "mph";
-  int display_value;
+  int display_speed;
   if (is_metric) {
-    display_value = coopSteeringMinKmh;
+    display_speed = lkasMinSpeedKmh;
   } else {
-    display_value = static_cast<int>(std::round(coopSteeringMinKmh * KM_TO_MILE));
+    display_speed = static_cast<int>(std::round(lkasMinSpeedKmh * KM_TO_MILE));
   }
-  const QString coop_desc = tr("Allows the driver to provide limited steering input while openpilot is engaged. Only works above %1 %2.")
-                                .arg(display_value)
-                                .arg(unit);
+
+  const QString lkas_steering_desc = tr("Enables LKAS steering control interface. Provides OEM-like torque blending for speeds above %1 %2.")
+                                     .arg(display_speed)
+                                     .arg(unit);
+
+  lkasSteeringToggle = new ParamControlSP(
+    "TeslaLkasSteering",
+    tr("LKAS Steering Control"),
+    lkas_steering_desc,
+    "../assets/offroad/icon_openpilot.png",
+    this
+  );
+  list->addItem(lkasSteeringToggle);
+  lkasSteeringToggle->showDescription();
+
+  // Cooperative steering - angle manipulation
+  const QString coop_desc = tr("Converts light driver input to steering angle at all speeds. It will blend with LKAS torque blending if enabled.");
 
   coopSteeringToggle = new ParamControlSP(
     "TeslaCoopSteering",
-    tr("Cooperative Steering"),
+    tr("Extended Cooperative Steering"),
     coop_desc,
     "",
     this
   );
   list->addItem(coopSteeringToggle);
   coopSteeringToggle->showDescription();
+
+
+  // Cooperative steering - pause at low speeds
+  const QString low_speed_pause_desc = tr("Lateral control will be paused at low speeds depending on the driver's torque and steering angle and will resume when the steering stops rotating");
+
+  lowSpeedSteerPauseToggle = new ParamControlSP(
+    "TeslaLowSpeedSteerPause",
+    tr("Low Speed Steering Pause - alpha"),
+    low_speed_pause_desc,
+    "",
+    this
+  );
+  list->addItem(lowSpeedSteerPauseToggle);
+  lowSpeedSteerPauseToggle->showDescription();
 }
 
 void TeslaSettings::updateSettings() {
+  lkasSteeringToggle->setEnabled(offroad);
   coopSteeringToggle->setEnabled(offroad);
+  lowSpeedSteerPauseToggle->setEnabled(offroad);
 }
