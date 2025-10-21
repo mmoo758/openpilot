@@ -4,6 +4,7 @@ Copyright (c) 2021-, Haibin Wen, sunnypilot, and a number of other contributors.
 This file is part of sunnypilot and is licensed under the MIT License.
 See the LICENSE.md file in the root directory for more details.
 """
+import math
 import time
 
 from cereal import custom, car
@@ -14,7 +15,7 @@ from openpilot.selfdrive.controls.lib.drive_helpers import CONTROL_N
 from openpilot.selfdrive.modeld.constants import ModelConstants
 from openpilot.sunnypilot import PARAMS_UPDATE_PERIOD
 from openpilot.sunnypilot.selfdrive.selfdrived.events import EventsSP
-from openpilot.sunnypilot.selfdrive.controls.lib.speed_limit import PCM_LONG_REQUIRED_MAX_SET_SPEED, CONFIRM_SPEED_THRESHOLD
+from openpilot.sunnypilot.selfdrive.controls.lib.speed_limit import CONFIRM_SPEED_THRESHOLD, resolve_pcm_long_required_max
 from openpilot.sunnypilot.selfdrive.controls.lib.speed_limit.common import Mode
 from openpilot.sunnypilot.selfdrive.controls.lib.speed_limit.helpers import compare_cluster_target, set_speed_limit_assist_availability
 
@@ -115,6 +116,11 @@ class SpeedLimitAssist:
   def target_set_speed_confirmed(self) -> bool:
     return bool(self.v_cruise_cluster_conv == self.target_set_speed_conv)
 
+  def _resolve_pcm_long_required_max(self) -> float:
+    speed_conv = CV.MS_TO_KPH if self.is_metric else CV.MS_TO_MPH
+    limit_floor_conv = math.floor(self._speed_limit_final_last * speed_conv)
+    return resolve_pcm_long_required_max(self.is_metric, limit_floor_conv, self._has_speed_limit)
+
   @property
   def v_cruise_cluster_below_confirm_speed_threshold(self) -> bool:
     return bool(self.v_cruise_cluster_conv < CONFIRM_SPEED_THRESHOLD[self.is_metric])
@@ -182,9 +188,7 @@ class SpeedLimitAssist:
     self.speed_limit_final_last_conv = round(self._speed_limit_final_last * speed_conv)
     self.v_cruise_cluster_conv = round(self.v_cruise_cluster * speed_conv)
 
-    cst_low, cst_high = PCM_LONG_REQUIRED_MAX_SET_SPEED[self.is_metric]
-    pcm_long_required_max = cst_low if self._has_speed_limit and self.speed_limit_final_last_conv < CONFIRM_SPEED_THRESHOLD[self.is_metric] else \
-                            cst_high
+    pcm_long_required_max = self._resolve_pcm_long_required_max()
     pcm_long_required_max_set_speed_conv = round(pcm_long_required_max * speed_conv)
 
     self.target_set_speed_conv = pcm_long_required_max_set_speed_conv if self.pcm_op_long else self.speed_limit_final_last_conv
