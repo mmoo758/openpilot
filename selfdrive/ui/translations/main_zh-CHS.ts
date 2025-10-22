@@ -969,10 +969,6 @@ DEPARTING</source>
         <translation>智能巡航按键管理 (ICBM) (Alpha)</translation>
     </message>
     <message>
-        <source>When enabled, sunnypilot will attempt to manage the built-in cruise control buttons by emulating button presses for limited longitudinal control.</source>
-        <translation>启用后，sunnypilot将通过模拟按键操作来管理原车巡航控制按键，实现有限的纵向控制功能。</translation>
-    </message>
-    <message>
         <source>Smart Cruise Control - Vision</source>
         <translation>弯道视觉速度控制(SCC-V)</translation>
     </message>
@@ -999,6 +995,26 @@ DEPARTING</source>
     <message>
         <source>Enable toggle to allow the model to determine when to use sunnypilot ACC or sunnypilot End to End Longitudinal.</source>
         <translation>启用开关，让模型决定何时使用sunnypilot ACC或sunnypilot端到端纵向控制。</translation>
+    </message>
+    <message>
+        <source>When enabled, sunnypilot will attempt to manage the built-in cruise control buttons by emulating button presses for limited longitudinal control.</source>
+        <translation>启用后，sunnypilot将通过模拟按键操作来管理原车巡航控制按键，实现有限的纵向控制功能。</translation>
+    </message>
+    <message>
+        <source>Intelligent Cruise Button Management is currently unavailable on this platform.</source>
+        <translation>该车辆目前不支持智能巡航按键管理。</translation>
+    </message>
+    <message>
+        <source>Disable the openpilot Longitudinal Control (alpha) toggle to allow Intelligent Cruise Button Management.</source>
+        <translation>关闭 openpilot 纵向控制 (alpha) 开关以允许智能巡航按键管理。</translation>
+    </message>
+    <message>
+        <source>openpilot Longitudinal Control is the default longitudinal control for this platform.</source>
+        <translation>openpilot 纵向控制是该车辆上的默认纵向控制。</translation>
+    </message>
+    <message>
+        <source>Start the vehicle to check vehicle compatibility.</source>
+        <translation>请启动车辆以检查车辆的兼容性。</translation>
     </message>
 </context>
 <context>
