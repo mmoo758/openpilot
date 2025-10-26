@@ -188,12 +188,12 @@ Please use caution when using this feature. Only use the blinker when traffic an
         <translation>纵向操控测试模式</translation>
     </message>
     <message>
-        <source>openpilot Longitudinal Control (Alpha)</source>
-        <translation>openpilot纵向控制（Alpha 版）</translation>
+        <source>sunnypilot Longitudinal Control (Alpha)</source>
+        <translation>sunnypilot 纵向控制（Alpha 版）</translation>
     </message>
     <message>
-        <source>WARNING: openpilot longitudinal control is in alpha for this car and will disable Automatic Emergency Braking (AEB).</source>
-        <translation>警告：此车辆的 openpilot 纵向控制功能目前处于Alpha版本，使用此功能将会停用自动紧急制动（AEB）功能。</translation>
+        <source>WARNING: sunnypilot longitudinal control is in alpha for this car and will disable Automatic Emergency Braking (AEB).</source>
+        <translation>警告：此车辆的 sunnypilot 纵向控制功能目前处于Alpha版本，使用此功能将会停用自动紧急制动（AEB）功能。</translation>
     </message>
     <message>
         <source>Enable ADB</source>
@@ -204,7 +204,7 @@ Please use caution when using this feature. Only use the blinker when traffic an
         <translation>ADB（Android调试桥接）允许通过USB或网络连接到您的设备。更多信息请参见 [https://docs.comma.ai/how-to/connect-to-comma](https://docs.comma.ai/how-to/connect-to-comma)。</translation>
     </message>
     <message>
-        <source>On this car, sunnypilot defaults to the car&apos;s built-in ACC instead of openpilot&apos;s longitudinal control. Enable this to switch to openpilot longitudinal control. Enabling Experimental mode is recommended when enabling openpilot longitudinal control alpha.</source>
+        <source>On this car, sunnypilot defaults to the car&apos;s built-in ACC instead of sunnypilot&apos;s longitudinal control. Enable this to switch to sunnypilot longitudinal control. Enabling Experimental mode is recommended when enabling sunnypilot longitudinal control alpha.</source>
         <translation>在这辆车上，sunnypilot 默认使用车辆内建的主动巡航控制（ACC），而非 sunnypilot 的纵向控制。启用此项功能可切换至 sunnypilot 的纵向控制。当启用 sunnypilot 纵向控制 Alpha 版本时，建议同时启用实验性模式（Experimental mode）。</translation>
     </message>
 </context>
@@ -819,8 +819,8 @@ DEPARTING</source>
         <translation>自定义纵向控制调校</translation>
     </message>
     <message>
-        <source>This feature can only be used with openpilot longitudinal control enabled.</source>
-        <translation>此功能仅在启用 openpilot 纵向控制时可用。</translation>
+        <source>This feature can only be used with sunnypilot longitudinal control enabled.</source>
+        <translation>此功能仅在启用 sunnypilot 纵向控制时可用。</translation>
     </message>
     <message>
         <source>Enable &quot;Always Offroad&quot; in Device panel, or turn vehicle off to select an option.</source>
@@ -839,8 +839,8 @@ DEPARTING</source>
         <translation>预测：利用驾驶模型预测的轨迹数据提前预判所需调整</translation>
     </message>
     <message>
-        <source>Fine-tune your driving experience by adjusting acceleration smoothness with openpilot longitudinal control.</source>
-        <translation>通过 openpilot 纵向控制微调加速度平顺性，打造更贴合个人偏好的驾驶体验。</translation>
+        <source>Fine-tune your driving experience by adjusting acceleration smoothness with sunnypilot longitudinal control.</source>
+        <translation>通过 sunnypilot 纵向控制微调加速度平顺性，打造更贴合个人偏好的驾驶体验。</translation>
     </message>
 </context>
 <context>
@@ -953,8 +953,8 @@ DEPARTING</source>
         <translation>启用自定义 短按/长按 调节巡航车速的增减步长。</translation>
     </message>
     <message>
-        <source>This feature can only be used with openpilot longitudinal control enabled.</source>
-        <translation>此功能仅在启用 openpilot 纵向控制时方可使用。</translation>
+        <source>This feature can only be used with sunnypilot longitudinal control enabled.</source>
+        <translation>此功能仅在启用 sunnypilot 纵向控制时方可使用。</translation>
     </message>
     <message>
         <source>This feature is not supported on this platform due to vehicle limitations.</source>
@@ -1005,12 +1005,12 @@ DEPARTING</source>
         <translation>该车辆目前不支持智能巡航按键管理。</translation>
     </message>
     <message>
-        <source>Disable the openpilot Longitudinal Control (alpha) toggle to allow Intelligent Cruise Button Management.</source>
-        <translation>关闭 openpilot 纵向控制 (alpha) 开关以允许智能巡航按键管理。</translation>
+        <source>Disable the sunnypilot Longitudinal Control (alpha) toggle to allow Intelligent Cruise Button Management.</source>
+        <translation>关闭 sunnypilot 纵向控制 (alpha) 开关以允许智能巡航按键管理。</translation>
     </message>
     <message>
-        <source>openpilot Longitudinal Control is the default longitudinal control for this platform.</source>
-        <translation>openpilot 纵向控制是该车辆上的默认纵向控制。</translation>
+        <source>sunnypilot Longitudinal Control is the default longitudinal control for this platform.</source>
+        <translation>sunnypilot 纵向控制是该车辆上的默认纵向控制。</translation>
     </message>
     <message>
         <source>Start the vehicle to check vehicle compatibility.</source>
@@ -2626,8 +2626,8 @@ Data</source>
         <translation>由于此车辆使用自带的ACC纵向控制，当前无法使用试验模式。</translation>
     </message>
     <message>
-        <source>openpilot longitudinal control may come in a future update.</source>
-        <translation>openpilot纵向控制可能会在未来的更新中提供。</translation>
+        <source>sunnypilot longitudinal control may come in a future update.</source>
+        <translation>sunnypilot纵向控制可能会在未来的更新中提供。</translation>
     </message>
     <message>
         <source>Aggressive</source>
@@ -2912,12 +2912,12 @@ Bottom</source>
         <translation>在屏幕底部及(或)右侧显示实时参数指标。</translation>
     </message>
     <message>
-        <source>Display useful metrics below the chevron that tracks the lead car (only applicable to cars with openpilot longitudinal control).</source>
-        <translation>在跟踪前车的三角标识下方显示相关指标（仅适用于开启了openpilot纵向控制功能时）。</translation>
+        <source>Display useful metrics below the chevron that tracks the lead car (only applicable to cars with sunnypilot longitudinal control).</source>
+        <translation>在跟踪前车的三角标识下方显示相关指标（仅适用于开启了sunnypilot纵向控制功能时）。</translation>
     </message>
     <message>
-        <source>This feature requires openpilot longitudinal control to be available.</source>
-        <translation>此功能需要车辆具备并开启openpilot纵向控制。</translation>
+        <source>This feature requires sunnypilot longitudinal control to be available.</source>
+        <translation>此功能需要车辆具备并开启sunnypilot纵向控制。</translation>
     </message>
 </context>
 <context>
