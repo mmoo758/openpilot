@@ -1768,12 +1768,20 @@ Warning: You are on a metered connection!</source>
 <context>
     <name>TeslaSettings</name>
     <message>
-        <source>Cooperative Steering</source>
+        <source>Cooperative Steering (Beta)</source>
         <translation>合作转向（测试功能）</translation>
     </message>
     <message>
-        <source>Allows the driver to provide limited steering input while openpilot is engaged. Only works above %1 %2.</source>
-        <translation>允许驾驶员在启用 openpilot 时提供有限的转向控制。仅在车速超过 %1 %2 时有效。</translation>
+        <source>Warning: May experience steering oscillations below %5 %6 during turns, recommend disabling this feature if you experience these.</source>
+        <translation>警告：转弯时可能会遇到低于 %5 %6 的转向振荡，如果遇到这些情况，建议禁用此功能。</translation>
+    </message>
+    <message>
+        <source>Allows the driver to provide limited steering input while openpilot is engaged.</source>
+        <translation>允许驾驶员在启用 openpilot 时提供有限的转向控制。</translation>
+    </message>
+    <message>
+        <source>Only works above %4 %6.</source>
+        <translation>仅在车速超过 %4 %6 时有效。</translation>
     </message>
 </context>
 <context>
