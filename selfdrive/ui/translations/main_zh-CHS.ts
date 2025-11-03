@@ -2922,6 +2922,10 @@ Bottom</source>
         <translation>sunnypilot 社区</translation>
     </message>
     <message>
+        <source>Need help or have ideas?&lt;br&gt;&lt;b&gt;Join&lt;/b&gt; our community now!</source>
+        <translation>需要帮助或有想法？&lt;br&gt;&lt;b&gt;立即加入&lt;/b&gt;我们的社区！</translation>
+    </message>
+    <message>
         <source>Learn More</source>
         <translation>了解更多</translation>
     </message>
