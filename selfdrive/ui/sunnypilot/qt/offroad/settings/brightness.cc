@@ -38,7 +38,7 @@ Brightness::Brightness() : OptionControlSP(
   tr("Global Brightness"),
   tr("Overrides the brightness of the device. This applies to both onroad and offroad screens. "),
   "../assets/offroad/icon_blank.png",
-  {0, 11}, 1, true, &brightness_options) {
+  {0, 21}, 1, true, &brightness_options) {
 
   refresh();
 }
