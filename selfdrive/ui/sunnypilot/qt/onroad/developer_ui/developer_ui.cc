@@ -25,7 +25,7 @@ UiElement DeveloperUi::getDRel(bool lead_status, float lead_d_rel) {
     }
   }
 
-  return UiElement(value, "相对距离", "m", color);
+  return UiElement(value, "前车距离", "m", color);
 }
 
 // Add Relative Velocity vs Primary Lead Car
@@ -72,7 +72,7 @@ UiElement DeveloperUi::getActualLateralAccel(float curvature, float v_ego, float
   QString value = QString::number(actualLateralAccel, 'f', 2);
   QColor color = lat_active ? (steer_override ? QColor(0x91, 0x9b, 0x95, 0xff) : QColor(0, 255, 0, 255)) : QColor(255, 255, 255, 255);
 
-  return UiElement(value, "横向加速", "m/s²", color);
+  return UiElement(value, "实际横向加速", "m/s²", color);
 }
 
 // Add Desired Steering Angle when using PID
@@ -111,7 +111,7 @@ UiElement DeveloperUi::getAEgo(float a_ego) {
   QString value = QString::number(a_ego, 'f', 1);
   QColor color = QColor(255, 255, 255, 255);
 
-  return UiElement(value, "加速", "m/s²", color);
+  return UiElement(value, "加速度", "m/s²", color);
 }
 
 // Add Relative Velocity to Primary Lead Car
@@ -130,7 +130,7 @@ UiElement DeveloperUi::getVEgoLead(bool lead_status, float lead_v_rel, float v_e
     }
   }
 
-  return UiElement(value, "参考车速", speed_unit, color);
+  return UiElement(value, "前车车速", speed_unit, color);
 }
 
 // Add Friction Coefficient Raw from torqued
@@ -148,7 +148,7 @@ UiElement DeveloperUi::getLatAccelFactorFiltered(float lat_accel_factor_filtered
   QString value = QString::number(lat_accel_factor_filtered, 'f', 3);
   QColor color = live_valid ? QColor(0, 255, 0, 255) : QColor(255, 255, 255, 255);
 
-  return UiElement(value, "横向加速", "m/s²", color);
+  return UiElement(value, "横向加速因子", "m/s²", color);
 }
 
 // Add Steering Torque from Car EPS
