@@ -3,9 +3,8 @@ sunnypilot Version 2025.003.000 (20xx-xx-xx)
 * 🛠️ 更新说明
   * onroad开发人员界面汉化
   * 测试GPS信号获取速度
-  * 测试GPS信号获取速度
   * 刷版本号至003
-
+  * 同步SP更新至#1456
 
 
 sunnypilot Version 2025.002.000 (2025-11-06)
