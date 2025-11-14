@@ -25,7 +25,7 @@ UiElement DeveloperUi::getDRel(bool lead_status, float lead_d_rel) {
     }
   }
 
-  return UiElement(value, "REL DIST", "m", color);
+  return UiElement(value, "相对距离", "m", color);
 }
 
 // Add Relative Velocity vs Primary Lead Car
@@ -44,7 +44,7 @@ UiElement DeveloperUi::getVRel(bool lead_status, float lead_v_rel, bool is_metri
     }
   }
 
-  return UiElement(value, "REL SPEED", speed_unit, color);
+  return UiElement(value, "相对速度", speed_unit, color);
 }
 
 // Add Real Steering Angle
@@ -61,7 +61,7 @@ UiElement DeveloperUi::getSteeringAngleDeg(float angle_steers, bool lat_active, 
     color = QColor(255, 188, 0, 255);
   }
 
-  return UiElement(value, "REAL STEER", "", color);
+  return UiElement(value, "转向角度", "", color);
 }
 
 // Add Actual Lateral Acceleration (roll compensated) when using Torque
@@ -72,7 +72,7 @@ UiElement DeveloperUi::getActualLateralAccel(float curvature, float v_ego, float
   QString value = QString::number(actualLateralAccel, 'f', 2);
   QColor color = lat_active ? (steer_override ? QColor(0x91, 0x9b, 0x95, 0xff) : QColor(0, 255, 0, 255)) : QColor(255, 255, 255, 255);
 
-  return UiElement(value, "ACTUAL L.A.", "m/s²", color);
+  return UiElement(value, "横向加速", "m/s²", color);
 }
 
 // Add Desired Steering Angle when using PID
@@ -93,7 +93,7 @@ UiElement DeveloperUi::getSteeringAngleDesiredDeg(bool lat_active, float steer_a
     }
   }
 
-  return UiElement(value, "DESIRED STEER", "", color);
+  return UiElement(value, "期望转向角度", "", color);
 }
 
 // Add Device Memory (RAM) Usage
@@ -102,7 +102,7 @@ UiElement DeveloperUi::getMemoryUsagePercent(int memory_usage_percent) {
   QString value = QString("%1%2").arg(QString::number(memory_usage_percent, 'd', 0)).arg("%");
   QColor color = (memory_usage_percent > 85) ? QColor(255, 188, 0, 255) : QColor(255, 255, 255, 255);
 
-  return UiElement(value, "RAM", "", color);
+  return UiElement(value, "内存占用", "", color);
 }
 
 // Add Vehicle Current Acceleration
@@ -111,7 +111,7 @@ UiElement DeveloperUi::getAEgo(float a_ego) {
   QString value = QString::number(a_ego, 'f', 1);
   QColor color = QColor(255, 255, 255, 255);
 
-  return UiElement(value, "ACC.", "m/s²", color);
+  return UiElement(value, "加速", "m/s²", color);
 }
 
 // Add Relative Velocity to Primary Lead Car
@@ -130,7 +130,7 @@ UiElement DeveloperUi::getVEgoLead(bool lead_status, float lead_v_rel, float v_e
     }
   }
 
-  return UiElement(value, "L.S.", speed_unit, color);
+  return UiElement(value, "参考车速", speed_unit, color);
 }
 
 // Add Friction Coefficient Raw from torqued
@@ -139,7 +139,7 @@ UiElement DeveloperUi::getFrictionCoefficientFiltered(float friction_coefficient
   QString value = QString::number(friction_coefficient_filtered, 'f', 3);
   QColor color = live_valid ? QColor(0, 255, 0, 255) : QColor(255, 255, 255, 255);
 
-  return UiElement(value, "FRIC.", "", color);
+  return UiElement(value, "摩擦系数", "", color);
 }
 
 // Add Lateral Acceleration Factor Raw from torqued
@@ -148,7 +148,7 @@ UiElement DeveloperUi::getLatAccelFactorFiltered(float lat_accel_factor_filtered
   QString value = QString::number(lat_accel_factor_filtered, 'f', 3);
   QColor color = live_valid ? QColor(0, 255, 0, 255) : QColor(255, 255, 255, 255);
 
-  return UiElement(value, "L.A.", "m/s²", color);
+  return UiElement(value, "横向加速", "m/s²", color);
 }
 
 // Add Steering Torque from Car EPS
@@ -157,7 +157,7 @@ UiElement DeveloperUi::getSteeringTorqueEps(float steering_torque_eps) {
   QString value = QString::number(std::fabs(steering_torque_eps), 'f', 1);
   QColor color = QColor(255, 255, 255, 255);
 
-  return UiElement(value, "E.T.", "N·dm", color);
+  return UiElement(value, "扭矩", "N·dm", color);
 }
 
 // Add Bearing Degree and Direction from Car (Compass)
@@ -189,7 +189,7 @@ UiElement DeveloperUi::getBearingDeg(float bearing_accuracy_deg, float bearing_d
     dir_value = "OFF";
   }
 
-  return UiElement(QString("%1 | %2").arg(dir_value).arg(value), "B.D.", "", color);
+  return UiElement(QString("%1 | %2").arg(dir_value).arg(value), "方向角", "", color);
 }
 
 // Add Altitude of Current Location
@@ -198,7 +198,7 @@ UiElement DeveloperUi::getAltitude(float gps_accuracy, float altitude) {
   QString value = (gps_accuracy != 0.00) ? QString::number(altitude, 'f', 1) : "-";
   QColor color = QColor(255, 255, 255, 255);
 
-  return UiElement(value, "ALT.", "m", color);
+  return UiElement(value, "海拔", "m", color);
 }
 
 // Add Actuators Output
@@ -211,10 +211,10 @@ UiElement DeveloperUi::getActuatorsOutputLateral(cereal::CarParams::SteerControl
   QString unit;
 
   if (steerControlType == cereal::CarParams::SteerControlType::ANGLE) {
-    label = "DESIRED STEER";
+    label = "期望转向角度";
     value = QString("%1%2%3").arg(QString::number(actuators.getSteeringAngleDeg(), 'f', 1)).arg("°").arg("");
   } else {
-    label = "DESIRED L.A.";
+    label = "期望横向加速";
     double desiredLateralAccel = (desiredCurvature * pow(v_ego, 2)) - (roll * 9.81);
     value = QString::number(desiredLateralAccel, 'f', 2);
     unit = "m/s²";
