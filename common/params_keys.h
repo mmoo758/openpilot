@@ -137,7 +137,7 @@ inline static std::unordered_map<std::string, ParamKeyAttributes> keys = {
     {"BlinkerMinLateralControlSpeed", {PERSISTENT | BACKUP, INT, "20"}},  // MPH or km/h
     {"BlinkerPauseLateralControl", {PERSISTENT | BACKUP, INT, "0"}},
     {"PauseLateralOnOverride", {PERSISTENT | BACKUP, INT, "0"}},
-    {"Brightness", {PERSISTENT | BACKUP, INT, "0"}},
+    {"Brightness", {PERSISTENT | BACKUP, INT, "1"}},
     {"CarParamsSP", {CLEAR_ON_MANAGER_START | CLEAR_ON_ONROAD_TRANSITION, BYTES}},
     {"CarParamsSPCache", {CLEAR_ON_MANAGER_START, BYTES}},
     {"CarParamsSPPersistent", {PERSISTENT, BYTES}},
