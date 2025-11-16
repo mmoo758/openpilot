@@ -199,7 +199,7 @@ void HudRendererSP::draw(QPainter &p, const QRect &surface_rect) {
     smartCruiseControlMapFrame = smartCruiseControlMapActive ? (smartCruiseControlMapFrame + 1) : 0;
 
     // Bottom Dev UI
-    if (devUiInfo == 2) {
+    if (devUiInfo == 1 || devUiInfo == 3) {
       QRect rect_bottom(surface_rect.left(), surface_rect.bottom() - 60, surface_rect.width(), 61);
       p.setPen(Qt::NoPen);
       p.setBrush(QColor(0, 0, 0, 100));
@@ -208,7 +208,7 @@ void HudRendererSP::draw(QPainter &p, const QRect &surface_rect) {
     }
 
     // Right Dev UI
-    if (devUiInfo != 0) {
+    if (devUiInfo == 2 || devUiInfo == 3) {
       QRect rect_right(surface_rect.right() - (UI_BORDER_SIZE * 2), UI_BORDER_SIZE * 1.5, 184, 170);
       drawRightDevUI(p, surface_rect.right() - 184 - UI_BORDER_SIZE * 2, UI_BORDER_SIZE * 2 + rect_right.height());
     }
