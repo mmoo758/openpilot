@@ -429,9 +429,6 @@ void HudRendererSP::drawBottomDevUI(QPainter &p, int x, int y) {
   UiElement dRelEl = DeveloperUi::getDRel(lead_status, lead_d_rel);
   rw += drawBottomDevUIElement(p, rw, y, dRelEl.value, dRelEl.label, dRelEl.units, dRelEl.color);
 
-  UiElement maxCpuTempElement = DeveloperUi::getMaxCpuTemp(maxCpuTemp); // 手动添加 maxCpu_temp 变量
-  rw += drawBottomDevUIElement(p, rw, y, maxCpuTempElement.value, maxCpuTempElement.label, maxCpuTempElement.units, maxCpuTempElement.color);
-
   // UiElement vEgoLeadElement = DeveloperUi::getVEgoLead(lead_status, lead_v_rel, vEgo, is_metric, speedUnit);
   // rw += drawBottomDevUIElement(p, rw, y, vEgoLeadElement.value, vEgoLeadElement.label, vEgoLeadElement.units, vEgoLeadElement.color);
 
@@ -440,6 +437,9 @@ void HudRendererSP::drawBottomDevUI(QPainter &p, int x, int y) {
 
   UiElement memEl = DeveloperUi::getMemoryUsagePercent(memoryUsagePercent);
   rw += drawBottomDevUIElement(p, rw, y, memEl.value, memEl.label, memEl.units, memEl.color);
+
+  UiElement maxCpuTempElement = DeveloperUi::getMaxCpuTemp(maxCpuTemp); // 手动添加 maxCpu_temp 变量
+  rw += drawBottomDevUIElement(p, rw, y, maxCpuTempElement.value, maxCpuTempElement.label, maxCpuTempElement.units, maxCpuTempElement.color);
 
   UiElement altitudeElement = DeveloperUi::getAltitude(gpsAccuracy, altitude);
   rw += drawBottomDevUIElement(p, rw, y, altitudeElement.value, altitudeElement.label, altitudeElement.units, altitudeElement.color);
