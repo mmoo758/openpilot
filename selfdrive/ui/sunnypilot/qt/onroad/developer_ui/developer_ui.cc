@@ -14,14 +14,14 @@
 // Unit: Meters
 UiElement DeveloperUi::getDRel(bool lead_status, float lead_d_rel) {
   QString value = lead_status ? QString::number(lead_d_rel, 'f', 0) : "-";
-  QColor color = QColor(255, 255, 255, 255);
+  QColor color = QColor(255, 255, 255, 200);
 
   if (lead_status) {
     // Orange if close, Red if very close
     if (lead_d_rel < 5) {
-      color = QColor(255, 0, 0, 255);
+      color = QColor(255, 0, 0, 200);
     } else if (lead_d_rel < 15) {
-      color = QColor(255, 188, 0, 255);
+      color = QColor(255, 188, 0, 200);
     }
   }
 
@@ -32,15 +32,15 @@ UiElement DeveloperUi::getDRel(bool lead_status, float lead_d_rel) {
 // Unit: kph if metric, else mph
 UiElement DeveloperUi::getVRel(bool lead_status, float lead_v_rel, bool is_metric, const QString &speed_unit) {
   QString value = lead_status ? QString::number(lead_v_rel * (is_metric ? MS_TO_KPH : MS_TO_MPH), 'f', 0) : "-";
-  QColor color = QColor(255, 255, 255, 255);
+  QColor color = QColor(255, 255, 255, 200);
 
   if (lead_status) {
     // Red if approaching faster than 10mph
     // Orange if approaching (negative)
     if (lead_v_rel < -4.4704) {
-      color = QColor(255, 0, 0, 255);
+      color = QColor(255, 0, 0, 200);
     } else if (lead_v_rel < 0) {
-      color = QColor(255, 188, 0, 255);
+      color = QColor(255, 188, 0, 200);
     }
   }
 
@@ -51,14 +51,14 @@ UiElement DeveloperUi::getVRel(bool lead_status, float lead_v_rel, bool is_metri
 // Unit: Degrees
 UiElement DeveloperUi::getSteeringAngleDeg(float angle_steers, bool lat_active, bool steer_override) {
   QString value = QString("%1%2%3").arg(QString::number(angle_steers, 'f', 1)).arg("°").arg("");
-  QColor color = lat_active ? (steer_override ? QColor(0x91, 0x9b, 0x95, 0xff) : QColor(0, 255, 0, 255)) : QColor(255, 255, 255, 255);
+  QColor color = lat_active ? (steer_override ? QColor(0x91, 0x9b, 0x95, 0xff) : QColor(0, 255, 0, 200)) : QColor(255, 255, 255, 200);
 
   // Red if large steering angle
   // Orange if moderate steering angle
   if (std::fabs(angle_steers) > 180) {
-    color = QColor(255, 0, 0, 255);
+    color = QColor(255, 0, 0, 200);
   } else if (std::fabs(angle_steers) > 90) {
-    color = QColor(255, 188, 0, 255);
+    color = QColor(255, 188, 0, 200);
   }
 
   return UiElement(value, "转向角度", "", color);
@@ -70,7 +70,7 @@ UiElement DeveloperUi::getActualLateralAccel(float curvature, float v_ego, float
   double actualLateralAccel = (curvature * pow(v_ego, 2)) - (roll * 9.81);
 
   QString value = QString::number(actualLateralAccel, 'f', 2);
-  QColor color = lat_active ? (steer_override ? QColor(0x91, 0x9b, 0x95, 0xff) : QColor(0, 255, 0, 255)) : QColor(255, 255, 255, 255);
+  QColor color = lat_active ? (steer_override ? QColor(0x91, 0x9b, 0x95, 0xff) : QColor(0, 255, 0, 200)) : QColor(255, 255, 255, 200);
 
   return UiElement(value, "实际横向加速", "m/s²", color);
 }
@@ -79,17 +79,17 @@ UiElement DeveloperUi::getActualLateralAccel(float curvature, float v_ego, float
 // Unit: Degrees
 UiElement DeveloperUi::getSteeringAngleDesiredDeg(bool lat_active, float steer_angle_desired, float angle_steers) {
   QString value = lat_active ? QString("%1%2%3").arg(QString::number(steer_angle_desired, 'f', 1)).arg("°").arg("") : "-";
-  QColor color = QColor(255, 255, 255, 255);
+  QColor color = QColor(255, 255, 255, 200);
 
   if (lat_active) {
     // Red if large steering angle
     // Orange if moderate steering angle
     if (std::fabs(angle_steers) > 180) {
-      color = QColor(255, 0, 0, 255);
+      color = QColor(255, 0, 0, 200);
     } else if (std::fabs(angle_steers) > 90) {
-      color = QColor(255, 188, 0, 255);
+      color = QColor(255, 188, 0, 200);
     } else {
-      color = QColor(0, 255, 0, 255);
+      color = QColor(0, 255, 0, 200);
     }
   }
 
@@ -100,7 +100,7 @@ UiElement DeveloperUi::getSteeringAngleDesiredDeg(bool lat_active, float steer_a
 // Unit: Percent
 UiElement DeveloperUi::getMemoryUsagePercent(int memory_usage_percent) {
   QString value = QString("%1%2").arg(QString::number(memory_usage_percent, 'd', 0)).arg("%");
-  QColor color = (memory_usage_percent > 85) ? QColor(255, 188, 0, 255) : QColor(255, 255, 255, 255);
+  QColor color = (memory_usage_percent > 85) ? QColor(255, 188, 0, 200) : QColor(255, 255, 255, 200);
 
   return UiElement(value, "内存占用", "", color);
 }
@@ -109,13 +109,13 @@ UiElement DeveloperUi::getMemoryUsagePercent(int memory_usage_percent) {
 // Unit: Celsius
 UiElement DeveloperUi::getMaxCpuTemp(float max_cpu_temp) {
   QString value = QString::number(max_cpu_temp, 'f', 0);
-  QColor color = QColor(255, 255, 255, 255);
+  QColor color = QColor(255, 255, 255, 200);
 
   // 警告温度阈值
   if (max_cpu_temp > 85) {
-    color = QColor(255, 188, 0, 255); // 黄色
+    color = QColor(255, 188, 0, 200); // 黄色
   } else if (max_cpu_temp > 95) {
-    color = QColor(255, 0, 0, 255); // 红色
+    color = QColor(255, 0, 0, 200); // 红色
   }
 
   return UiElement(value, "CPU温度", "°C", color);
@@ -125,7 +125,7 @@ UiElement DeveloperUi::getMaxCpuTemp(float max_cpu_temp) {
 // Unit: m/s²
 UiElement DeveloperUi::getAEgo(float a_ego) {
   QString value = QString::number(a_ego, 'f', 1);
-  QColor color = QColor(255, 255, 255, 255);
+  QColor color = QColor(255, 255, 255, 200);
 
   return UiElement(value, "加速度", "m/s²", color);
 }
@@ -134,15 +134,15 @@ UiElement DeveloperUi::getAEgo(float a_ego) {
 // Unit: kph if metric, else mph
 UiElement DeveloperUi::getVEgoLead(bool lead_status, float lead_v_rel, float v_ego, bool is_metric, const QString &speed_unit) {
   QString value = lead_status ? QString::number((lead_v_rel + v_ego) * (is_metric ? MS_TO_KPH : MS_TO_MPH), 'f', 0) : "-";
-  QColor color = QColor(255, 255, 255, 255);
+  QColor color = QColor(255, 255, 255, 200);
 
   if (lead_status) {
     // Red if approaching faster than 10mph
     // Orange if approaching (negative)
     if (lead_v_rel < -4.4704) {
-      color = QColor(255, 0, 0, 255);
+      color = QColor(255, 0, 0, 200);
     } else if (lead_v_rel < 0) {
-      color = QColor(255, 188, 0, 255);
+      color = QColor(255, 188, 0, 200);
     }
   }
 
@@ -153,7 +153,7 @@ UiElement DeveloperUi::getVEgoLead(bool lead_status, float lead_v_rel, float v_e
 // Unit: None
 UiElement DeveloperUi::getFrictionCoefficientFiltered(float friction_coefficient_filtered, bool live_valid) {
   QString value = QString::number(friction_coefficient_filtered, 'f', 3);
-  QColor color = live_valid ? QColor(0, 255, 0, 255) : QColor(255, 255, 255, 255);
+  QColor color = live_valid ? QColor(0, 255, 0, 200) : QColor(255, 255, 255, 200);
 
   return UiElement(value, "摩擦系数", "", color);
 }
@@ -162,7 +162,7 @@ UiElement DeveloperUi::getFrictionCoefficientFiltered(float friction_coefficient
 // Unit: m/s²
 UiElement DeveloperUi::getLatAccelFactorFiltered(float lat_accel_factor_filtered, bool live_valid) {
   QString value = QString::number(lat_accel_factor_filtered, 'f', 3);
-  QColor color = live_valid ? QColor(0, 255, 0, 255) : QColor(255, 255, 255, 255);
+  QColor color = live_valid ? QColor(0, 255, 0, 200) : QColor(255, 255, 255, 200);
 
   return UiElement(value, "横向加速因子", "m/s²", color);
 }
@@ -171,7 +171,7 @@ UiElement DeveloperUi::getLatAccelFactorFiltered(float lat_accel_factor_filtered
 // Unit: Newton Meters
 UiElement DeveloperUi::getSteeringTorqueEps(float steering_torque_eps) {
   QString value = QString::number(std::fabs(steering_torque_eps), 'f', 1);
-  QColor color = QColor(255, 255, 255, 255);
+  QColor color = QColor(255, 255, 255, 200);
 
   return UiElement(value, "扭矩", "N·dm", color);
 }
@@ -180,7 +180,7 @@ UiElement DeveloperUi::getSteeringTorqueEps(float steering_torque_eps) {
 // Unit: Meters
 UiElement DeveloperUi::getBearingDeg(float bearing_accuracy_deg, float bearing_deg) {
   QString value = (bearing_accuracy_deg != 180.00) ? QString("%1%2%3").arg(QString::number(bearing_deg, 'd', 0)).arg("°").arg("") : "-";
-  QColor color = QColor(255, 255, 255, 255);
+  QColor color = QColor(255, 255, 255, 200);
   QString dir_value;
 
   if (bearing_accuracy_deg != 180.00) {
@@ -212,7 +212,7 @@ UiElement DeveloperUi::getBearingDeg(float bearing_accuracy_deg, float bearing_d
 // Unit: Meters
 UiElement DeveloperUi::getAltitude(float gps_accuracy, float altitude) {
   QString value = (gps_accuracy != 0.00) ? QString::number(altitude, 'f', 1) : "-";
-  QColor color = QColor(255, 255, 255, 255);
+  QColor color = QColor(255, 255, 255, 200);
 
   return UiElement(value, "海拔", "m", color);
 }
@@ -237,7 +237,7 @@ UiElement DeveloperUi::getActuatorsOutputLateral(cereal::CarParams::SteerControl
   }
 
   value = lat_active ? value : "-";
-  QColor color = lat_active ? (steer_override ? QColor(0x91, 0x9b, 0x95, 0xff) : QColor(0, 255, 0, 255)) : QColor(255, 255, 255, 255);
+  QColor color = lat_active ? (steer_override ? QColor(0x91, 0x9b, 0x95, 0xff) : QColor(0, 255, 0, 200)) : QColor(255, 255, 255, 200);
 
   return UiElement(value, label, unit, color);
 }
