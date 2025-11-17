@@ -28,4 +28,5 @@ public:
   static UiElement getActuatorsOutputLateral(cereal::CarParams::SteerControlType steerControlType,
                                              cereal::CarControl::Actuators::Reader &actuators,
                                              float desiredCurvature, float v_ego, float roll, bool lat_active, bool steer_override);
+  static UiElement getMaxCpuTemp(float max_cpu_temp); // 新增：获取最大CPU温度
 };

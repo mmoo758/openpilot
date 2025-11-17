@@ -120,6 +120,14 @@ void HudRendererSP::updateState(const UIState &s) {
     liveValid = ltp.getLiveValid();
   }
 
+  const auto deviceState = sm["deviceState"].getDeviceState();
+  maxCpuTemp = 0.0f;
+  if (deviceState.getCpuTempC().size() > 0) {
+    for (const float& temp : deviceState.getCpuTempC()) {
+      maxCpuTemp = std::max(maxCpuTemp, temp);
+    }
+  }
+
   latActive = car_control.getLatActive();
   actuators = car_control.getActuators();
   longOverride = car_control.getCruiseControl().getOverride();
@@ -421,8 +429,11 @@ void HudRendererSP::drawBottomDevUI(QPainter &p, int x, int y) {
   UiElement dRelEl = DeveloperUi::getDRel(lead_status, lead_d_rel);
   rw += drawBottomDevUIElement(p, rw, y, dRelEl.value, dRelEl.label, dRelEl.units, dRelEl.color);
 
-  UiElement vEgoLeadElement = DeveloperUi::getVEgoLead(lead_status, lead_v_rel, vEgo, is_metric, speedUnit);
-  rw += drawBottomDevUIElement(p, rw, y, vEgoLeadElement.value, vEgoLeadElement.label, vEgoLeadElement.units, vEgoLeadElement.color);
+  UiElement maxCpuTempElement = DeveloperUi::getMaxCpuTemp(maxCpuTemp); // 手动添加 maxCpu_temp 变量
+  rw += drawBottomDevUIElement(p, rw, y, maxCpuTempElement.value, maxCpuTempElement.label, maxCpuTempElement.units, maxCpuTempElement.color);
+
+  // UiElement vEgoLeadElement = DeveloperUi::getVEgoLead(lead_status, lead_v_rel, vEgo, is_metric, speedUnit);
+  // rw += drawBottomDevUIElement(p, rw, y, vEgoLeadElement.value, vEgoLeadElement.label, vEgoLeadElement.units, vEgoLeadElement.color);
 
   UiElement aEgoElement = DeveloperUi::getAEgo(aEgo);
   rw += drawBottomDevUIElement(p, rw, y, aEgoElement.value, aEgoElement.label, aEgoElement.units, aEgoElement.color);
