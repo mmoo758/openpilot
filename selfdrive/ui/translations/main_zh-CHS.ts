@@ -2897,6 +2897,10 @@ Data</source>
         <translation>启用后，屏幕上将显示可视化的转向指示。</translation>
     </message>
     <message>
+        <source>Bottom</source>
+        <translation>底部</translation>
+    </message>
+    <message>
         <source>Right</source>
         <translation>右侧</translation>
     </message>
