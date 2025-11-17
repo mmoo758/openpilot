@@ -105,6 +105,22 @@ UiElement DeveloperUi::getMemoryUsagePercent(int memory_usage_percent) {
   return UiElement(value, "内存占用", "", color);
 }
 
+// Add Max CPU Temperature
+// Unit: Celsius
+UiElement DeveloperUi::getMaxCpuTemp(float max_cpu_temp) {
+  QString value = QString::number(max_cpu_temp, 'f', 0);
+  QColor color = QColor(255, 255, 255, 255);
+
+  // 警告温度阈值
+  if (max_cpu_temp > 85) {
+    color = QColor(255, 188, 0, 255); // 黄色
+  } else if (max_cpu_temp > 95) {
+    color = QColor(255, 0, 0, 255); // 红色
+  }
+
+  return UiElement(value, "CPU温度", "°C", color);
+}
+
 // Add Vehicle Current Acceleration
 // Unit: m/s²
 UiElement DeveloperUi::getAEgo(float a_ego) {

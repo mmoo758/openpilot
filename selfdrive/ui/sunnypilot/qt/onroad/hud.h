@@ -54,6 +54,7 @@ private:
   float altitude;
   float vEgo;
   float aEgo;
+  float maxCpuTemp;
   float steeringTorqueEps;
   float bearingAccuracyDeg;
   float bearingDeg;
