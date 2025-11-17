@@ -14,6 +14,6 @@ struct UiElement {
   QString units{};
   QColor color{};
 
-  explicit UiElement(const QString &value = "", const QString &label = "", const QString &units = "", const QColor &color = QColor(255, 255, 255, 255))
+  explicit UiElement(const QString &value = "", const QString &label = "", const QString &units = "", const QColor &color = QColor(255, 255, 255, 200))
     : value(value), label(label), units(units), color(color) {}
 };
