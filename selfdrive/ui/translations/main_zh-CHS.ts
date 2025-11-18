@@ -133,6 +133,29 @@ Please use caution when using this feature. Only use the blinker when traffic an
     </message>
 </context>
 <context>
+    <name>OnroadScreenBrightnessControl</name>
+    <message>
+        <source>Onroad Brightness Delay</source>
+        <translation>行驶时屏幕设置启用延迟</translation>
+    </message>
+    <message>
+        <source>s</source>
+        <translation>秒</translation>
+    </message>
+    <message>
+        <source>m</source>
+        <translation>分钟</translation>
+    </message>
+    <message>
+        <source>Onroad Brightness</source>
+        <translation>行驶时的屏幕亮度</translation>
+    </message>
+    <message>
+        <source>Screen Off</source>
+        <translation>屏幕关闭</translation>
+    </message>
+</context>
+<context>
     <name>Brightness</name>
     <message>
         <source>Auto (Dark)</source>
@@ -148,7 +171,7 @@ Please use caution when using this feature. Only use the blinker when traffic an
     </message>
     <message>
         <source>Overrides the brightness of the device. This applies to both onroad and offroad screens. </source>
-        <translation>覆盖设备的亮度设置。此设置同时适用于行车界面和离线界面。选择 自动（深色） 时，亮度自动调整范围为0至100；选择 自动调节 时，亮度自动调整范围为10至100。 </translation>
+        <translation>覆盖设备的亮度设置。此设置同时适用于行驶界面和设置界面。选择 自动（深色） 时，亮度自动调整范围为0至100；选择 自动调节 时，亮度自动调整范围为10至100。 </translation>
     </message>
 </context>
 <context>
@@ -536,7 +559,7 @@ Steering lag calibration is complete.</source>
     </message>
     <message>
         <source>Onroad Uploads</source>
-        <translation>行车数据上传</translation>
+        <translation>行驶时数据上传</translation>
     </message>
     <message>
         <source>Enable Always Offroad</source>
@@ -555,7 +578,7 @@ Steering lag calibration is complete.</source>
     </message>
     <message>
         <source>Onroad Screen: Reduced Brightness</source>
-        <translation>行车屏幕亮度设置</translation>
+        <translation>行驶时屏幕亮度设置</translation>
     </message>
     <message>
         <source>Turn off device screen or reduce brightness after driving starts. It automatically brightens again when screen is touched or a visible alert is displayed.</source>
@@ -1430,7 +1453,7 @@ The default software delay value is 0.2</source>
     </message>
     <message>
         <source>openpilot detected excessive %1 actuation on your last drive. Please contact support at https://comma.ai/support and share your device&apos;s Dongle ID for troubleshooting.</source>
-        <translation>openpilot 检测到您上次行车时 %1 动作幅度过大。请访问 https://comma.ai/support 并提供设备的 Dongle ID，以便我们帮您排查。</translation>
+        <translation>openpilot 检测到您上次行驶时 %1 动作幅度过大。请访问 https://comma.ai/support 并提供设备的 Dongle ID，以便我们帮您排查。</translation>
     </message>
     <message>
         <source>Immediately connect to the internet to check for updates. If you do not connect to the internet, sunnypilot won&apos;t engage in %1</source>
@@ -2842,7 +2865,7 @@ Data</source>
     </message>
     <message>
         <source>Show a timer on the HUD when the car is at a standstill.</source>
-        <translation>当车辆停止时，在行车界面上显示一个计时器记录停车时间。</translation>
+        <translation>当车辆停止时，在行驶界面上显示一个计时器记录停车时间。</translation>
     </message>
     <message>
         <source>Display Road Name</source>
@@ -2882,11 +2905,11 @@ Data</source>
     </message>
     <message>
         <source>Speedometer: Hide from Onroad Screen</source>
-        <translation>车速表：在行车屏幕上隐藏</translation>
+        <translation>车速表：在行驶时的屏幕上隐藏</translation>
     </message>
     <message>
         <source>When enabled, the speedometer on the onroad screen is not displayed.</source>
-        <translation>启用后，行车屏幕上的车速将不再显示。</translation>
+        <translation>启用后，行驶时屏幕上的车速将不再显示。</translation>
     </message>
     <message>
         <source>Display Turn Signals</source>

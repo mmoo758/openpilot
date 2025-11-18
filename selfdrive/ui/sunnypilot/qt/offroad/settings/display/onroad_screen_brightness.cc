@@ -19,14 +19,14 @@ OnroadScreenBrightnessControl::OnroadScreenBrightnessControl(const QString &para
 
   onroadScreenOffTimer = new OptionControlSP(
     "OnroadScreenOffTimer",
-    "Onroad Brightness Delay",
+    tr("Onroad Brightness Delay"),
     "",
     "",
     {0, 11}, 1, true, &onroadScreenOffTimerOptions);
 
   onroadScreenBrightness = new OptionControlSP(
     "OnroadScreenOffBrightness",
-    "Onroad Brightness",
+    tr("Onroad Brightness"),
     "",
     "",
     {0, 90}, 10, true);
