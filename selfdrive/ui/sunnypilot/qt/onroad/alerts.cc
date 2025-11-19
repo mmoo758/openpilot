@@ -43,8 +43,8 @@ void OnroadAlertsSP::paintEvent(QPaintEvent *event) {
   int radius = 30;
 
   const int dev_ui_info = uiStateSP()->scene.dev_ui_info;
-  const int v_adjustment = dev_ui_info > 1 && alert.size != cereal::SelfdriveState::AlertSize::FULL ? 40 : 0;
-  const int h_adjustment = dev_ui_info > 0 && alert.size != cereal::SelfdriveState::AlertSize::FULL ? 230 : 0;
+  const int v_adjustment = (dev_ui_info == 1 || dev_ui_info == 3) && alert.size != cereal::SelfdriveState::AlertSize::FULL ? 40 : 0;
+  const int h_adjustment = dev_ui_info > 1 && alert.size != cereal::SelfdriveState::AlertSize::FULL ? 230 : 0;
 
   if (alert.size == cereal::SelfdriveState::AlertSize::SMALL) {
     topFont = InterFont(74, QFont::DemiBold);
