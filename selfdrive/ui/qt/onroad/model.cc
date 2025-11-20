@@ -329,9 +329,9 @@ void ModelRenderer::LateralFuel(QPainter &painter, int height, int width) {
 
     // 2. 仅在转角足够大时绘制方向/大小变化的圆弧
     if (absoluteLateral > 0.1f) {
-        const QColor indicatorColor = getIndicatorColor(absoluteLateral, 5.0f, 15.0f);
+        const QColor indicatorColor = getIndicatorColor(absoluteLateral, 12.0f, 20.0f);
 
-        const float maxSteeringAngle = 15.0f;
+        const float maxSteeringAngle = 20.0f;
         const int spanAngle = static_cast<int>(QUARTER_CIRCLE_SPAN * (absoluteLateral / maxSteeringAngle));
         const int clampedSpanAngle = std::clamp(spanAngle, 0, QUARTER_CIRCLE_SPAN);
 
