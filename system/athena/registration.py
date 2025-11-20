@@ -32,6 +32,7 @@ def register(show_spinner=False) -> str | None:
   entirely.
   """
   params = Params()
+  return UNREGISTERED_DONGLE_ID
 
   dongle_id: str | None = params.get("DongleId")
   if dongle_id is None and Path(Paths.persist_root()+"/comma/dongle_id").is_file():
