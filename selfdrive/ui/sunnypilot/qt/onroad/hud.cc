@@ -377,8 +377,12 @@ void HudRendererSP::drawRightDevUI(QPainter &p, int x, int y) {
   int rh = 5;
   int ry = y;
 
-  UiElement dRelElement = DeveloperUi::getDRel(lead_status, lead_d_rel);
-  rh += drawRightDevUIElement(p, x, ry, dRelElement.value, dRelElement.label, dRelElement.units, dRelElement.color);
+  // UiElement dRelElement = DeveloperUi::getDRel(lead_status, lead_d_rel);
+  // rh += drawRightDevUIElement(p, x, ry, dRelElement.value, dRelElement.label, dRelElement.units, dRelElement.color);
+  // ry = y + rh;
+
+  UiElement aEgoElement = DeveloperUi::getAEgo(aEgo);
+  rh += drawRightDevUIElement(p, x, ry, aEgoElement.value, aEgoElement.label, aEgoElement.units, aEgoElement.color);
   ry = y + rh;
 
   UiElement vRelElement = DeveloperUi::getVRel(lead_status, lead_v_rel, is_metric, speedUnit);
@@ -429,11 +433,11 @@ void HudRendererSP::drawBottomDevUI(QPainter &p, int x, int y) {
   UiElement dRelEl = DeveloperUi::getDRel(lead_status, lead_d_rel);
   rw += drawBottomDevUIElement(p, rw, y, dRelEl.value, dRelEl.label, dRelEl.units, dRelEl.color);
 
-  // UiElement vEgoLeadElement = DeveloperUi::getVEgoLead(lead_status, lead_v_rel, vEgo, is_metric, speedUnit);
-  // rw += drawBottomDevUIElement(p, rw, y, vEgoLeadElement.value, vEgoLeadElement.label, vEgoLeadElement.units, vEgoLeadElement.color);
+  UiElement vEgoLeadElement = DeveloperUi::getVEgoLead(lead_status, lead_v_rel, vEgo, is_metric, speedUnit);
+  rw += drawBottomDevUIElement(p, rw, y, vEgoLeadElement.value, vEgoLeadElement.label, vEgoLeadElement.units, vEgoLeadElement.color);
 
-  UiElement aEgoElement = DeveloperUi::getAEgo(aEgo);
-  rw += drawBottomDevUIElement(p, rw, y, aEgoElement.value, aEgoElement.label, aEgoElement.units, aEgoElement.color);
+  // UiElement aEgoElement = DeveloperUi::getAEgo(aEgo);
+  // rw += drawBottomDevUIElement(p, rw, y, aEgoElement.value, aEgoElement.label, aEgoElement.units, aEgoElement.color);
 
   UiElement memEl = DeveloperUi::getMemoryUsagePercent(memoryUsagePercent);
   rw += drawBottomDevUIElement(p, rw, y, memEl.value, memEl.label, memEl.units, memEl.color);
