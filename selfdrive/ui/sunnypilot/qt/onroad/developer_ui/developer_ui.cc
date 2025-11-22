@@ -19,7 +19,8 @@ UiElement DeveloperUi::getDRel(bool lead_status, float lead_d_rel) {
   if (lead_status) {
     // Orange if close, Red if very close
     if (lead_d_rel < 5) {
-      color = QColor(255, 0, 0, 200);
+      // color = QColor(255, 0, 0, 200);
+      color = QColor(255, 188, 0, 200);
     } else if (lead_d_rel < 15) {
       color = QColor(255, 188, 0, 200);
     }
@@ -140,7 +141,8 @@ UiElement DeveloperUi::getVEgoLead(bool lead_status, float lead_v_rel, float v_e
     // Red if approaching faster than 10mph
     // Orange if approaching (negative)
     if (lead_v_rel < -4.4704) {
-      color = QColor(255, 0, 0, 200);
+      // color = QColor(255, 0, 0, 200);
+      color = QColor(255, 188, 0, 200);
     } else if (lead_v_rel < 0) {
       color = QColor(255, 188, 0, 200);
     }
@@ -185,27 +187,28 @@ UiElement DeveloperUi::getBearingDeg(float bearing_accuracy_deg, float bearing_d
 
   if (bearing_accuracy_deg != 180.00) {
     if (((bearing_deg >= 337.5) && (bearing_deg <= 360)) || ((bearing_deg >= 0) && (bearing_deg <= 22.5))) {
-      dir_value = "N";
+      dir_value = "北";
     } else if ((bearing_deg > 22.5) && (bearing_deg < 67.5)) {
-      dir_value = "NE";
+      dir_value = "东北";
     } else if ((bearing_deg >= 67.5) && (bearing_deg <= 112.5)) {
-      dir_value = "E";
+      dir_value = "东";
     } else if ((bearing_deg > 112.5) && (bearing_deg < 157.5)) {
-      dir_value = "SE";
+      dir_value = "东南";
     } else if ((bearing_deg >= 157.5) && (bearing_deg <= 202.5)) {
-      dir_value = "S";
+      dir_value = "南";
     } else if ((bearing_deg > 202.5) && (bearing_deg < 247.5)) {
-      dir_value = "SW";
+      dir_value = "西南";
     } else if ((bearing_deg >= 247.5) && (bearing_deg <= 292.5)) {
-      dir_value = "W";
+      dir_value = "西";
     } else if ((bearing_deg > 292.5) && (bearing_deg < 337.5)) {
-      dir_value = "NW";
+      dir_value = "西北";
     }
   } else {
     dir_value = "OFF";
   }
 
-  return UiElement(QString("%1 | %2").arg(dir_value).arg(value), "方向角", "", color);
+  // return UiElement(QString("%1 | %2").arg(dir_value).arg(value), "行驶方向", "", color);
+  return UiElement(dir_value, "行驶方向", "", color);
 }
 
 // Add Altitude of Current Location

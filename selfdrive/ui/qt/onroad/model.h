@@ -69,7 +69,7 @@ protected:
   QPointF lead_vertices[2] = {};
   Eigen::Matrix3f car_space_transform = Eigen::Matrix3f::Zero();
   QRectF clip_region;
-  
+
   // Gauge configuration constants
   static constexpr qreal GAUGE_SIZE = 140.0;
   static constexpr qreal BACKGROUND_SIZE_MULTIPLIER = 1.4;
@@ -87,4 +87,5 @@ protected:
   inline static const QColor LOW_INDICATOR_COLOR = QColor(23, 241, 66, 200);
   inline static const QColor MODERATE_INDICATOR_COLOR = QColor(255, 166, 0, 200);
   inline static const QColor HIGH_INDICATOR_COLOR = QColor(245, 0, 0, 200);
+  inline static const QColor LAT_COLOR = QColor(255, 255, 255, 200);
 };
