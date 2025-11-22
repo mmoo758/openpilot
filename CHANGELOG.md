@@ -1,3 +1,12 @@
+sunnypilot 2025.003.000 (2025-11-22)
+========================
+* 🛠️ 更新说明
+  * 同步上游Dzid26两个更新：
+  * SLA: lower confirmation speed for the city
+  * Disable low speed filtering
+
+
+
 sunnypilot 2025.003.000 (2025-11-21)
 ========================
 * 🛠️ 更新说明
