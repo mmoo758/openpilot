@@ -410,12 +410,12 @@ int HudRendererSP::drawBottomDevUIElement(QPainter &p, int x, int y, const QStri
 
   QRect init_rect2 = fm.boundingRect(value);
   QRect real_rect2 = fm.boundingRect(init_rect2, 0, value);
-  real_rect2.moveTop(real_rect.top());
+  real_rect2.moveCenter({x, y});
   real_rect2.moveLeft(real_rect.right() + 10);
 
   QRect init_rect3 = fm.boundingRect(units);
   QRect real_rect3 = fm.boundingRect(init_rect3, 0, units);
-  real_rect3.moveTop(real_rect.top());
+  real_rect3.moveCenter({x, y});
   real_rect3.moveLeft(real_rect2.right() + 10);
 
   p.setPen(Qt::white);
@@ -430,22 +430,25 @@ int HudRendererSP::drawBottomDevUIElement(QPainter &p, int x, int y, const QStri
 void HudRendererSP::drawBottomDevUI(QPainter &p, int x, int y) {
   int rw = 90;
 
-  UiElement dRelEl = DeveloperUi::getDRel(lead_status, lead_d_rel);
+  UiElement dRelEl = DeveloperUi::getDRel(lead_status, lead_d_rel); // 前车距离
   rw += drawBottomDevUIElement(p, rw, y, dRelEl.value, dRelEl.label, dRelEl.units, dRelEl.color);
 
-  UiElement vEgoLeadElement = DeveloperUi::getVEgoLead(lead_status, lead_v_rel, vEgo, is_metric, speedUnit);
-  rw += drawBottomDevUIElement(p, rw, y, vEgoLeadElement.value, vEgoLeadElement.label, vEgoLeadElement.units, vEgoLeadElement.color);
+  UiElement bearingDegElement = DeveloperUi::getBearingDeg(bearingAccuracyDeg, bearingDeg); // 行驶方向
+  rw += drawBottomDevUIElement(p, rw, y, bearingDegElement.value, bearingDegElement.label, bearingDegElement.units, bearingDegElement.color);
 
-  // UiElement aEgoElement = DeveloperUi::getAEgo(aEgo);
+  // UiElement vEgoLeadElement = DeveloperUi::getVEgoLead(lead_status, lead_v_rel, vEgo, is_metric, speedUnit); // 前车速度
+  // rw += drawBottomDevUIElement(p, rw, y, vEgoLeadElement.value, vEgoLeadElement.label, vEgoLeadElement.units, vEgoLeadElement.color);
+
+  // UiElement aEgoElement = DeveloperUi::getAEgo(aEgo); // 加速度
   // rw += drawBottomDevUIElement(p, rw, y, aEgoElement.value, aEgoElement.label, aEgoElement.units, aEgoElement.color);
 
-  UiElement memEl = DeveloperUi::getMemoryUsagePercent(memoryUsagePercent);
+  UiElement memEl = DeveloperUi::getMemoryUsagePercent(memoryUsagePercent); // 内存占用
   rw += drawBottomDevUIElement(p, rw, y, memEl.value, memEl.label, memEl.units, memEl.color);
 
-  UiElement maxCpuTempElement = DeveloperUi::getMaxCpuTemp(maxCpuTemp); // 手动添加 maxCpu_temp 变量
+  UiElement maxCpuTempElement = DeveloperUi::getMaxCpuTemp(maxCpuTemp); // cpu温度
   rw += drawBottomDevUIElement(p, rw, y, maxCpuTempElement.value, maxCpuTempElement.label, maxCpuTempElement.units, maxCpuTempElement.color);
 
-  UiElement altitudeElement = DeveloperUi::getAltitude(gpsAccuracy, altitude);
+  UiElement altitudeElement = DeveloperUi::getAltitude(gpsAccuracy, altitude); // 海拔
   rw += drawBottomDevUIElement(p, rw, y, altitudeElement.value, altitudeElement.label, altitudeElement.units, altitudeElement.color);
 }
 
