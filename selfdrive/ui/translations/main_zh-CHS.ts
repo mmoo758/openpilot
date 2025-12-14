@@ -171,7 +171,7 @@ Please use caution when using this feature. Only use the blinker when traffic an
     </message>
     <message>
         <source>Overrides the brightness of the device. This applies to both onroad and offroad screens. </source>
-        <translation>覆盖设备的亮度设置。此设置同时适用于行驶界面和设置界面。选择 自动（深色） 时，亮度自动调整范围为0至100；选择 自动调节 时，亮度自动调整范围为10至100。 </translation>
+        <translation>覆盖设备的亮度设置。此设置同时适用于行驶界面和设置界面。选择 自动（深色） 时，亮度自动调整范围为5至30；选择 自动调节 时，亮度自动调整范围为5至100。 </translation>
     </message>
 </context>
 <context>

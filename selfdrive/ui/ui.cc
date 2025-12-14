@@ -191,7 +191,7 @@ void Device::updateBrightness(const UIState &s) {
     if (brightness_override == 1) {
       clipped_brightness = std::clamp(100.0f * clipped_brightness, 5.0f, 30.0f);  // Scale back to 5% to 30%
     } else if (brightness_override == 0) {
-      clipped_brightness = std::clamp(100.0f * clipped_brightness, 10.0f, 100.0f);  // Scale back to 10% to 100%
+      clipped_brightness = std::clamp(100.0f * clipped_brightness, 5.0f, 100.0f);  // Scale back to 10% to 100%
     }
   }
 
