@@ -104,6 +104,7 @@ void HudRendererSP::updateState(const UIState &s) {
 
   if (sm.updated("deviceState")) {
     memoryUsagePercent = sm["deviceState"].getDeviceState().getMemoryUsagePercent();
+    freeSpacePercent = sm["deviceState"].getDeviceState().getFreeSpacePercent();
   }
 
   if (sm.updated(gps_source)) {
@@ -433,8 +434,8 @@ void HudRendererSP::drawBottomDevUI(QPainter &p, int x, int y) {
   UiElement dRelEl = DeveloperUi::getDRel(lead_status, lead_d_rel); // 前车距离
   rw += drawBottomDevUIElement(p, rw, y, dRelEl.value, dRelEl.label, dRelEl.units, dRelEl.color);
 
-  UiElement bearingDegElement = DeveloperUi::getBearingDeg(bearingAccuracyDeg, bearingDeg); // 行驶方向
-  rw += drawBottomDevUIElement(p, rw, y, bearingDegElement.value, bearingDegElement.label, bearingDegElement.units, bearingDegElement.color);
+  // UiElement bearingDegElement = DeveloperUi::getBearingDeg(bearingAccuracyDeg, bearingDeg); // 行驶方向
+  // rw += drawBottomDevUIElement(p, rw, y, bearingDegElement.value, bearingDegElement.label, bearingDegElement.units, bearingDegElement.color);
 
   // UiElement vEgoLeadElement = DeveloperUi::getVEgoLead(lead_status, lead_v_rel, vEgo, is_metric, speedUnit); // 前车速度
   // rw += drawBottomDevUIElement(p, rw, y, vEgoLeadElement.value, vEgoLeadElement.label, vEgoLeadElement.units, vEgoLeadElement.color);
@@ -444,6 +445,9 @@ void HudRendererSP::drawBottomDevUI(QPainter &p, int x, int y) {
 
   UiElement memEl = DeveloperUi::getMemoryUsagePercent(memoryUsagePercent); // 内存占用
   rw += drawBottomDevUIElement(p, rw, y, memEl.value, memEl.label, memEl.units, memEl.color);
+
+  UiElement storageEl = DeveloperUi::getFreeSpacePercent(freeSpacePercent); // 存储剩余
+  rw += drawBottomDevUIElement(p, rw, y, storageEl.value, storageEl.label, storageEl.units, storageEl.color);
 
   UiElement maxCpuTempElement = DeveloperUi::getMaxCpuTemp(maxCpuTemp); // cpu温度
   rw += drawBottomDevUIElement(p, rw, y, maxCpuTempElement.value, maxCpuTempElement.label, maxCpuTempElement.units, maxCpuTempElement.color);

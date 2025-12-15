@@ -49,6 +49,7 @@ private:
   float curvature;
   float roll;
   int memoryUsagePercent;
+  int freeSpacePercent;
   int devUiInfo;
   float gpsAccuracy;
   float altitude;
