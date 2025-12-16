@@ -9,6 +9,8 @@ from openpilot.common.realtime import DT_CTRL, Ratekeeper
 from openpilot.common.params import Params
 from openpilot.common.swaglog import cloudlog
 
+from opendbc.car.interfaces import get_interface_attr
+
 LongCtrlState = car.CarControl.Actuators.LongControlState
 MAX_LAT_ACCEL = 3.0
 
@@ -18,6 +20,16 @@ def joystickd_thread():
   cloudlog.info("joystickd is waiting for CarParams")
   CP = messaging.log_from_bytes(params.get("CarParams", block=True), car.CarParams)
   VM = VehicleModel(CP)
+
+  car_angle_max = None
+  try:
+    car_params = get_interface_attr('CarControllerParams')
+    if car_params and CP.carFingerprint in car_params:
+      angle_limits = car_params[CP.carFingerprint].ANGLE_LIMITS
+      if hasattr(angle_limits, 'steerAngleMax'):
+        car_angle_max = angle_limits.steerAngleMax
+  except Exception:
+    pass  # Fall back to the existing max_angle if anything goes wrong
 
   sm = messaging.SubMaster(['carState', 'onroadEvents', 'liveParameters', 'selfdriveState', 'testJoystick'], frequency=1. / DT_CTRL)
   pm = messaging.PubMaster(['carControl', 'controlsState'])
@@ -42,6 +54,8 @@ def joystickd_thread():
 
     if not should_reset_joystick:
       joystick_axes = sm['testJoystick'].axes
+      if hasattr(sm['testJoystick'], 'buttons') and sm['testJoystick'].buttons and sm['testJoystick'].buttons[0] == 1:
+        CC.cruiseControl.cancel = True
     else:
       joystick_axes = [0.0, 0.0]
 
@@ -54,7 +68,12 @@ def joystickd_thread():
       max_curvature = MAX_LAT_ACCEL / max(sm['carState'].vEgo ** 2, 5)
       max_angle = math.degrees(VM.get_steer_from_curvature(max_curvature, sm['carState'].vEgo, sm['liveParameters'].roll))
 
-      actuators.torque = float(np.clip(joystick_axes[1], -1, 1))
+      if car_angle_max is not None:
+        max_angle = min(max_angle, car_angle_max)
+
+      max_angle = min(max_angle, 390)  # keep the PSA limit as a hard cap
+
+      actuators.torque = -float(np.clip(joystick_axes[1], -1, 1))
       actuators.steeringAngleDeg, actuators.curvature = actuators.torque * max_angle, actuators.torque * -max_curvature
 
     pm.send('carControl', cc_msg)
