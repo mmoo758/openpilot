@@ -9,6 +9,8 @@ from openpilot.common.realtime import DT_CTRL, Ratekeeper
 from openpilot.common.params import Params
 from openpilot.common.swaglog import cloudlog
 
+from opendbc.car.interfaces import get_interface_attr
+
 LongCtrlState = car.CarControl.Actuators.LongControlState
 MAX_LAT_ACCEL = 3.0
 
@@ -52,6 +54,18 @@ def joystickd_thread():
     if CC.latActive:
       max_curvature = MAX_LAT_ACCEL / max(sm['carState'].vEgo ** 2, 5)
       max_angle = math.degrees(VM.get_steer_from_curvature(max_curvature, sm['carState'].vEgo, sm['liveParameters'].roll))
+
+      # Get car-specific angle limits
+      try:
+          car_params = get_interface_attr('CarControllerParams')
+          if car_params and CP.carFingerprint in car_params:
+              angle_limits = car_params[CP.carFingerprint].ANGLE_LIMITS
+              if hasattr(angle_limits, 'steerAngleMax'):
+                  max_angle = min(max_angle, angle_limits.steerAngleMax)
+      except Exception:
+          pass  # Fall back to the existing max_angle if anything goes wrong
+
+      max_angle = min(max_angle, 390)  # Still keep the PSA limit as a hard cap
 
       actuators.torque = float(np.clip(joystick_axes[1], -1, 1))
       actuators.steeringAngleDeg, actuators.curvature = actuators.torque * max_angle, actuators.torque * -max_curvature
