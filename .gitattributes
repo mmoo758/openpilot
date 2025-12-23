@@ -40,6 +40,7 @@ selfdrive/assets/training/step15.png -filter=lfs -diff=lfs -merge=lfs
 selfdrive/assets/training/step16.png -filter=lfs -diff=lfs -merge=lfs
 selfdrive/assets/training/step17.png -filter=lfs -diff=lfs -merge=lfs
 selfdrive/assets/training/step18.png -filter=lfs -diff=lfs -merge=lfs
+selfdrive/modeld/models/dmonitoring_model.onnx -filter=lfs -diff=lfs -merge=lfs
 selfdrive/modeld/models/driving_policy.onnx -filter=lfs -diff=lfs -merge=lfs
 selfdrive/modeld/models/driving_vision.onnx -filter=lfs -diff=lfs -merge=lfs
 sunnypilot/selfdrive/assets/img_minus_arrow_down.png -filter=lfs -diff=lfs -merge=lfs
