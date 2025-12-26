@@ -75,6 +75,7 @@ class ManagerProcess(ABC):
   watchdog_max_dt: int | None = None
   watchdog_seen = False
   shutting_down = False
+  restart_if_crash = False
 
   @abstractmethod
   def prepare(self) -> None:
@@ -197,7 +198,7 @@ class NativeProcess(ManagerProcess):
 
 
 class PythonProcess(ManagerProcess):
-  def __init__(self, name, module, should_run, enabled=True, sigkill=False, watchdog_max_dt=None):
+  def __init__(self, name, module, should_run, enabled=True, sigkill=False, watchdog_max_dt=None, restart_if_crash=False):
     self.name = name
     self.module = module
     self.should_run = should_run
@@ -205,6 +206,7 @@ class PythonProcess(ManagerProcess):
     self.sigkill = sigkill
     self.watchdog_max_dt = watchdog_max_dt
     self.launcher = launcher
+    self.restart_if_crash = restart_if_crash
 
   def prepare(self) -> None:
     if self.enabled:
@@ -284,6 +286,9 @@ def ensure_running(procs: ValuesView[ManagerProcess], started: bool, params=None
   running = []
   for p in procs:
     if p.enabled and p.name not in not_run and p.should_run(started, params, CP):
+      if p.restart_if_crash and p.proc is not None and not p.proc.is_alive():
+        cloudlog.error(f'Restarting {p.name} (exitcode {p.proc.exitcode})')
+        p.restart()
       running.append(p)
     else:
       p.stop(block=False)
