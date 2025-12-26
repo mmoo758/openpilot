@@ -21,6 +21,16 @@ def joystickd_thread():
   CP = messaging.log_from_bytes(params.get("CarParams", block=True), car.CarParams)
   VM = VehicleModel(CP)
 
+  car_angle_max = None
+  try:
+    car_params = get_interface_attr('CarControllerParams')
+    if car_params and CP.carFingerprint in car_params:
+      angle_limits = car_params[CP.carFingerprint].ANGLE_LIMITS
+      if hasattr(angle_limits, 'steerAngleMax'):
+        car_angle_max = angle_limits.steerAngleMax
+  except Exception:
+    pass  # Fall back to the existing max_angle if anything goes wrong
+
   sm = messaging.SubMaster(['carState', 'onroadEvents', 'liveParameters', 'selfdriveState', 'testJoystick'], frequency=1. / DT_CTRL)
   pm = messaging.PubMaster(['carControl', 'controlsState'])
 
@@ -44,30 +54,26 @@ def joystickd_thread():
 
     if not should_reset_joystick:
       joystick_axes = sm['testJoystick'].axes
+      if hasattr(sm['testJoystick'], 'buttons') and sm['testJoystick'].buttons and sm['testJoystick'].buttons[0] == 1:
+        CC.cruiseControl.cancel = True
     else:
       joystick_axes = [0.0, 0.0]
 
     if CC.longActive:
       actuators.accel = 4.0 * float(np.clip(joystick_axes[0], -1, 1))
       actuators.longControlState = LongCtrlState.pid if sm['carState'].vEgo > CP.vEgoStopping else LongCtrlState.stopping
+      CC.cruiseControl.resume = actuators.accel > 0.0
 
     if CC.latActive:
       max_curvature = MAX_LAT_ACCEL / max(sm['carState'].vEgo ** 2, 5)
       max_angle = math.degrees(VM.get_steer_from_curvature(max_curvature, sm['carState'].vEgo, sm['liveParameters'].roll))
 
-      # Get car-specific angle limits
-      try:
-          car_params = get_interface_attr('CarControllerParams')
-          if car_params and CP.carFingerprint in car_params:
-              angle_limits = car_params[CP.carFingerprint].ANGLE_LIMITS
-              if hasattr(angle_limits, 'steerAngleMax'):
-                  max_angle = min(max_angle, angle_limits.steerAngleMax)
-      except Exception:
-          pass  # Fall back to the existing max_angle if anything goes wrong
+      if car_angle_max is not None:
+        max_angle = min(max_angle, car_angle_max)
 
-      max_angle = min(max_angle, 390)  # Still keep the PSA limit as a hard cap
+      max_angle = min(max_angle, 390)  # keep the PSA limit as a hard cap
 
-      actuators.torque = float(np.clip(joystick_axes[1], -1, 1))
+      actuators.torque = -float(np.clip(joystick_axes[1], -1, 1))
       actuators.steeringAngleDeg, actuators.curvature = actuators.torque * max_angle, actuators.torque * -max_curvature
 
     pm.send('carControl', cc_msg)

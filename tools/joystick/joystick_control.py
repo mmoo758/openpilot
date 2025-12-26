@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import os
 import argparse
-import time
 import threading
 import numpy as np
 from inputs import UnpluggedError, get_gamepad, devices
@@ -53,31 +52,25 @@ class Joystick:
 
     if 'Stadia' in gamepad_name:
       print("Google Stadia axes mapping")
-      accel_axis = 'ABS_BRAKE'
       steer_axis = 'ABS_X'
-      self.flip_map = {'ABS_GAS': accel_axis}
+      accel_axis = 'ABS_GAS'
+      self.flip_map = {'ABS_BRAKE': accel_axis}
     elif HARDWARE.get_device_type() == 'pc':
       print("PlayStation 5 DualSense (PC) axes mapping")
-      accel_axis = 'ABS_Z'
+      accel_axis = 'ABS_RZ'
       steer_axis = 'ABS_RX'
-      self.flip_map = {'ABS_RZ': accel_axis}
+      self.flip_map = {'ABS_Z': accel_axis}
     else:
       print("PlayStation 5 DualSense axes mapping")
-      accel_axis = 'ABS_RX'
+      accel_axis = 'ABS_RY'
       steer_axis = 'ABS_Z'
-      self.flip_map = {'ABS_RY': accel_axis}
-
-    time.sleep(1)
+      self.flip_map = {'ABS_RX': accel_axis}
 
     self.min_axis_value = {accel_axis: 0, steer_axis: 0}
     self.max_axis_value = {accel_axis: 255, steer_axis: 255}
     self.axes_values = {accel_axis: 0., steer_axis: 0.}
     self.axes_order = [accel_axis, steer_axis]
     self.cancel = False
-
-    if 'Stadia' in gamepad_name:
-      # don't wait for brake trigger press to learn the negative limit
-      self.min_axis_value = {accel_axis: -255, steer_axis: 0}
 
   def update(self):
     try:
@@ -88,7 +81,7 @@ class Joystick:
 
     event = (joystick_event.code, joystick_event.state)
 
-    # flip left trigger to negative accel
+    # flip left trigger (brake) to negative accel
     if event[0] in self.flip_map:
       event = (self.flip_map[event[0]], -event[1])
 
@@ -101,7 +94,7 @@ class Joystick:
       self.max_axis_value[event[0]] = max(event[1], self.max_axis_value[event[0]])
       self.min_axis_value[event[0]] = min(event[1], self.min_axis_value[event[0]])
 
-      norm = -float(np.interp(event[1], [self.min_axis_value[event[0]], self.max_axis_value[event[0]]], [-1., 1.]))
+      norm = float(np.interp(event[1], [self.min_axis_value[event[0]], self.max_axis_value[event[0]]], [-1., 1.]))
       norm = norm if abs(norm) > 0.03 else 0.  # center can be noisy, deadzone of 3%
       self.axes_values[event[0]] = EXPO * norm ** 3 + (1 - EXPO) * norm  # less action near center for fine control
     else:
