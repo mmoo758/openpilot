@@ -71,3 +71,20 @@ def set_car_specific_params(CP: structs.CarParams, CP_SP: structs.CarParamsSP, p
   # no ACC MAIN button for these brands
   if CP.brand in MADS_NO_ACC_MAIN_BUTTON:
     params.remove("MadsMainCruiseAllowed")
+
+
+def detect_hold_and_tap(a: bool, b: bool, b_prev: bool, tap_pending: bool) -> tuple[bool, bool]:
+    b_rise = (not b_prev) and b
+    b_fall = b_prev and (not b)
+
+    if a and b_rise:
+        tap_pending = True
+
+    if not a:
+        tap_pending = False
+
+    if b_fall and tap_pending:
+            tap_pending = False
+            return True, tap_pending
+
+    return False, tap_pending
