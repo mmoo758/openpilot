@@ -15,7 +15,6 @@ from openpilot.common.swaglog import cloudlog
 from openpilot.sunnypilot import PARAMS_UPDATE_PERIOD
 from openpilot.sunnypilot.livedelay.helpers import get_lat_delay
 from openpilot.sunnypilot.modeld.modeld_base import ModelStateBase
-from openpilot.sunnypilot.selfdrive.controls.lib.param_store import ParamStore
 from openpilot.sunnypilot.selfdrive.controls.lib.blinker_pause_lateral import BlinkerPauseLateral
 from openpilot.sunnypilot.selfdrive.controls.lib.override_pause_lateral import OverridePauseLateral
 
@@ -28,7 +27,6 @@ class ControlsExt(ModelStateBase):
     self._param_update_time: float = 0.0
     self.blinker_pause_lateral = BlinkerPauseLateral()
     self.override_pause_lateral = OverridePauseLateral()
-    self.param_store = ParamStore(self.CP)
 
     cloudlog.info("controlsd_ext is waiting for CarParamsSP")
     self.CP_SP = messaging.log_from_bytes(params.get("CarParamsSP", block=True), custom.CarParamsSP)
@@ -38,8 +36,6 @@ class ControlsExt(ModelStateBase):
     self.pm_services_ext = ['carControlSP']
 
   def get_params_sp(self, sm: messaging.SubMaster) -> None:
-    self.param_store.update(self.params)
-
     if time.monotonic() - self._param_update_time > PARAMS_UPDATE_PERIOD:
       self.blinker_pause_lateral.get_params()
 
@@ -89,8 +85,6 @@ class ControlsExt(ModelStateBase):
 
     # MADS state
     CC_SP.mads = sm['selfdriveStateSP'].mads
-
-    CC_SP.params = self.param_store.param_list
 
     CC_SP.intelligentCruiseButtonManagement = sm['selfdriveStateSP'].intelligentCruiseButtonManagement
 
