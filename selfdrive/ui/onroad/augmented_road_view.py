@@ -27,6 +27,7 @@ BORDER_COLORS = {
 
 WIDE_CAM_MAX_SPEED = 10.0  # m/s (22 mph)
 ROAD_CAM_MIN_SPEED = 15.0  # m/s (34 mph)
+INF_POINT = np.array([1000.0, 0.0, 0.0])
 
 
 class AugmentedRoadView(CameraView):
@@ -91,8 +92,8 @@ class AugmentedRoadView(CameraView):
     # Draw all UI overlays
     self.model_renderer.render(self._content_rect)
     self._hud_renderer.render(self._content_rect)
-    if not self.alert_renderer.render(self._content_rect):
-      self.driver_state_renderer.render(self._content_rect)
+    self.alert_renderer.render(self._content_rect)
+    self.driver_state_renderer.render(self._content_rect)
 
     # Custom UI extension point - add custom overlays here
     # Use self._content_rect for positioning within camera bounds
@@ -167,9 +168,8 @@ class AugmentedRoadView(CameraView):
     zoom = 2.0 if is_wide_camera else 1.1
 
     # Calculate transforms for vanishing point
-    inf_point = np.array([1000.0, 0.0, 0.0])
     calib_transform = intrinsic @ calibration
-    kep = calib_transform @ inf_point
+    kep = calib_transform @ INF_POINT
 
     # Calculate center points and dimensions
     x, y = self._content_rect.x, self._content_rect.y
