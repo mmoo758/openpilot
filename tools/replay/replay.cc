@@ -59,7 +59,6 @@ void Replay::setupSegmentManager(bool has_filters) {
 }
 
 Replay::~Replay() {
-  seg_mgr_.reset();
   if (stream_thread_.joinable()) {
     rInfo("shutdown: in progress...");
     interruptStream([this]() {
@@ -70,6 +69,7 @@ Replay::~Replay() {
     rInfo("shutdown: done");
   }
   camera_server_.reset();
+  seg_mgr_.reset();
 }
 
 bool Replay::load() {
