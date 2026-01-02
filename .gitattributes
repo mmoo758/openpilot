@@ -49,3 +49,9 @@ sunnypilot/selfdrive/assets/offroad/icon_display.png -filter=lfs -diff=lfs -merg
 sunnypilot/selfdrive/assets/images/green_light.png -filter=lfs -diff=lfs -merge=lfs
 sunnypilot/selfdrive/assets/images/lead_depart.png -filter=lfs -diff=lfs -merge=lfs
 sunnypilot/selfdrive/assets/images/spinner_sunnypilot.png -filter=lfs -diff=lfs -merge=lfs
+tools/jotpluggler/assets/pause.png -filter=lfs -diff=lfs -merge=lfs
+tools/jotpluggler/assets/play.png -filter=lfs -diff=lfs -merge=lfs
+tools/jotpluggler/assets/plus.png -filter=lfs -diff=lfs -merge=lfs
+tools/jotpluggler/assets/split_h.png -filter=lfs -diff=lfs -merge=lfs
+tools/jotpluggler/assets/split_v.png -filter=lfs -diff=lfs -merge=lfs
+tools/jotpluggler/assets/x.png -filter=lfs -diff=lfs -merge=lfs
