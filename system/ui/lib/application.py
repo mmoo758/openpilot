@@ -274,8 +274,9 @@ class GuiApplication:
               self._modal_overlay.callback(result)
 
             self._modal_overlay = ModalOverlay()
+          yield True
         else:
-          yield
+          yield False
 
         if self._render_texture:
           rl.end_texture_mode()
