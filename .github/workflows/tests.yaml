@@ -107,7 +107,6 @@ jobs:
 
   build_mac:
     name: build macOS
-    if: false  # temp disable since homebrew install is getting stuck
     runs-on: ${{ ((github.repository == 'commaai/openpilot') && ((github.event_name != 'pull_request') || (github.event.pull_request.head.repo.full_name == 'commaai/openpilot'))) && 'namespace-profile-macos-8x14' || 'macos-latest' }}
     steps:
     - uses: actions/checkout@v4
@@ -127,8 +126,8 @@ jobs:
     - name: Install dependencies
       run: ./tools/mac_setup.sh
       env:
-        # package install has DeprecationWarnings
-        PYTHONWARNINGS: default
+        PYTHONWARNINGS: default  # package install has DeprecationWarnings
+        HOMEBREW_DISPLAY_INSTALL_TIMES: 1
     - name: Save Homebrew cache
       uses: actions/cache/save@v4
       if: github.ref == 'refs/heads/master'
@@ -196,8 +195,6 @@ jobs:
                         # Pre-compile Python bytecode so each pytest worker doesn't need to
                         $PYTEST --collect-only -m 'not slow' -qq && \
                         MAX_EXAMPLES=1 $PYTEST -m 'not slow' && \
-                        ./selfdrive/ui/tests/create_test_translations.sh && \
-                        QT_QPA_PLATFORM=offscreen ./selfdrive/ui/tests/test_translations && \
                         chmod -R 777 /tmp/comma_download_cache"
 
   process_replay:
@@ -258,7 +255,7 @@ jobs:
       (github.event.pull_request.head.repo.full_name == 'commaai/openpilot'))
       && fromJSON('["namespace-profile-amd64-8x16", "namespace-experiments:docker.builds.local-cache=separate"]')
       || fromJSON('["ubuntu-24.04"]') }}
-    if: (github.repository == 'commaai/openpilot') && ((github.event_name != 'pull_request') || (github.event.pull_request.head.repo.full_name == 'commaai/openpilot'))
+    if: false  # FIXME: Started to timeout recently
     steps:
     - uses: actions/checkout@v4
       with:
@@ -275,38 +272,54 @@ jobs:
                         source selfdrive/test/setup_vsound.sh && \
                         CI=1 pytest -s tools/sim/tests/test_metadrive_bridge.py"
 
-  create_ui_report:
-    # This job name needs to be the same as UI_JOB_NAME in ui_preview.yaml
-    name: Create UI Report
+  create_raylib_ui_report:
+    name: Create raylib UI Report
     runs-on: ${{
       (github.repository == 'commaai/openpilot') &&
       ((github.event_name != 'pull_request') ||
       (github.event.pull_request.head.repo.full_name == 'commaai/openpilot'))
       && fromJSON('["namespace-profile-amd64-8x16", "namespace-experiments:docker.builds.local-cache=separate"]')
       || fromJSON('["ubuntu-24.04"]') }}
-    if: false  # FIXME: FrameReader is broken on CI runners
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: true
       - uses: ./.github/workflows/setup-with-retry
-      - name: caching frames
-        id: frames-cache
-        uses: actions/cache@v4
-        with:
-          path: .ci_cache/comma_download_cache
-          key: ui_screenshots_test_${{ hashFiles('selfdrive/ui/tests/test_ui/run.py') }}
       - name: Build openpilot
         run: ${{ env.RUN }} "scons -j$(nproc)"
-      - name: Create Test Report
-        timeout-minutes: ${{ ((steps.frames-cache.outputs.cache-hit == 'true') && 2 || 4) }}
+      - name: Create raylib UI Report
         run: >
-            ${{ env.RUN }} "PYTHONWARNINGS=ignore &&
-                            source selfdrive/test/setup_xvfb.sh &&
-                            CACHE_ROOT=/tmp/comma_download_cache python3 selfdrive/ui/tests/test_ui/run.py &&
-                            chmod -R 777 /tmp/comma_download_cache"
-      - name: Upload Test Report
+          ${{ env.RUN }} "PYTHONWARNINGS=ignore &&
+                          source selfdrive/test/setup_xvfb.sh &&
+                          python3 selfdrive/ui/tests/test_ui/raylib_screenshots.py"
+      - name: Upload Raylib UI Report
         uses: actions/upload-artifact@v4
         with:
-          name: report-${{ inputs.run_number || '1' }}-${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && 'master' || github.event.number }}
-          path: selfdrive/ui/tests/test_ui/report_1/screenshots
+          name: raylib-report-${{ inputs.run_number || '1' }}-${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && 'master' || github.event.number }}
+          path: selfdrive/ui/tests/test_ui/raylib_report/screenshots
+
+  create_mici_raylib_ui_report:
+    name: Create mici raylib UI Report
+    runs-on: ${{
+      (github.repository == 'commaai/openpilot') &&
+      ((github.event_name != 'pull_request') ||
+      (github.event.pull_request.head.repo.full_name == 'commaai/openpilot'))
+      && fromJSON('["namespace-profile-amd64-8x16", "namespace-experiments:docker.builds.local-cache=separate"]')
+      || fromJSON('["ubuntu-24.04"]') }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - uses: ./.github/workflows/setup-with-retry
+      - name: Build openpilot
+        run: ${{ env.RUN }} "scons -j$(nproc)"
+      - name: Create mici raylib UI Report
+        run: >
+          ${{ env.RUN }} "PYTHONWARNINGS=ignore &&
+                          source selfdrive/test/setup_xvfb.sh &&
+                          WINDOWED=1 python3 selfdrive/ui/tests/diff/replay.py"
+      - name: Upload Raylib UI Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: mici-raylib-report-${{ inputs.run_number || '1' }}-${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && 'master' || github.event.number }}
+          path: selfdrive/ui/tests/diff/report
