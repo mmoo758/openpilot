@@ -141,3 +141,9 @@ class Widget(abc.ABC):
     if self._click_callback:
       self._click_callback()
     return False
+
+  def show_event(self):
+    """Optionally handle show event. Parent must manually call this"""
+
+  def hide_event(self):
+    """Optionally handle hide event. Parent must manually call this"""
