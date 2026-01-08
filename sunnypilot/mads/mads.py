@@ -69,7 +69,14 @@ class ModularAssistiveDrivingSystem:
 
     return False
 
-  def both_pedals_pressed(self, CS: structs.CarState) -> bool:
+  def both_pedals_gesture(self, CS: structs.CarState) -> bool:
+    """
+    Detect if one pedal is tapped while the other is held.
+
+    This is better than simple both pedals pressed detection.
+    It prevents false positives when driver transitions between pedals
+    for launch control or hill starting.
+    """
     gas_tap_brake_held, self.gas_tap_pending = detect_hold_and_tap(
       CS.brakePressed, CS.gasPressed, self.selfdrive.CS_prev.gasPressed, self.gas_tap_pending
     )
@@ -185,7 +192,7 @@ class ModularAssistiveDrivingSystem:
       if self.selfdrive.CS_prev.cruiseState.available:
         self.events_sp.add(EventNameSP.lkasDisable)
 
-    if self.both_pedals_pressed(CS) or (self.steering_mode_on_brake == MadsSteeringModeOnBrake.DISENGAGE
+    if self.both_pedals_gesture(CS) or (self.steering_mode_on_brake == MadsSteeringModeOnBrake.DISENGAGE
                                and self.pedal_pressed_non_gas_pressed(CS)):
       if self.enabled:
         self.events_sp.add(EventNameSP.lkasDisable)
