@@ -27,11 +27,11 @@ class PairingDialog(Widget):
   def _get_pairing_url(self) -> str:
     try:
       dongle_id = self.params.get("DongleId") or ""
-      token = Api(dongle_id).get_token({'pair': True})
+      token = Api(dongle_id).get_token()
     except Exception as e:
       cloudlog.warning(f"Failed to get pairing token: {e}")
       token = ""
-    return f"https://connect.comma.ai/?pair={token}"
+    return f"https://connect.comma.ai/setup?token={token}"
 
   def _generate_qr_code(self) -> None:
     try:
