@@ -13,6 +13,7 @@ from opendbc.car.interfaces import get_interface_attr
 
 LongCtrlState = car.CarControl.Actuators.LongControlState
 MAX_LAT_ACCEL = 3.0
+MAX_LAT_JERK = 1.5
 
 
 def joystickd_thread():
@@ -21,20 +22,22 @@ def joystickd_thread():
   CP = messaging.log_from_bytes(params.get("CarParams", block=True), car.CarParams)
   VM = VehicleModel(CP)
 
-  car_angle_max = None
+  # get max angle from car brand params
+  max_angle = 450
   try:
     car_params = get_interface_attr('CarControllerParams')
     if car_params and CP.carFingerprint in car_params:
       angle_limits = car_params[CP.carFingerprint].ANGLE_LIMITS
       if hasattr(angle_limits, 'steerAngleMax'):
-        car_angle_max = angle_limits.steerAngleMax
+        max_angle = angle_limits.steerAngleMax
   except Exception:
-    pass  # Fall back to the existing max_angle if anything goes wrong
+    pass
 
   sm = messaging.SubMaster(['carState', 'onroadEvents', 'liveParameters', 'selfdriveState', 'testJoystick'], frequency=1. / DT_CTRL)
   pm = messaging.PubMaster(['carControl', 'controlsState'])
 
   rk = Ratekeeper(100, print_delay_threshold=None)
+  prev_curvature = 0.0
   while 1:
     sm.update(0)
 
@@ -65,16 +68,32 @@ def joystickd_thread():
       CC.cruiseControl.resume = actuators.accel > 0.0
 
     if CC.latActive:
-      max_curvature = MAX_LAT_ACCEL / max(sm['carState'].vEgo ** 2, 5)
-      max_angle = math.degrees(VM.get_steer_from_curvature(max_curvature, sm['carState'].vEgo, sm['liveParameters'].roll))
+      steer_input = float(np.clip(joystick_axes[1], -1, 1))
 
-      if car_angle_max is not None:
-        max_angle = min(max_angle, car_angle_max)
+      # limit lateral acceleration and jerk for non-torque cars
+      v_ego = sm['carState'].vEgo
+      roll = sm['liveParameters'].roll
+      max_curvature = MAX_LAT_ACCEL / max(v_ego ** 2, 5)
+      max_curvature_rate = (MAX_LAT_JERK / max(v_ego ** 2, 5))
 
-      max_angle = min(max_angle, 390)  # keep the PSA limit as a hard cap
+      max_curvature_from_angle = abs(VM.calc_curvature(math.radians(max_angle), v_ego, roll))
+      target_curvature = steer_input * min(max_curvature, max_curvature_from_angle)
 
-      actuators.torque = -float(np.clip(joystick_axes[1], -1, 1))
-      actuators.steeringAngleDeg, actuators.curvature = actuators.torque * max_angle, actuators.torque * -max_curvature
+      # rate-imit only when moving away from the center
+      # snappy centering helps user with correcting the input
+      up = float(np.clip(target_curvature - prev_curvature, -np.inf, max_curvature_rate * DT_CTRL))
+      down = float(np.clip(target_curvature - prev_curvature, -max_curvature_rate * DT_CTRL, np.inf))
+      curvature = prev_curvature + (up if target_curvature > 0.0 else down)
+
+      angle = math.degrees(VM.get_steer_from_curvature(curvature, v_ego, roll))
+
+      actuators.torque = -steer_input
+      actuators.curvature = curvature
+      actuators.steeringAngleDeg = -angle
+
+      prev_curvature = curvature
+    else:
+      prev_curvature = 0.0
 
     pm.send('carControl', cc_msg)
 
