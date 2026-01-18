@@ -1,3 +1,12 @@
+Version 0.10.1 (2026-01-18)
+========================
+* 此版本为AmyJeanes的coop-steering修改C3L版本并汉化
+* 同步master更新至#1401
+* AGNOS系统版本升级至13.1
+* long_mpc.py文件调整（Luby）
+
+
+
 Version 0.10.1 (2025-10-20)
 ========================
 * 此版本为AmyJeanes的coop-steering修改C3L版本并汉化
