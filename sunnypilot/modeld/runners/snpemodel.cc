@@ -21,7 +21,7 @@ SNPEModel::SNPEModel(const std::string path, float *_output, size_t _output_size
   output_size = _output_size;
   use_tf8 = _use_tf8;
 
-#ifdef __TICI__
+#ifdef QCOM2
   if (runtime == USE_GPU_RUNTIME) {
     snpe_runtime = zdl::DlSystem::Runtime_t::GPU;
   } else if (runtime == USE_DSP_RUNTIME) {
@@ -42,7 +42,7 @@ SNPEModel::SNPEModel(const std::string path, float *_output, size_t _output_size
   // create model runner
   zdl::SNPE::SNPEBuilder snpe_builder(container.get());
   while (!snpe) {
-#ifdef __TICI__
+#ifdef QCOM2
     snpe = snpe_builder.setOutputLayers({})
                        .setRuntimeProcessor(snpe_runtime)
                        .setUseUserSuppliedBuffers(true)
