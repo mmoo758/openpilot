@@ -110,7 +110,7 @@ class Thneed {
     int debug;
     int timestamp;
 
-#ifdef QCOM2
+#ifdef __TICI__
     unique_ptr<GPUMalloc> ram;
     vector<unique_ptr<CachedIoctl> > cmds;
     int fd;

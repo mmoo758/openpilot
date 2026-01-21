@@ -36,7 +36,7 @@ public:
 private:
   std::string model_data;
 
-#ifdef QCOM2
+#ifdef __TICI__
   zdl::DlSystem::Runtime_t snpe_runtime;
 #endif
 
