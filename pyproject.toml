@@ -14,7 +14,7 @@ dependencies = [
   "pyserial",     # pigeond + qcomgpsd
   "requests",     # many one-off uses
   "sympy",        # rednose + friends
-  "crcmod",       # cars + qcomgpsd
+  "crcmod-plus",  # cars + qcomgpsd
   "tqdm",         # cars (fw_versions.py) on start + many one-off uses
 
   # hardwared
@@ -49,7 +49,7 @@ dependencies = [
   # logging
   "pyzmq",
   "sentry-sdk",
-  "xattr", # used in place of 'os.getxattr' for macos compatibility
+  "xattr",  # used in place of 'os.getxattr' for macOS compatibility
 
   # athena
   "PyJWT",
@@ -72,7 +72,7 @@ dependencies = [
   "zstandard",
 
   # ui
-  "raylib < 5.5.0.3", # TODO: unpin when they fix https://github.com/electronstudio/raylib-python-cffi/issues/186
+  "raylib > 5.5.0.3",
   "qrcode",
   "mapbox-earcut",
 ]
@@ -115,7 +115,7 @@ dev = [
   "parameterized >=0.8, <0.9",
   "pyautogui",
   "pygame",
-  "pyopencl; platform_machine != 'aarch64'", # broken on arm64
+  "pyopencl",
   "pytools>=2025.1.6; platform_machine != 'aarch64'",
   "pywinctl",
   "pyprof2calltree",
@@ -272,6 +272,6 @@ invalid-argument-type = "ignore"
 call-non-callable = "ignore"
 # Ignore unsupported-operator - false positives from dynamic types
 unsupported-operator = "ignore"
-# Ignore non-subscriptable - false positives from dynamic types
-non-subscriptable = "ignore"
+# Ignore not-subscriptable - false positives from dynamic types
+not-subscriptable = "ignore"
 # not-iterable errors are now fixed
