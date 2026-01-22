@@ -44,10 +44,10 @@ private:
       height: 150px;
       padding: 0 25px 0 25px;
       color: #FFFFFF;
-      background-color: #393939;
+      background-color: #1e79e8;
     }
     PushButtonSP:pressed {
-      background-color: #4A4A4A;
+      background-color: #1E8FFF;
     }
   )";
 
