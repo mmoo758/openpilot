@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import abc
 import pyray as rl
 from enum import IntEnum
@@ -77,7 +75,7 @@ class Widget(abc.ABC):
     if changed:
       self._update_layout_rects()
 
-  def render(self, rect: rl.Rectangle | None = None) -> bool | int | None:
+  def render(self, rect: rl.Rectangle = None) -> bool | int | None:
     if rect is not None:
       self.set_rect(rect)
 

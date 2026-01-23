@@ -114,8 +114,7 @@ class MouseState:
         time.monotonic(),
       )
       # Only add changes
-      prev = self._prev_mouse_event[slot]
-      if prev is None or ev[:-1] != prev[:-1]:
+      if self._prev_mouse_event[slot] is None or ev[:-1] != self._prev_mouse_event[slot][:-1]:
         with self._lock:
           self._events.append(ev)
         self._prev_mouse_event[slot] = ev

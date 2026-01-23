@@ -123,7 +123,7 @@ class CarSpecificEvents:
           events.add(EventName.speedTooLow)
 
       # TODO: this needs to be implemented generically in carState struct
-      # if CC.eps_timer_soft_disable_alert:
+      # if CC.eps_timer_soft_disable_alert:  # type: ignore[attr-defined]
       #   events.add(EventName.steerTimeLimit)
 
     elif self.CP.brand == 'hyundai':

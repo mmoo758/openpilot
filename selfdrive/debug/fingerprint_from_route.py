@@ -28,12 +28,11 @@ def get_fingerprint(lr):
 
   # TODO: also print the fw fingerprint merged with the existing ones
   # show FW fingerprint
-  if fw:
-    print("\nFW fingerprint:\n")
-    for f in fw:
-      print(f"    (Ecu.{f.ecu}, {hex(f.address)}, {None if f.subAddress == 0 else f.subAddress}): [")
-      print(f"      {f.fwVersion},")
-      print("    ],")
+  print("\nFW fingerprint:\n")
+  for f in fw:
+    print(f"    (Ecu.{f.ecu}, {hex(f.address)}, {None if f.subAddress == 0 else f.subAddress}): [")
+    print(f"      {f.fwVersion},")
+    print("    ],")
   print()
   print(f"VIN: {vin}")
 
