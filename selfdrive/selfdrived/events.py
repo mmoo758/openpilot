@@ -206,7 +206,7 @@ def personality_changed_alert(CP: car.CarParams, CS: car.CarState, sm: messaging
 def invalid_lkas_setting_alert(CP: car.CarParams, CS: car.CarState, sm: messaging.SubMaster, metric: bool, soft_disable_time: int, personality) -> Alert:
   text = "切换原厂车道保持辅助系统（LKAS）的开关以启用"
   if CP.brand == "tesla":
-    text = "切换到交通感知巡航控制（TACC）以启用"
+    text = "切换到 主动巡航控制（TACC） 以启用"
   elif CP.brand == "mazda":
     text = "启用车辆的LKAS系统以启用"
   elif CP.brand == "nissan":
