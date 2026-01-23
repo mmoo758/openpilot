@@ -64,12 +64,7 @@ def request_refresh_osm_location_data(nations: list[str], states: list[str] | No
     "states": states or []
   }
 
-  osm_download_locations_dump = json.dumps({
-    "nations": nations,
-    "states": states or []
-  })
-
-  print(f"Downloading maps for {osm_download_locations_dump}")
+  print(f"Downloading maps for {json.dumps(osm_download_locations)}")
   mem_params.put("OSMDownloadLocations", osm_download_locations)
 
 
