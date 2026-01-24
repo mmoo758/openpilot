@@ -82,6 +82,10 @@ if __name__ == "__main__":
           if (len(exact_matches) == 1) and (list(exact_matches)[0] == live_fingerprint):
             good_exact += 1
             print(f"Correct! Live: {live_fingerprint} - Fuzzy: {fuzzy_matches}")
+            print("\nCar FW details:")
+            for fw in car_fw:
+              print(f"  {fw}")
+            print()
 
             # Check if fuzzy match was correct
             if len(fuzzy_matches) == 1:
