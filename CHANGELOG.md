@@ -1,4 +1,4 @@
-sunnypilot 2025.003.000 (2026-01-23)
+sunnypilot 2025.003.000 (2026-01-24)
 ========================
 * 🛠️ dev版本更新说明
   * 取消ImmediateDisableAlert的声音报警（for jungle）
