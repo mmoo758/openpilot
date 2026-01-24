@@ -1,28 +1,19 @@
-Version 0.10.1 (2025-10-20)
+Version 0.10.4 (2026-02-17)
 ========================
-* 此版本为dzid26的251018版的vtb-lkas-pause修改C3版本并汉化
-* 同步master更新至#1401
+* Lexus LS 2018 support thanks to Hacheoy!
 
-
-
-
-Version 0.10.1 (2025-10-19)
+Version 0.10.3 (2025-12-17)
 ========================
-* 此版本为dzid26的251018版的vtb-lkas-pause修改C3版本并汉化
-* 修改开机图片及新手指南中文
+* New driving model #36249
+  * New temporal policy architecture
+  * New on-policy training physics noise model
+* New driver monitoring model #36409
+  * Trained on a new dataset, including comma four data
+* Improved inter-process communication memory efficiency
 
-
-
-
-
-Version 0.10.1 (2025-10-18)
+Version 0.10.2 (2025-11-19)
 ========================
-* 此版本为dzid26的251018版的vtb-lkas-pause修改C3版本并汉化
-* 同步master的更新
-
-
-
-
+* comma four support
 
 Version 0.10.1 (2025-09-08)
 ========================
