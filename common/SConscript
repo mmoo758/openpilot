@@ -5,12 +5,17 @@ common_libs = [
   'swaglog.cc',
   'util.cc',
   'watchdog.cc',
-  'ratekeeper.cc',
-  'clutil.cc',
+  'ratekeeper.cc'
 ]
 
 _common = env.Library('common', common_libs, LIBS="json11")
-Export('_common')
+
+files = [
+  'clutil.cc',
+]
+
+_gpucommon = env.Library('gpucommon', files)
+Export('_common', '_gpucommon')
 
 if GetOption('extras'):
   env.Program('tests/test_common',
