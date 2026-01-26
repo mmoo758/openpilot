@@ -224,7 +224,7 @@ Please use caution when using this feature. Only use the blinker when traffic an
     </message>
     <message>
         <source>ADB (Android Debug Bridge) allows connecting to your device over USB or over the network. See https://docs.comma.ai/how-to/connect-to-comma for more info.</source>
-        <translation>ADB（Android调试桥接）允许通过USB或网络连接到您的设备。更多信息请参见 [https://docs.comma.ai/how-to/connect-to-comma](https://docs.comma.ai/how-to/connect-to-comma)。</translation>
+        <translation>ADB（Android调试桥接）允许通过USB或网络连接到您的设备。更多信息请参见 https://docs.comma.ai/how-to/connect-to-comma。</translation>
     </message>
     <message>
         <source>On this car, sunnypilot defaults to the car&apos;s built-in ACC instead of sunnypilot&apos;s longitudinal control. Enable this to switch to sunnypilot longitudinal control. Enabling Experimental mode is recommended when enabling sunnypilot longitudinal control alpha.</source>
@@ -1173,10 +1173,6 @@ DEPARTING</source>
         <translation>决策模型</translation>
     </message>
     <message>
-        <source>If you’re driving at 20 mph (32 km/h) or below and have your blinker on, the car will plan a turn in that direction at the nearest drivable path. This prevents situations (like at red lights) where the car might plan the wrong turn direction.</source>
-        <translation>如果你的车速在20英里/小时（32公里/小时）或以下，并且已打开转向灯，汽车将在最近的可行驶路径上计划朝该方向转弯。这可以避免在红绿灯等情况下，汽车可能会计划错误的转弯方向的情况。</translation>
-    </message>
-    <message>
         <source>Live Learning Steer Delay</source>
         <translation>实时学习转向延迟</translation>
     </message>
@@ -1281,6 +1277,10 @@ The default software delay value is 0.2</source>
     <message>
         <source>Fetching Latest Models</source>
         <translation>正在获取最新驾驶模型列表</translation>
+    </message>
+    <message>
+        <source>If you’re driving at 20 mph (32 km/h) or below and have your blinker on, the car will plan a turn in that direction at the nearest drivable path. This prevents situations (like at red lights) where the car might plan the wrong turn direction.</source>
+        <translation>如果你的车速在20英里/小时（32公里/小时）或以下，并且已打开转向灯，汽车将在最近的可行驶路径上计划朝该方向转弯。这可以避免在红绿灯等情况下，汽车可能会计划错误的转弯方向的情况。</translation>
     </message>
     <message>
         <source>Enable this for the car to learn and adapt its steering response time. Disable to use a fixed steering response time. Keeping this on provides the stock openpilot experience.</source>

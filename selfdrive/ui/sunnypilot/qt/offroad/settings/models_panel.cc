@@ -105,9 +105,9 @@ ModelsPanel::ModelsPanel(QWidget *parent) : QWidget(parent) {
 
   // Lane Turn Desire toggle
   lane_turn_desire_toggle = new ParamControlSP("LaneTurnDesire", tr("Use Lane Turn Desires"),
-                            "If you’re driving at 20 mph (32 km/h) or below and have your blinker on, "
-                            "the car will plan a turn in that direction at the nearest drivable path. "
-                            "This prevents situations (like at red lights) where the car might plan the wrong turn direction.",
+                            tr("If you’re driving at 20 mph (32 km/h) or below and have your blinker on, "
+                               "the car will plan a turn in that direction at the nearest drivable path. "
+                               "This prevents situations (like at red lights) where the car might plan the wrong turn direction."),
                              "../assets/offroad/icon_shell.png");
   list->addItem(lane_turn_desire_toggle);
 
