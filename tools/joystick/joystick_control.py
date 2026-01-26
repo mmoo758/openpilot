@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 import os
 import argparse
+import time
 import threading
 import numpy as np
-from inputs import UnpluggedError, get_gamepad
+from inputs import UnpluggedError, get_gamepad, devices
 
 from cereal import messaging
 from openpilot.common.params import Params
@@ -42,24 +43,46 @@ class Keyboard:
 
 class Joystick:
   def __init__(self):
-    # This class supports a PlayStation 5 DualSense controller on the comma 3X
-    # TODO: find a way to get this from API or detect gamepad/PC, perhaps "inputs" doesn't support it
     self.cancel_button = 'BTN_NORTH'  # BTN_NORTH=X/triangle
-    if HARDWARE.get_device_type() == 'pc':
+
+    gamepad_name = ''
+    if devices.gamepads:
+      gp0 = devices.gamepads[0]
+      gamepad_name = getattr(gp0, 'name', '') or str(gp0)
+      print(f"Detected: {gamepad_name}\n")
+
+    if 'Stadia' in gamepad_name:
+      print("Google Stadia axes mapping")
+      accel_axis = 'ABS_BRAKE'
+      steer_axis = 'ABS_Z'
+      self.flip_map = {'ABS_GAS': accel_axis}
+    elif 'Saitek Pro Flight X-56 Rhino Throttle' in gamepad_name:
+      print("Saitek X-56 Rhino Throttle axes mapping")
+      accel_axis = 'ABS_X'
+      steer_axis = 'ABS_Z'
+      self.flip_map = {}
+    elif HARDWARE.get_device_type() == 'pc':
+      print("PlayStation 5 DualSense (PC) axes mapping")
       accel_axis = 'ABS_Z'
       steer_axis = 'ABS_RX'
-      # TODO: once the longcontrol API is finalized, we can replace this with outputting gas/brake and steering
       self.flip_map = {'ABS_RZ': accel_axis}
     else:
+      print("PlayStation 5 DualSense axes mapping")
       accel_axis = 'ABS_RX'
       steer_axis = 'ABS_Z'
       self.flip_map = {'ABS_RY': accel_axis}
 
-    self.min_axis_value = {accel_axis: 0., steer_axis: 0.}
-    self.max_axis_value = {accel_axis: 255., steer_axis: 255.}
+    time.sleep(1)
+
+    self.min_axis_value = {accel_axis: 0, steer_axis: 0}
+    self.max_axis_value = {accel_axis: 255, steer_axis: 255}
     self.axes_values = {accel_axis: 0., steer_axis: 0.}
     self.axes_order = [accel_axis, steer_axis]
     self.cancel = False
+
+    if 'Stadia' in gamepad_name:
+      # don't wait for brake trigger press to learn the negative limit
+      self.min_axis_value = {accel_axis: -255, steer_axis: 0}
 
   def update(self):
     try:
@@ -98,11 +121,13 @@ def send_thread(joystick):
 
   while True:
     if rk.frame % 20 == 0:
-      print('\n' + ', '.join(f'{name}: {round(v, 3)}' for name, v in joystick.axes_values.items()))
+      print('\n' + ', '.join(f'{name}: {round(v, 3)} ' for name, v in joystick.axes_values.items()))
+      print(joystick.cancel_button, ": ", joystick.cancel)
 
     joystick_msg = messaging.new_message('testJoystick')
     joystick_msg.valid = True
     joystick_msg.testJoystick.axes = [joystick.axes_values[ax] for ax in joystick.axes_order]
+    joystick_msg.testJoystick.buttons = [1] if joystick.cancel else []
 
     pm.send('testJoystick', joystick_msg)
 
