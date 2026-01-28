@@ -178,8 +178,8 @@ node {
 
   try {
     if (env.BRANCH_NAME == 'devel-staging') {
-      deviceStage("build release3-staging", "tizi-needs-can", [], [
-        step("build release3-staging", "RELEASE_BRANCH=release3-staging $SOURCE_DIR/release/build_release.sh"),
+      deviceStage("build release-tizi-staging", "tizi-needs-can", [], [
+        step("build release-tizi-staging", "RELEASE_BRANCH=release-tizi-staging $SOURCE_DIR/release/build_release.sh"),
       ])
     }
 
