@@ -2528,8 +2528,8 @@ Data</source>
         <translation>启用 sunnylink 上传器，以允许 sunnypilot 将您的驾驶数据上传至 sunnypilot 服务器。（仅限最高级别用户使用，对您没有任何实际好处，仅用于测试数据量。）</translation>
     </message>
     <message>
-        <source>Enable sunnylink uploader (infrastructure test)</source>
-        <translation>启用 sunnylink 上传器 (系统测试)</translation>
+        <source>Enable sunnylink uploader (just for testing infrastructure)</source>
+        <translation>启用 sunnylink 上传器 (仅用于测试)</translation>
     </message>
     <message>
         <source>🚀 sunnylink 🚀</source>
