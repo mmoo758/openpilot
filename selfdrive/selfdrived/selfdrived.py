@@ -75,7 +75,7 @@ class SelfdriveD(CruiseHelper):
 
     self.pose_calibrator = PoseCalibrator()
     self.calibrated_pose: Pose | None = None
-    self.excessive_actuation_check = ExcessiveActuationCheck()
+    self.excessive_actuation_check = ExcessiveActuationCheck(self.params)
     self.excessive_actuation = self.params.get("Offroad_ExcessiveActuation") is not None
 
     # Setup sockets

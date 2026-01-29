@@ -2,6 +2,7 @@ import math
 from enum import StrEnum, auto
 
 from cereal import car, messaging
+from openpilot.common.params import Params
 from openpilot.common.realtime import DT_CTRL
 from openpilot.selfdrive.locationd.helpers import Pose
 from opendbc.car import ACCELERATION_DUE_TO_GRAVITY
@@ -18,15 +19,20 @@ class ExcessiveActuationType(StrEnum):
 
 
 class ExcessiveActuationCheck:
-  def __init__(self):
+  def __init__(self, params: Params):
     self._excessive_counter = 0
     self._engaged_counter = 0
+    self.params = params
+    self.longitudinal_active_with_gas = self.params.get_bool("LongitudinalActiveWithGas")
 
   def update(self, sm: messaging.SubMaster, CS: car.CarState, calibrated_pose: Pose) -> ExcessiveActuationType | None:
     # CS.aEgo can be noisy to bumps in the road, transitioning from standstill, losing traction, etc.
     # longitudinal
     accel_calibrated = calibrated_pose.acceleration.x
-    excessive_long_actuation = sm['carControl'].longActive and (accel_calibrated > ACCEL_MAX * 2 or accel_calibrated < ACCEL_MIN * 2)
+    if self.longitudinal_active_with_gas:
+      excessive_long_actuation = sm['carControl'].longActive and ((not CS.gasPressed and accel_calibrated > ACCEL_MAX * 2) or accel_calibrated < ACCEL_MIN * 2)
+    else:
+      excessive_long_actuation = sm['carControl'].longActive and (accel_calibrated > ACCEL_MAX * 2 or accel_calibrated < ACCEL_MIN * 2)
 
     # lateral
     yaw_rate = calibrated_pose.angular_velocity.yaw
