@@ -24,5 +24,4 @@ public:
 private:
   ParamControlSP *coopSteeringToggle = nullptr;
   ParamControlSP *lkasSteeringToggle = nullptr;
-  ParamControlSP *lowSpeedSteerPauseToggle = nullptr;
 };
