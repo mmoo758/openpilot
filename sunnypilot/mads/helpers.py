@@ -24,8 +24,6 @@ class MadsSteeringModeOnBrake:
 def get_mads_limited_brands(CP: structs.CarParams, CP_SP: structs.CarParamsSP) -> bool:
   if CP.brand == 'rivian':
     return True
-  if CP.brand == 'tesla':
-    return False # not CP_SP.flags & TeslaFlagsSP.HAS_VEHICLE_BUS
 
   return False
 
