@@ -127,34 +127,6 @@ ModelsPanel::ModelsPanel(QWidget *parent) : QWidget(parent) {
   connect(lane_turn_desire_toggle, &ParamControlSP::toggleFlipped, this, &ModelsPanel::refreshLaneTurnValueControl);
   connect(lane_turn_value_control, &OptionControlSP::updateLabels, this, &ModelsPanel::refreshLaneTurnValueControl);
 
-  // Camera Offset toggle
-  camera_offset_toggle = new ParamControlSP("CameraOffsetToggle", tr("Adjust Camera Offset"),
-                            tr("Adjust this to center the car in its lane by virtually shifting the camera's perspective."),
-                             "../assets/offroad/icon_shell.png");
-  list->addItem(camera_offset_toggle);
-
-  // Camera Offset value control
-  camera_offset_control = new OptionControlSP("CameraOffset", tr("Camera Offset Value"),
-    tr("Negative Values: Shears the image to the left, moving the model's center to the Right; Positive Values: Shears the image to the right, moving the model's center to the Left. Note: these values are in meters."),
-    "m", {-35, 35}, 1, false, nullptr, true, true);
-  camera_offset_control->showDescription();
-  list->addItem(camera_offset_control);
-
-  // Set default value and step size
-  camera_offset_control->setLabel("0.00 m");
-  connect(camera_offset_control, &OptionControlSP::updateLabels, [=]() {
-    float raw_value = QString::fromStdString(params.get("CameraOffset")).toFloat();
-    float display_value = raw_value / 100.0f; // Convert from centi-meters to meters
-    camera_offset_control->setLabel(QString::number(display_value, 'f', 2) + " m");
-  });
-
-  // Connect toggle to show/hide offset control
-  connect(camera_offset_toggle, &ParamControlSP::toggleFlipped, this, &ModelsPanel::refreshCameraOffsetControl);
-  connect(camera_offset_control, &OptionControlSP::updateLabels, this, &ModelsPanel::refreshCameraOffsetControl);
-
-  // Initialize visibility
-  refreshCameraOffsetControl();
-
   // LiveDelay toggle
   lagd_toggle_control = new ParamControlSP("LagdToggle", tr("Live Learning Steer Delay"), "", "../assets/offroad/icon_shell.png");
   lagd_toggle_control->showDescription();
@@ -208,18 +180,6 @@ void ModelsPanel::refreshLaneTurnValueControl() {
   }
   lane_turn_value_control->setLabel(QString::number(static_cast<int>(std::round(display_value))) + " " + unit);
   lane_turn_value_control->setVisible(params.getBool("LaneTurnDesire"));
-}
-
-void ModelsPanel::refreshCameraOffsetControl() {
-    if (!camera_offset_control) return;
-    bool enabled = params.getBool("CameraOffsetToggle");
-    camera_offset_control->setVisible(enabled);
-
-    if (enabled) {
-        float raw_value = QString::fromStdString(params.get("CameraOffset")).toFloat();
-        float display_value = raw_value / 100.0f;
-        camera_offset_control->setLabel(QString::number(display_value, 'f', 2) + " m");
-    }
 }
 
 /**
@@ -497,8 +457,6 @@ void ModelsPanel::updateLabels() {
 
   // Update lane turn desire label and visibility
   refreshLaneTurnValueControl();
-
-  refreshCameraOffsetControl();
 
   clearModelCacheBtn->setValue(QString::number(calculateCacheSize(), 'f', 2) + " MB");
 }
