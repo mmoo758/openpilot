@@ -4,7 +4,6 @@ from msgq.ipc_pyx import Context, Poller, SubSocket, PubSocket, SocketEventHandl
 from msgq.ipc_pyx import MultiplePublishersError, IpcError
 from msgq import fake_event_handle, drain_sock_raw
 import msgq
-
 import os
 import capnp
 import time
