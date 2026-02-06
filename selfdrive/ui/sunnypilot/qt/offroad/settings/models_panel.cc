@@ -228,6 +228,19 @@ void ModelsPanel::handleBundleDownloadProgress() {
         progressBar = policyProgressBar;
         modelFrame = policyFrame;
         break;
+      case cereal::ModelManagerSP::Model::Type::OFF_POLICY: // <-- 新增这个 case
+        // 临时处理: 直接当作 POLICY 类型处理 (避免编译错误)
+        // 注意: 这意味着 OFF_POLICY 模型会和 POLICY 模型共享 UI 控件和显示
+        // 如果需要单独的 UI，则需定义 offPolicyProgressBar, offPolicyFrame, 并在此添加实际的 UI 更新逻辑
+        // Example (GET THE UUID): https://github.com/sunnypilot/sunnypilot/blob/master/selfdrive/ui/sunnypilot/qt/offroad/settings/models_panel.cc#L213
+        progressBar = policyProgressBar; // 或者作为初始化的默认值赋给policyProgressBar
+        modelFrame = policyFrame;        // 或者作为初始化的默认值赋给policyFrame
+        // Optional: Update state for off_policy if needed (maybe it's a meta to policy)
+        // logging / proxy. check if its used in the toggle etc.
+        break;
+      default: // ADD THIS FOR CENTRALIZED ERROR_HANDLING (Optional but good practice)
+          // Swallow unknown types or log them if you want to
+          continue; // skip this unknown model
     }
 
     const auto &progress = model.getArtifact().getDownloadProgress();
