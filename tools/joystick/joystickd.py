@@ -13,7 +13,6 @@ from opendbc.car.interfaces import get_interface_attr
 
 LongCtrlState = car.CarControl.Actuators.LongControlState
 MAX_LAT_ACCEL = 3.0
-MAX_LAT_JERK = 1.5
 
 
 def joystickd_thread():
@@ -22,22 +21,10 @@ def joystickd_thread():
   CP = messaging.log_from_bytes(params.get("CarParams", block=True), car.CarParams)
   VM = VehicleModel(CP)
 
-  # get max angle from car brand params
-  max_angle = 450
-  try:
-    car_params = get_interface_attr('CarControllerParams')
-    if car_params and CP.carFingerprint in car_params:
-      angle_limits = car_params[CP.carFingerprint].ANGLE_LIMITS
-      if hasattr(angle_limits, 'steerAngleMax'):
-        max_angle = angle_limits.steerAngleMax
-  except Exception:
-    pass
-
   sm = messaging.SubMaster(['carState', 'onroadEvents', 'liveParameters', 'selfdriveState', 'testJoystick'], frequency=1. / DT_CTRL)
   pm = messaging.PubMaster(['carControl', 'controlsState'])
 
   rk = Ratekeeper(100, print_delay_threshold=None)
-  prev_curvature = 0.0
   while 1:
     sm.update(0)
 
@@ -46,7 +33,7 @@ def joystickd_thread():
     CC = cc_msg.carControl
     CC.enabled = sm['selfdriveState'].enabled
     CC.latActive = sm['selfdriveState'].active and not sm['carState'].steerFaultTemporary and not sm['carState'].steerFaultPermanent
-    CC.longActive = CC.enabled and CP.openpilotLongitudinalControl
+    CC.longActive = CC.enabled and not any(e.overrideLongitudinal for e in sm['onroadEvents']) and CP.openpilotLongitudinalControl
     CC.cruiseControl.cancel = sm['carState'].cruiseState.enabled and (not CC.enabled or not CP.pcmCruise)
     CC.hudControl.leadDistanceBars = 2
 
@@ -57,43 +44,31 @@ def joystickd_thread():
 
     if not should_reset_joystick:
       joystick_axes = sm['testJoystick'].axes
-      if hasattr(sm['testJoystick'], 'buttons') and sm['testJoystick'].buttons and sm['testJoystick'].buttons[0] == 1:
-        CC.cruiseControl.cancel = True
     else:
       joystick_axes = [0.0, 0.0]
 
     if CC.longActive:
       actuators.accel = 4.0 * float(np.clip(joystick_axes[0], -1, 1))
       actuators.longControlState = LongCtrlState.pid if sm['carState'].vEgo > CP.vEgoStopping else LongCtrlState.stopping
-      CC.cruiseControl.resume = actuators.accel > 0.0
 
     if CC.latActive:
-      steer_input = float(np.clip(joystick_axes[1], -1, 1))
+      max_curvature = MAX_LAT_ACCEL / max(sm['carState'].vEgo ** 2, 5)
+      max_angle = math.degrees(VM.get_steer_from_curvature(max_curvature, sm['carState'].vEgo, sm['liveParameters'].roll))
 
-      # limit lateral acceleration and jerk for non-torque cars
-      v_ego = sm['carState'].vEgo
-      roll = sm['liveParameters'].roll
-      max_curvature = MAX_LAT_ACCEL / max(v_ego ** 2, 5)
-      max_curvature_rate = (MAX_LAT_JERK / max(v_ego ** 2, 5))
+      # Get car-specific angle limits
+      try:
+          car_params = get_interface_attr('CarControllerParams')
+          if car_params and CP.carFingerprint in car_params:
+              angle_limits = car_params[CP.carFingerprint].ANGLE_LIMITS
+              if hasattr(angle_limits, 'steerAngleMax'):
+                  max_angle = min(max_angle, angle_limits.steerAngleMax)
+      except Exception:
+          pass  # Fall back to the existing max_angle if anything goes wrong
 
-      max_curvature_from_angle = abs(VM.calc_curvature(math.radians(max_angle), v_ego, roll))
-      target_curvature = steer_input * min(max_curvature, max_curvature_from_angle)
+      max_angle = min(max_angle, 390)  # Still keep the PSA limit as a hard cap
 
-      # rate-imit only when moving away from the center
-      # snappy centering helps user with correcting the input
-      up = float(np.clip(target_curvature - prev_curvature, -np.inf, max_curvature_rate * DT_CTRL))
-      down = float(np.clip(target_curvature - prev_curvature, -max_curvature_rate * DT_CTRL, np.inf))
-      curvature = prev_curvature + (up if target_curvature > 0.0 else down)
-
-      angle = math.degrees(VM.get_steer_from_curvature(curvature, v_ego, roll))
-
-      actuators.torque = -steer_input
-      actuators.curvature = curvature
-      actuators.steeringAngleDeg = -angle
-
-      prev_curvature = curvature
-    else:
-      prev_curvature = 0.0
+      actuators.torque = float(np.clip(joystick_axes[1], -1, 1))
+      actuators.steeringAngleDeg, actuators.curvature = actuators.torque * max_angle, actuators.torque * -max_curvature
 
     pm.send('carControl', cc_msg)
 

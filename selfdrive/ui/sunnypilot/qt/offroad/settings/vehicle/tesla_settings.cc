@@ -48,9 +48,24 @@ TeslaSettings::TeslaSettings(QWidget *parent) : BrandSettingsInterface(parent) {
   );
   list->addItem(coopSteeringToggle);
   coopSteeringToggle->showDescription();
+
+
+  // Cooperative steering - pause at low speeds
+  const QString low_speed_pause_desc = tr("Lateral control will be paused at low speeds depending on the driver's torque and steering angle and will resume when the steering stops rotating");
+
+  lowSpeedSteerPauseToggle = new ParamControlSP(
+    "TeslaLowSpeedSteerPause",
+    tr("Low Speed Steering Pause - alpha"),
+    low_speed_pause_desc,
+    "",
+    this
+  );
+  list->addItem(lowSpeedSteerPauseToggle);
+  lowSpeedSteerPauseToggle->showDescription();
 }
 
 void TeslaSettings::updateSettings() {
   lkasSteeringToggle->setEnabled(offroad);
   coopSteeringToggle->setEnabled(offroad);
+  lowSpeedSteerPauseToggle->setEnabled(offroad);
 }
