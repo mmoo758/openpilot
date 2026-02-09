@@ -10,6 +10,8 @@
 *.otf filter=lfs diff=lfs merge=lfs -text
 *.wav filter=lfs diff=lfs merge=lfs -text
 
+panda_tici/docs/CANPacket_structure.png -filter=lfs -diff=lfs -merge=lfs
+panda_tici/docs/USB_packet_structure.png -filter=lfs -diff=lfs -merge=lfs
 selfdrive/car/tests/test_models_segs.txt filter=lfs diff=lfs merge=lfs -text
 system/hardware/tici/updater_weston filter=lfs diff=lfs merge=lfs -text
 system/hardware/tici/updater_magic filter=lfs diff=lfs merge=lfs -text
