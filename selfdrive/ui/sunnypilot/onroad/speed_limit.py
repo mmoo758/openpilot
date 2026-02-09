@@ -210,7 +210,7 @@ class SpeedLimitRenderer(Widget):
       self._draw_text_centered(self.font_bold, sub, int(s_radius * 2 * f_scale), s_center, white)
 
   def _render_mutcd(self, rect, val, sub, color, has_limit, alpha=1.0):
-    white = rl.Color(255, 255, 255, int(255 * alpha))
+    white = rl.Color(255, 255, 255, int(152 * alpha))
     black = rl.Color(0, 0, 0, int(255 * alpha))
     dark_grey = rl.Color(77, 77, 77, int(255 * alpha))
 
