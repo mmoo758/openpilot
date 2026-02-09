@@ -266,7 +266,7 @@ def init(pigeon: TTYPigeon) -> None:
   set_power(False)
   time.sleep(0.1)
   set_power(True)
-  time.sleep(0.5)
+  time.sleep(1.0)
 
   init_baudrate(pigeon)
   init_pigeon(pigeon)
