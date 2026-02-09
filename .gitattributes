@@ -10,6 +10,8 @@
 *.otf filter=lfs diff=lfs merge=lfs -text
 *.wav filter=lfs diff=lfs merge=lfs -text
 
+panda_tici/docs/CANPacket_structure.png -filter=lfs -diff=lfs -merge=lfs
+panda_tici/docs/USB_packet_structure.png -filter=lfs -diff=lfs -merge=lfs
 selfdrive/car/tests/test_models_segs.txt filter=lfs diff=lfs merge=lfs -text
 system/hardware/tici/updater_weston filter=lfs diff=lfs merge=lfs -text
 system/hardware/tici/updater_magic filter=lfs diff=lfs merge=lfs -text
@@ -21,3 +23,24 @@ third_party/acados/*/t_renderer filter=lfs diff=lfs merge=lfs -text
 third_party/qt5/larch64/bin/lrelease filter=lfs diff=lfs merge=lfs -text
 third_party/qt5/larch64/bin/lupdate filter=lfs diff=lfs merge=lfs -text
 third_party/catch2/include/catch2/catch.hpp filter=lfs diff=lfs merge=lfs -text
+selfdrive/assets/training/step0.png -filter=lfs -diff=lfs -merge=lfs
+selfdrive/assets/training/step1.png -filter=lfs -diff=lfs -merge=lfs
+selfdrive/assets/training/step2.png -filter=lfs -diff=lfs -merge=lfs
+selfdrive/assets/training/step3.png -filter=lfs -diff=lfs -merge=lfs
+selfdrive/assets/training/step4.png -filter=lfs -diff=lfs -merge=lfs
+selfdrive/assets/training/step5.png -filter=lfs -diff=lfs -merge=lfs
+selfdrive/assets/training/step6.png -filter=lfs -diff=lfs -merge=lfs
+selfdrive/assets/training/step7.png -filter=lfs -diff=lfs -merge=lfs
+selfdrive/assets/training/step8.png -filter=lfs -diff=lfs -merge=lfs
+selfdrive/assets/training/step9.png -filter=lfs -diff=lfs -merge=lfs
+selfdrive/assets/training/step10.png -filter=lfs -diff=lfs -merge=lfs
+selfdrive/assets/training/step11.png -filter=lfs -diff=lfs -merge=lfs
+selfdrive/assets/training/step12.png -filter=lfs -diff=lfs -merge=lfs
+selfdrive/assets/training/step13.png -filter=lfs -diff=lfs -merge=lfs
+selfdrive/assets/training/step14.png -filter=lfs -diff=lfs -merge=lfs
+selfdrive/assets/training/step15.png -filter=lfs -diff=lfs -merge=lfs
+selfdrive/assets/training/step16.png -filter=lfs -diff=lfs -merge=lfs
+selfdrive/assets/training/step17.png -filter=lfs -diff=lfs -merge=lfs
+selfdrive/assets/training/step18.png -filter=lfs -diff=lfs -merge=lfs
+sunnypilot/selfdrive/assets/images/lead_depart.png -filter=lfs -diff=lfs -merge=lfs
+sunnypilot/selfdrive/assets/images/spinner_sunnypilot.png -filter=lfs -diff=lfs -merge=lfs
