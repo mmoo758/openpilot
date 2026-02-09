@@ -135,7 +135,7 @@ EVENTS_SP: dict[int, dict[str, Alert | AlertCallbackType]] = {
     ET.NO_ENTRY: Alert(
       "Gear not D",
       "openpilot Unavailable",
-      AlertStatus.normal, AlertSize.mid,
+      AlertStatus.normal, AlertSize.none,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, 0.),
   },
 
@@ -241,6 +241,6 @@ EVENTS_SP: dict[int, dict[str, Alert | AlertCallbackType]] = {
       "",
       "",
       AlertStatus.normal, AlertSize.none,
-      Priority.MID, VisualAlert.none, AudibleAlert.prompt, 3.),
+      Priority.MID, VisualAlert.none, AudibleAlert.promptRepeat, 1.),
   },
 }
