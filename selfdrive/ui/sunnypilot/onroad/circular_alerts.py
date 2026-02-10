@@ -95,7 +95,7 @@ class CircularAlertsRenderer:
       frame_color = rl.Color(255, 255, 255, 75) if is_pulsing else rl.Color(0, 255, 0, 75)
 
     # Draw Circle
-    rl.draw_circle_v(center, e2e_alert_size, rl.Color(0, 0, 0, 190))
+    rl.draw_circle_v(center, e2e_alert_size, rl.Color(0, 0, 0, 128))
     # Draw Ring (Border)
     rl.draw_ring(center, e2e_alert_size - 7.5, e2e_alert_size + 7.5, 0, 360, 0, frame_color)
 
