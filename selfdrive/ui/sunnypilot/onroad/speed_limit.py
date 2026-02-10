@@ -117,7 +117,7 @@ class SpeedLimitRenderer(Widget):
     rl.draw_text_ex(font, text, rl.Vector2(pos_center.x - sz.x / 2, pos_center.y - sz.y / 2), size, 0, color)
 
   def _render(self, rect: rl.Rectangle):
-    width = UI_CONFIG.set_speed_width_metric if ui_state.is_metric else UI_CONFIG.set_speed_width_imperial
+    width = UI_CONFIG.set_speed_width_metric
     x = rect.x + 60 + width + 30 - 6
     y = rect.y + 45 - 6
 
@@ -155,10 +155,7 @@ class SpeedLimitRenderer(Widget):
     elif not self.speed_limit_valid:
       txt_color = Colors.GREY
 
-    if ui_state.is_metric:
-      self._render_vienna(rect, limit_str, sub_text, txt_color, has_limit, alpha)
-    else:
-      self._render_mutcd(rect, limit_str, sub_text, txt_color, has_limit, alpha)
+    self._render_mutcd(rect, limit_str, sub_text, txt_color, has_limit, alpha)
 
   def _draw_pre_active_arrow(self, sign_rect):
     set_speed_rounded = round(self.set_speed)
@@ -178,36 +175,36 @@ class SpeedLimitRenderer(Widget):
       arrow_y = sign_rect.y + (sign_rect.height - self._arrow_down.height) / 2 - bounce_offset
       rl.draw_texture(self._arrow_down, int(arrow_x), int(arrow_y), rl.WHITE)
 
-  def _render_vienna(self, rect, val, sub, color, has_limit, alpha=1.0):
-    center = rl.Vector2(rect.x + rect.width / 2, rect.y + rect.height / 2)
-    radius = (rect.width + 18) / 2
+  #def _render_vienna(self, rect, val, sub, color, has_limit, alpha=1.0):
+  #  center = rl.Vector2(rect.x + rect.width / 2, rect.y + rect.height / 2)
+  #  radius = (rect.width + 18) / 2
 
-    white = rl.Color(255, 255, 255, int(255 * alpha))
-    red = rl.Color(255, 0, 0, int(255 * alpha))
+  #  white = rl.Color(255, 255, 255, int(255 * alpha))
+  #  red = rl.Color(255, 0, 0, int(255 * alpha))
 
-    if hasattr(color, 'r'):
-      text_color = rl.Color(color.r, color.g, color.b, int(255 * alpha))
-    else:
-      text_color = rl.Color(color[0], color[1], color[2], int(255 * alpha))
+  #  if hasattr(color, 'r'):
+  #    text_color = rl.Color(color.r, color.g, color.b, int(255 * alpha))
+  #  else:
+  #    text_color = rl.Color(color[0], color[1], color[2], int(255 * alpha))
 
-    black = rl.Color(0, 0, 0, int(255 * alpha))
-    dark_grey = rl.Color(77, 77, 77, int(255 * alpha))
+  #  black = rl.Color(0, 0, 0, int(255 * alpha))
+  #  dark_grey = rl.Color(77, 77, 77, int(255 * alpha))
 
-    rl.draw_circle_v(center, radius, white)
-    rl.draw_ring(center, radius * 0.80, radius, 0, 360, 36, red)
+  #  rl.draw_circle_v(center, radius, white)
+  #  rl.draw_ring(center, radius * 0.80, radius, 0, 360, 36, red)
 
-    f_size = 70 if len(val) >= 3 else 85
-    self._draw_text_centered(self.font_bold, val, f_size, center, text_color)
+  #  f_size = 70 if len(val) >= 3 else 85
+  #  self._draw_text_centered(self.font_bold, val, f_size, center, text_color)
 
-    if sub and has_limit:
-      s_radius = radius * 0.4
-      s_center = rl.Vector2(rect.x + rect.width - s_radius / 2, rect.y + s_radius / 2)
+  #  if sub and has_limit:
+  #    s_radius = radius * 0.4
+  #    s_center = rl.Vector2(rect.x + rect.width - s_radius / 2, rect.y + s_radius / 2)
 
-      rl.draw_circle_v(s_center, s_radius, black)
-      rl.draw_ring(s_center, s_radius - 3, s_radius, 0, 360, 36, dark_grey)
+  #    rl.draw_circle_v(s_center, s_radius, black)
+  #    rl.draw_ring(s_center, s_radius - 3, s_radius, 0, 360, 36, dark_grey)
 
-      f_scale = 0.5 if len(sub) < 3 else 0.45
-      self._draw_text_centered(self.font_bold, sub, int(s_radius * 2 * f_scale), s_center, white)
+  #    f_scale = 0.5 if len(sub) < 3 else 0.45
+  #    self._draw_text_centered(self.font_bold, sub, int(s_radius * 2 * f_scale), s_center, white)
 
   def _render_mutcd(self, rect, val, sub, color, has_limit, alpha=1.0):
     white = rl.Color(255, 255, 255, int(152 * alpha))
