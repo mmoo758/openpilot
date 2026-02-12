@@ -81,7 +81,7 @@ class UIStateSP:
     return self.onroad_brightness in (OnroadBrightness.AUTO, OnroadBrightness.AUTO_DARK)
 
   @staticmethod
-  def update_status(ss, ss_sp, onroad_evt) -> str:
+  def update_status(ss, ss_sp, onroad_evt=None) -> str:  # 允许onroad_evt为None，避免未传参报错
     state = ss.state
     mads = ss_sp.mads
     mads_state = mads.state
@@ -91,9 +91,6 @@ class UIStateSP:
 
     if state == OpenpilotState.overriding:
       if not mads.available:
-        return "override"
-
-      if any(e.overrideLongitudinal for e in onroad_evt):
         return "override"
 
     if mads_state in (MADSState.paused, MADSState.overriding):
