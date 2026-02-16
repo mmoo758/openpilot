@@ -15,13 +15,24 @@ def main():
   config_realtime_process(0, 51)
 
   gui_app.init_window("UI")
-  if gui_app.big_ui():
-    main_layout = MainLayout()
-  else:
-    main_layout = MiciMainLayout()
-  main_layout.set_rect(rl.Rectangle(0, 0, gui_app.width, gui_app.height))
+  def _build_layout(big: bool):
+    layout = MainLayout() if big else MiciMainLayout()
+    layout.set_rect(rl.Rectangle(0, 0, gui_app.width, gui_app.height))
+    return layout
+
+  current_big_ui = gui_app.big_ui()
+  main_layout = _build_layout(current_big_ui)
   for should_render in gui_app.render():
     ui_state.update()
+
+    # Rebuild layout when the compact UI toggle changes while disengaged
+    desired_big_ui = gui_app.big_ui()
+    if not ui_state.engaged and desired_big_ui != current_big_ui:
+      main_layout.hide_event()
+      gui_app.resize_for_layout(desired_big_ui)
+      main_layout = _build_layout(desired_big_ui)
+      current_big_ui = desired_big_ui
+
     if should_render:
       main_layout.render()
 
