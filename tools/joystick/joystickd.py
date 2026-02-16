@@ -23,6 +23,9 @@ def joystickd_thread():
   pm = messaging.PubMaster(['carControl', 'controlsState'])
 
   rk = Ratekeeper(100, print_delay_threshold=None)
+
+  longitudinal_active_with_gas = params.get_bool("LongitudinalActiveWithGas")
+
   while 1:
     sm.update(0)
 
@@ -31,7 +34,9 @@ def joystickd_thread():
     CC = cc_msg.carControl
     CC.enabled = sm['selfdriveState'].enabled
     CC.latActive = sm['selfdriveState'].active and not sm['carState'].steerFaultTemporary and not sm['carState'].steerFaultPermanent
-    CC.longActive = CC.enabled and not any(e.overrideLongitudinal for e in sm['onroadEvents']) and CP.openpilotLongitudinalControl
+    CC.longActive = CC.enabled and CP.openpilotLongitudinalControl
+    if not longitudinal_active_with_gas:
+      CC.longActive = CC.longActive and not any(e.overrideLongitudinal for e in sm['onroadEvents'])
     CC.cruiseControl.cancel = sm['carState'].cruiseState.enabled and (not CC.enabled or not CP.pcmCruise)
     CC.hudControl.leadDistanceBars = 2
 
