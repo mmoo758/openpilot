@@ -49,14 +49,14 @@ class LeadInfoElement:
   def get_lead_color(lead_d_rel: float, lead_v_rel: float = 0.0, use_v_rel: bool = False) -> rl.Color:
     if use_v_rel:
       if lead_v_rel < -4.4704:
-        return rl.RED
+        return rl.Color(255, 188, 0, 200)  # Orange
       elif lead_v_rel < 0:
-        return rl.Color(255, 188, 0, 255)  # Orange
+        return rl.Color(255, 188, 0, 200)  # Orange
     else:
       if lead_d_rel < 5:
-        return rl.RED
+        return rl.Color(255, 188, 0, 200)  # Orange
       elif lead_d_rel < 15:
-        return rl.Color(255, 188, 0, 255)  # Orange
+        return rl.Color(255, 188, 0, 200)  # Orange
     return rl.WHITE
 
 
@@ -66,13 +66,13 @@ class LateralControlElement:
                     check_angle: bool = False) -> rl.Color:
     color = rl.WHITE
     if lat_active:
-      color = rl.Color(145, 155, 149, 255) if steer_override else rl.Color(0, 255, 0, 255)
+      color = rl.Color(145, 155, 149, 200) if steer_override else rl.Color(0, 255, 0, 200)
 
     if check_angle and lat_active:
       if abs(angle_steers) > 180:
         color = rl.RED
       elif abs(angle_steers) > 90:
-        color = rl.Color(255, 188, 0, 255)
+        color = rl.Color(255, 188, 0, 200)
       else:
         # Keep green/grey from above
         pass
@@ -80,7 +80,7 @@ class LateralControlElement:
       if abs(angle_steers) > 180:
         color = rl.RED
       elif abs(angle_steers) > 90:
-        color = rl.Color(255, 188, 0, 255)
+        color = rl.Color(255, 188, 0, 200)
 
     return color
 
@@ -93,7 +93,7 @@ class RelDistElement(LeadInfoElement):
     lead_status, lead_d_rel, _ = self.get_lead_status(sm)
     value = f"{lead_d_rel:.0f}" if lead_status else "-"
     color = self.get_lead_color(lead_d_rel) if lead_status else rl.WHITE
-    return UiElement(value, "REL DIST", self.unit, color)
+    return UiElement(value, "DIST.", self.unit, color)
 
 
 class RelSpeedElement(LeadInfoElement):
@@ -146,9 +146,9 @@ class DesiredSteeringAngleElement(LateralControlElement):
       if abs(angle_steers) > 180:
         color = rl.RED
       elif abs(angle_steers) > 90:
-        color = rl.Color(255, 188, 0, 255)
+        color = rl.Color(255, 188, 0, 200)
       else:
-        color = rl.Color(0, 255, 0, 255)
+        color = rl.Color(0, 255, 0, 200)
 
     return UiElement(value, "DESIRED STEER", self.unit, color)
 
@@ -209,9 +209,9 @@ class DesiredSteeringPIDElement(LateralControlElement):
       if abs(angle_steers) > 180:
         color = rl.RED
       elif abs(angle_steers) > 90:
-        color = rl.Color(255, 188, 0, 255)
+        color = rl.Color(255, 188, 0, 200)
       else:
-        color = rl.Color(0, 255, 0, 255)
+        color = rl.Color(0, 255, 0, 200)
 
     return UiElement(value, "DESIRED STEER", self.unit, color)
 
@@ -253,8 +253,52 @@ class FrictionCoefficientElement:
     live_valid = ltp.liveValid
 
     value = f"{friction_coef:.3f}"
-    color = rl.Color(0, 255, 0, 255) if live_valid else rl.WHITE
+    color = rl.Color(0, 255, 0, 200) if live_valid else rl.WHITE
     return UiElement(value, "FRIC.", self.unit, color)
+
+
+class StorageElement:
+  def __init__(self):
+    self.unit = "%"
+
+  def update(self, sm, is_metric: bool) -> UiElement:
+    if not sm.valid['deviceState']:
+      return UiElement("-", "STO.", self.unit, rl.WHITE)
+
+    free_percent = float(sm['deviceState'].freeSpacePercent)
+    value = f"{int(round(free_percent))}"
+
+    # color based on remaining storage
+    if free_percent <= 2.0:
+      color = rl.RED
+    elif free_percent < 10.0:
+      color = rl.Color(255, 188, 0, 200)
+    else:
+      color = rl.Color(0, 255, 0, 200)
+
+    return UiElement(value, "FREE.", self.unit, color)
+
+
+class MemoryUsageElement:
+  def __init__(self):
+    self.unit = "%"
+
+  def update(self, sm, is_metric: bool) -> UiElement:
+    if not sm.valid['deviceState']:
+      return UiElement("-", "MEM.", self.unit, rl.WHITE)
+
+    mem_percent = int(round(sm['deviceState'].memoryUsagePercent))
+    value = f"{mem_percent}"
+
+    # color: higher memory usage -> more severe
+    if mem_percent >= 95:
+      color = rl.RED
+    elif mem_percent >= 85:
+      color = rl.Color(255, 188, 0, 200)
+    else:
+      color = rl.Color(0, 255, 0, 200)
+
+    return UiElement(value, "MEM.", self.unit, color)
 
 
 class LatAccelFactorElement:
@@ -267,8 +311,34 @@ class LatAccelFactorElement:
     live_valid = ltp.liveValid
 
     value = f"{lat_accel_factor:.3f}"
-    color = rl.Color(0, 255, 0, 255) if live_valid else rl.WHITE
+    color = rl.Color(0, 255, 0, 200) if live_valid else rl.WHITE
     return UiElement(value, "L.A.F.", self.unit, color)
+
+
+class CpuTempMaxElement:
+  def __init__(self):
+    self.unit = "°C"
+
+  def update(self, sm, is_metric: bool) -> UiElement:
+    if not sm.valid['deviceState']:
+      return UiElement("-", "CPU.", self.unit, rl.WHITE)
+
+    # cpuTempC is a list (multiple cores), get the maximum temperature
+    cpu_temps = sm['deviceState'].cpuTempC
+    max_cpu_temp = max(cpu_temps) if cpu_temps else 0.0
+    value = f"{max_cpu_temp:.0f}"
+
+    # color based on temperature threshold
+    if max_cpu_temp >= 95:
+      color = rl.RED
+    elif max_cpu_temp >= 85:
+      color = rl.Color(255, 188, 0, 200)
+    elif max_cpu_temp >= 70:
+      color = rl.Color(255, 255, 0, 200)
+    else:
+      color = rl.Color(0, 255, 0, 200)
+
+    return UiElement(value, "CPU.", self.unit, color)
 
 
 class SteeringTorqueEpsElement:
