@@ -7,224 +7,107 @@ sunnypilot 2026.001.000 (2026-02-25)
 
 
 
-sunnypilot 2025.003.000 (2026-02-06)
+sunnypilot Version 2026.001.000 (2026-03-xx)
 ========================
-* 🛠️ dev版本更新说明
-  * 拉取一些官方更新
-  * 回退20260130的dev更新
-  * 模型选择器同步官方更新V11版本
-  * 版本号修改为“TESLA”，原来的“sunnypilot...”太长了
-
-
-
-sunnypilot 2025.003.000 (2026-01-30)
-========================
-* 🛠️ dev版本更新说明
-  * 拉取一些官方更新
-  * 同步20260130的dev更新
-
-
-
-
-sunnypilot 2025.003.000 (2026-01-27)
-========================
-* 🛠️ dev版本更新说明
-  * 前车驶离提醒时的前车图片更换
-  * 车道转向意图注释汉化（漏的）
-
-
-
-
-sunnypilot 2025.003.000 (2026-01-24)
-========================
-* 🛠️ dev版本更新说明
-  * 取消ImmediateDisableAlert的声音报警（for jungle）
-  * 同步一些更新
-  * “进入行驶模式”按钮颜色由灰色改为蓝色
-  * 支持tesla fsd14（虽然国内没有）
-  * 同步更新tesla混控
-  * 更换默认模型为WMI（同步SP）
-
-sunnypilot 2025.003.000 (2026-01-22)
-========================
-* 🛠️ dev版本更新说明
-  * 取消ImmediateDisableAlert的声音报警（for jungle）
-  * 同步一些更新
-  * “进入行驶模式”按钮颜色由灰色改为蓝色
-  * 支持tesla fsd14（虽然国内没有）
-  * 同步更新tesla混控
-  * 等等.....
-
-
-sunnypilot 2025.003.000 (2026-01-20)
-========================
-* 🛠️ dev版本更新说明
-  * 同步，将STEER_OVERRIDE_MAX_LAT_ACCEL = 1.0改为1.5
-
-
-
-
-
-sunnypilot 2025.003.000 (2026-01-18)
-========================
-* 🛠️ dev版本更新说明
-  * 同步2026年1月17日版特斯拉混控测试
-
-
-
-
-
-sunnypilot 2025.003.000 (2026-01-15)
-========================
-* 🛠️ dev版本更新说明
-  * 同步2026年1月15日新版特斯拉dev测试
-  * AGNOS系统版本从12.8升级为13.1
-  * 同步一些官方更新
-
-
-
-sunnypilot 2025.003.000 (2026-01-08)
-========================
-* 🛠️ dev版本更新说明
-  * 同步2026年1月7日新版特斯拉dev测试
-  * AGNOS系统版本从12.8升级为13.1
-  * 同步一些官方代码
-
-
-
-sunnypilot 2025.003.000 (2026-01-04)
-========================
-* 🛠️ dev版本更新说明
-  * 2025年12月新版dev测试
-  * AGNOS系统版本从12.8升级为13.1
-  * 同步一些官方代码
-
-
-
-
-sunnypilot 2025.003.000 (2025-12-30)
-========================
-* 🛠️ dev版本更新说明
-  * 2025年12月新版dev测试
-  * 同步其他车型的dbc
-  * PANDA中加入mr.one L机器代码
-
-
-
-
-sunnypilot 2025.003.000 (2025-12-26)
-========================
-* 🛠️ dev版本更新说明
-  * 2025年12月新版dev测试
-
-
-
-
-
-
-sunnypilot 2025.003.000 (2025-12-20)
-========================
-* 🛠️ dev版本更新说明
-  * 横向控制代码更新至#36364
-  * 离线后默认关屏时间设置为120秒
-
-
-
-
-sunnypilot 2025.003.000 (2025-12-18)
-========================
-* 🛠️ dev版本更新说明
-  * 提高横向加速度的动态响应，以适应更复杂的道路条件
-  * 在转向时减少突兀感，提升舒适度
-
-
-
-
-
-sunnypilot 2025.003.000 (2025-12-17)
-========================
-* 🛠️ dev版本更新说明
-  * SLA区段优化
-  * 踩刹车脱离acc行为优化，防止误触发
-  * 优化特斯拉的横向控制低速转弯抖动问题
-
-
-
-
-sunnypilot 2025.003.000 (2025-12-15)
-========================
-* 🛠️ 更新说明
-  * 调整摄像头曝光收敛速度加快；
-  * hud底部显示中，关闭“行驶方向”，增加“剩余存储”；
-  * 调整屏幕亮度范围及相关翻译；
-  * 选择“自动（暗）”时亮度范围为5%至30%；
-  * 选择“自动调节”时亮度范围为5%至100%。
-
-
-sunnypilot 2025.003.000 (2025-11-26)
-========================
-* 🛠️ 更新说明
-  * 更换默认模型为 The Cool People
-  * 驾驶模型选择器更新v10
-
-
-
-
-sunnypilot 2025.003.000 (2025-11-24)
-========================
-* 🛠️ 更新说明
-  * 调整底部的显示为：前车距离 行驶方向 内存占用 cpu温度 海拔
-  * 以上显示的数据位置调整居中
-  * "LAT"文字透明度80%，方向大于16度显示红色
-
-
-
-sunnypilot 2025.003.000 (2025-11-22)
-========================
-* 🛠️ 更新说明
-  * 同步上游Dzid26两个更新：
-  * SLA: lower confirmation speed for the city
-  * Disable low speed filtering
-
-
-
-sunnypilot 2025.003.000 (2025-11-21)
-========================
-* 🛠️ 更新说明
-  * 底部显示的加速度数据跳动太频繁，丢到右侧去显示了
-  * 把原底部显示的 加速度，修改为显示 前车速度
-  * 调整转向角度指示器超过18度时，显示红色
-
-
-
-sunnypilot 2025.003.000 (2025-11-20)
-========================
-* 🛠️ 更新说明
-  * 替换默认模型为 Firehose
-  * 修复选择底部显示时，屏幕提示背景右侧不到边的问题
-  * 转向角度指示器转角范围调整
-
-
-
-
-sunnypilot 2025.003.000 (2025-11-18)
-========================
-* 🛠️ 更新说明
-  * 行车界面增加横向指示仪表
-  * 增加单独显示底部参数开关-显示:距离、加速度、内存、温度、海拔
-  * 部分未汉化菜单汉化及调整翻译
-  * 屏幕亮度选项中，将 自动（深色）的亮度范围限制在5%-30%
-
-
-
-sunnypilot Version 2025.003.000 (20xx-xx-xx)
-========================
-* 🛠️ 更新说明
-  * onroad开发人员界面汉化
-  * 测试GPS信号获取速度
-  * 刷版本号至003
-  * 同步SP更新至#1456
-
+* What's Changed (sunnypilot/sunnypilot)
+  * Complete rewrite of the user interface from Qt C++ to Raylib Python
+  * comma four support
+  * ui: sunnypilot toggle style by @nayan8teen
+  * ui: fix scroll panel mouse wheel behavior by @nayan8teen
+  * ui: sunnypilot panels by @nayan8teen
+  * sunnylink: centralize key pair handling in sunnylink registration by @devtekve
+  * ui: reimplement sunnypilot branding with Raylib by @sunnyhaibin
+  * ui: Platform Selector by @Discountchubbs
+  * ui: vehicle brand settings by @Discountchubbs
+  * ui: sunnylink client-side implementation by @nayan8teen
+  * ui: `NetworkUISP` by @Discountchubbs
+  * ui: add sunnypilot font by @nayan8teen
+  * ui: sunnypilot sponsor tier color mapping by @sunnyhaibin
+  * ui: sunnylink panel by @nayan8teen
+  * ui: Models panel by @Discountchubbs
+  * ui: software panel by @Discountchubbs
+  * modeld_v2: support planplus outputs by @Discountchubbs
+  * ui: OSM panel by @Discountchubbs
+  * ui: Developer panel extension by @Discountchubbs
+  * sunnylink: Vehicle Selector support by @sunnyhaibin
+  * [TIZI/TICI] ui: Developer Metrics by @rav4kumar
+  * [comma 4] ui: sunnylink panel by @nayan8teen
+  * ui: lateral-only and longitudinal-only UI statuses support by @royjr
+  * sunnylink: elliptic curve keys support and improve key path handling by @nayan8teen
+  * sunnylink: block remote modification of SSH key parameters by @zikeji
+  * [TIZI/TICI] ui: rainbow path by @rav4kumar
+  * [TIZI/TICI] ui: chevron metrics by @rav4kumar
+  * ui: include MADS enabled state to `engaged` check by @sunnyhaibin
+  * Toyota: Enforce Factory Longitudinal Control by @sunnyhaibin
+  * ui: fix malformed dongle ID display on the PC if dongleID is not set by @dzid26
+  * SL: Re enable and validate ingestion of swaglogs by @devtekve
+  * modeld_v2: planplus model tuning by @Discountchubbs
+  * ui: fix Always Offroad button visibility by @nayan8teen
+  * Reimplement sunnypilot Terms of Service & sunnylink Consent Screens by @sunnyhaibin
+  * [TIZI/TICI] ui: update dmoji position and Developer UI adjustments by @rav4kumar
+  * modeld: configurable camera offset by @Discountchubbs
+  * [TIZI/TICI] ui: sunnylink status on sidebar by @Copilot
+  * ui: Global Brightness Override by @nayan8teen
+  * ui: Customizable Interactive Timeout by @sunnyhaibin
+  * sunnylink: add units to param metadata by @nayan8teen
+  * ui: Customizable Onroad Brightness by @sunnyhaibin
+  * [TIZI/TICI] ui: Steering panel by @nayan8teen
+  * [TIZI/TICI] ui: Rocket Fuel by @rav4kumar
+  * [TIZI/TICI] ui: MICI style turn signals by @rav4kumar
+  * [TIZI/TICI] ui: MICI style blindspot indicators by @sunnyhaibin
+  * [MICI] ui: display blindspot indicators when available by @rav4kumar
+  * [TIZI/TICI] ui: Road Name by @rav4kumar
+  * [TIZI/TICI] ui: Blue "Exit Always Offroad" button by @dzid26
+  * [TIZI/TICI] ui: Speed Limit by @rav4kumar
+  * Reapply "latcontrol_torque: lower kp and lower friction threshold (commaai/openpilot#36619)" by @sunnyhaibin
+  * [TIZI/TICI] ui: steering arc by @royjr
+  * [TIZI/TICI] ui: Smart Cruise Control elements by @sunnyhaibin
+  * [TIZI/TICI] ui: Green Light and Lead Departure elements by @sunnyhaibin
+  * [TIZI/TICI] ui: standstill timer by @sunnyhaibin
+  * [MICI] ui: driving models selector by @Discountchubbs
+  * [TIZI/TICI] ui: Hide vEgo and True vEgo by @sunnyhaibin
+  * [TIZI/TICI] ui: Visuals panel by @nayan8teen
+  * Device: Retain QuickBoot state after op switch by @nayan8teen
+  * [TIZI/TICI] ui: Trips panel by @sunnyhaibin
+  * [TIZI/TICI] ui: dynamic ICBM status by @sunnyhaibin
+  * [TIZI/TICI] ui: Cruise panel by @sunnyhaibin
+  * ui: better wake mode support by @nayan8teen
+  * Pause Lateral Control with Blinker: Post-Blinker Delay by @CHaucke89
+  * SCC-V: Use p97 for predicted lateral accel by @yasu-oh
+  * Controls: Support for Torque Lateral Control v0 Tune by @sunnyhaibin
+* What's Changed (sunnypilot/opendbc)
+  * Honda: DBC for Accord 9th Generation by @mvl-boston
+  * FCA: update tire stiffness values for `RAM_HD` by @dparring
+  * Honda: Nidec hybrid baseline brake support by @mvl-boston
+  * Subaru Global Gen2: bump steering limits and update tuning by @sunnyhaibin
+  * Toyota: Enforce Stock Longitudinal Control by @rav4kumar
+  * Nissan: use MADS enabled status for LKAS HUD logic by @downquark7
+  * Reapply "Lateral: lower friction threshold (#2915)" (#378) by @sunnyhaibin
+  * HKG: add KIA_FORTE_2019_NON_SCC fingerprint by @royjr
+  * Nissan: Parse cruise control buttons by @downquark7
+  * Rivian: Add stalk down ACC behavior to match stock Rivian by @lukasloetkolben
+  * Tesla: remove `TESLA_MODEL_X` from `dashcamOnly` by @ssysm
+  * Hyundai Longitudinal: refactor tuning by @Discountchubbs
+  * Tesla: add fingerprint for Model 3 Performance HW4 by @sunnyhaibin
+  * Toyota: do not disable radar when smartDSU or CAN Filter detected by @sunnyhaibin
+  * Honda: add missing `GasInterceptor` messages to Taiwan Odyssey DBC by @mvl-boston
+  * GM: remove `CHEVROLET_EQUINOX_NON_ACC_3RD_GEN` from `dashcamOnly` by @sunnyhaibin
+  * GM: remove `CHEVROLET_BOLT_NON_ACC_2ND_GEN` from `dashcamOnly` by @sunnyhaibin
+* New Contributors (sunnypilot/sunnypilot)
+  * @TheSecurityDev made their first contribution in "ui: fix sidebar scroll in UI screenshots"
+  * @zikeji made their first contribution in "sunnylink: block remote modification of SSH key parameters"
+  * @Candy0707 made their first contribution in "[TIZI/TICI] ui: Fix misaligned turn signals and blindspot indicators with sidebar"
+  * @CHaucke89 made their first contribution in "Pause Lateral Control with Blinker: Post-Blinker Delay"
+  * @yasu-oh made their first contribution in "SCC-V: Use p97 for predicted lateral accel"
+* New Contributors (sunnypilot/opendbc)
+  * @AmyJeanes made their first contribution in "Tesla: Fix stock LKAS being blocked when MADS is enabled"
+  * @mvl-boston made their first contribution in "Honda: Update Clarity brake to renamed DBC message name"
+  * @dzid26 made their first contribution in "Tesla: Parse speed limit from CAN"
+  * @firestar5683 made their first contribution in "GM: Non-ACC platforms with steering only support"
+  * @downquark7 made their first contribution in "Nissan: use MADS enabled status for LKAS HUD logic"
+  * @royjr made their first contribution in "HKG: add KIA_FORTE_2019_NON_SCC fingerprint"
+  * @ssysm made their first contribution in "Tesla: remove `TESLA_MODEL_X` from `dashcamOnly`"
+* Full Changelog: https://github.com/sunnypilot/sunnypilot/compare/v2025.002.000...v2026.001.000
 
 sunnypilot Version 2025.002.000 (2025-11-06)
 ========================
@@ -249,35 +132,6 @@ sunnypilot Version 2025.002.000 (2025-11-06)
   * @AmyJeanes made their first contribution in "Tesla: Coop Steering"
   * @mpurnell1 made their first contribution in "docs: Update README installation branches and discord links"
 * Full Changelog: https://github.com/sunnypilot/sunnypilot/compare/v2025.001.000...v2025.002.000
-
-
-
-sunnypilot Version 2025.001.000 (2025-11-06)
-========================
-* 🛠️ 更新说明
-  * 同步sunnypilot更新 #1440及修改相关翻译
-  * 修复手动选择亮度时不能选择50%以上的问题
-  * 亮度翻译增加 自动调节 和 自动（深色） 的区别
-
-
-
-sunnypilot Version 2025.002.000 (2025-xx-xx)
-========================
-* 根着上游sp更新版本号。。
-* 将模型 json 版本提升至 v8
-
-
-
-
-sunnypilot Version 2025.001.000 (2025-10-23)
-========================
-* 此版本为dzid26的251018版的vtb-lkas-pause修改C3版本并汉化
-* 🛠️ 更新说明
-  * 同步sunnypilot更新至20251022 #1416
-
-
-
-
 
 sunnypilot Version 2025.001.000 (2025-10-25)
 ========================
