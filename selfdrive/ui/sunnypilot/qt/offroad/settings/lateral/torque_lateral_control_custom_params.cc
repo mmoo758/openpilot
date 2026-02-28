@@ -23,6 +23,7 @@ TorqueLateralControlCustomParams::TorqueLateralControlCustomParams(const QString
     this
   );
   connect(torqueLateralControlParamsOverride, &ParamControl::toggleFlipped, this, &TorqueLateralControlCustomParams::refresh);
+  frame_layout->addWidget(torqueLateralControlParamsOverride, 0, 0, 1, 2);
 
   torqueParamsOverrideLatAccelFactor = new OptionControlSP("TorqueParamsOverrideLatAccelFactor", tr("Lateral Acceleration Factor"), "", "", {1, 500}, 1, false, nullptr, true, false);
   connect(torqueParamsOverrideLatAccelFactor, &OptionControlSP::updateLabels, this, &TorqueLateralControlCustomParams::refresh);
@@ -32,11 +33,8 @@ TorqueLateralControlCustomParams::TorqueLateralControlCustomParams(const QString
   connect(torqueParamsOverrideFriction, &OptionControlSP::updateLabels, this, &TorqueLateralControlCustomParams::refresh);
   torqueParamsOverrideFriction->setFixedWidth(280);
 
-  frame_layout->addWidget(torqueLateralControlParamsOverride, 0, 0, 1, 2);
-  QSpacerItem *spacer = new QSpacerItem(20, 40);
-  frame_layout->addItem(spacer, 1, 0, 1, 2);
-  frame_layout->addWidget(torqueParamsOverrideLatAccelFactor, 2, 0, Qt::AlignCenter);
-  frame_layout->addWidget(torqueParamsOverrideFriction, 2, 1, Qt::AlignCenter);
+  frame_layout->addWidget(torqueParamsOverrideLatAccelFactor, 1, 0, Qt::AlignCenter);
+  frame_layout->addWidget(torqueParamsOverrideFriction, 1, 1, Qt::AlignCenter);
 
   addItem(frame);
 
@@ -56,3 +54,5 @@ void TorqueLateralControlCustomParams::refresh() {
   torqueParamsOverrideLatAccelFactor->setLabel(QString::number(laf_param, 'f', 2) + " " + laf_unit);
   torqueParamsOverrideFriction->setLabel(QString::number(friction_param, 'f', 2));
 }
+
+

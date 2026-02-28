@@ -33,4 +33,8 @@ private:
   std::map<std::string, ParamControlSP*> toggles;
 
   TorqueLateralControlCustomParams *torqueLateralControlCustomParams;
+  OptionControlSP *torqueControlTuneVersion;
+
+  // Helper method to get version label from stored value
+  QString getTorqueVersionLabel(const QString &stored_value) const;
 };

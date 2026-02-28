@@ -2770,6 +2770,14 @@ Data</source>
 <context>
     <name>TorqueLateralControlSettings</name>
     <message>
+        <source>Torque Control Tune Version</source>
+        <translation>扭矩控制调节版本</translation>
+    </message>
+    <message>
+        <source>Select the version of Torque Control Tune to use.</source>
+        <translation>选择要使用的扭矩控制调校版本。V1.0版本为同步上游，v0.0版本使用旧版本，可能转向反应会更快。</translation>
+    </message>
+    <message>
         <source>Self-Tune</source>
         <translation>自学习调校</translation>
     </message>
