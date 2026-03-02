@@ -33,15 +33,14 @@ def get_max_accel(v_ego):
 def get_coast_accel(pitch):
   return np.sin(pitch) * -5.65 - 0.3  # fitted from data using xx/projects/allow_throttle/compute_coast_accel.py
 
-def limit_accel_in_turns(v_ego, angle_steers, a_target, CP):
+def limit_accel_in_turns(v_ego, lateral_curvature, a_target):
   """
-  This function returns a limited long acceleration allowed, depending on the existing lateral acceleration
+  This function returns a limited long acceleration allowed, depending on the desired lateral acceleration.
   this should avoid accelerating when losing the target in turns
   """
-  # FIXME: This function to calculate lateral accel is incorrect and should use the VehicleModel
-  # The lookup table for turns should also be updated if we do this
+  # TODO The lookup table for turns should be verified
   a_total_max = np.interp(v_ego, _A_TOTAL_MAX_BP, _A_TOTAL_MAX_V)
-  a_y = v_ego ** 2 * angle_steers * CV.DEG_TO_RAD / (CP.steerRatio * CP.wheelbase)
+  a_y = v_ego ** 2 * abs(lateral_curvature)
   a_x_allowed = math.sqrt(max(a_total_max ** 2 - a_y ** 2, 0.))
 
   return [a_target[0], min(a_target[1], a_x_allowed)]
@@ -111,8 +110,8 @@ class LongitudinalPlanner(LongitudinalPlannerSP):
     prev_accel_constraint = not (reset_state or sm['carState'].standstill)
 
     accel_clip = [ACCEL_MIN, get_max_accel(v_ego)]
-    steer_angle_without_offset = sm['carState'].steeringAngleDeg - sm['liveParameters'].angleOffsetDeg
-    accel_clip = limit_accel_in_turns(v_ego, steer_angle_without_offset, accel_clip, self.CP)
+    current_curvature = sm['controlsState'].curvature
+    accel_clip = limit_accel_in_turns(v_ego, current_curvature, accel_clip)
 
     if reset_state:
       self.v_desired_filter.x = v_ego
