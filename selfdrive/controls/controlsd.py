@@ -54,7 +54,7 @@ class Controls(ControlsExt):
     self.pose_calibrator = PoseCalibrator()
     self.calibrated_pose: Pose | None = None
 
-    self.LoC = LongControl(self.CP, self.CP_SP)
+    self.LoC = LongControl(self.CP)
     self.VM = VehicleModel(self.CP)
     self.LaC: LatControl
     if self.CP.steerControlType == car.CarParams.SteerControlType.angle:
