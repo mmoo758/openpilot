@@ -64,6 +64,7 @@ class SmartCruiseControlVision:
 
     self.state = VisionState.disabled
     self.current_lat_acc = 0.
+    self.desired_lat_acc = 0.
     self.max_pred_lat_acc = 0.
 
   def get_a_target_from_control(self) -> float:
@@ -87,6 +88,7 @@ class SmartCruiseControlVision:
       vel_plan = np.array(sm['modelV2'].velocity.x)
 
       self.current_lat_acc = self.v_ego ** 2 * abs(sm['controlsState'].curvature)
+      self.desired_lat_acc = self.v_ego ** 2 * abs(sm['controlsState'].desiredCurvature)
 
       # get the maximum lat accel from the model
       predicted_lat_accels = rate_plan * vel_plan
@@ -173,7 +175,8 @@ class SmartCruiseControlVision:
     # TURNING
     elif self.state == VisionState.turning:
       # When turning, we provide a target acceleration that is comfortable for the lateral acceleration felt.
-      a_target = np.interp(self.current_lat_acc, _TURNING_ACC_BP, _TURNING_ACC_V)
+      turning_lat_acc = max(self.current_lat_acc, self.desired_lat_acc)
+      a_target = np.interp(turning_lat_acc, _TURNING_ACC_BP, _TURNING_ACC_V)
     # LEAVING
     elif self.state == VisionState.leaving:
       # When leaving, we provide a comfortable acceleration to regain speed.
