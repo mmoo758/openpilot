@@ -98,7 +98,7 @@ def generate_carState():
 
 def generate_controlsState():
   controls_state = messaging.new_message('controlsState')
-  controls_state.controlsState.curvature = 0.05
+  controls_state.controlsState.desiredCurvature = 0.05
 
   return controls_state
 

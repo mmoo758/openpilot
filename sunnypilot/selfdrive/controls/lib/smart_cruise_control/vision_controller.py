@@ -63,7 +63,7 @@ class SmartCruiseControlVision:
     self.v_cruise_setpoint = 0.
 
     self.state = VisionState.disabled
-    self.current_lat_acc = 0.
+    self.desired_lat_acc = 0.
     self.max_pred_lat_acc = 0.
 
   def get_a_target_from_control(self) -> float:
@@ -86,7 +86,7 @@ class SmartCruiseControlVision:
       rate_plan = np.array(np.abs(sm['modelV2'].orientationRate.z))
       vel_plan = np.array(sm['modelV2'].velocity.x)
 
-      self.current_lat_acc = self.v_ego ** 2 * abs(sm['controlsState'].curvature)
+      self.desired_lat_acc = self.v_ego ** 2 * abs(sm['controlsState'].desiredCurvature)
 
       # get the maximum lat accel from the model
       predicted_lat_accels = rate_plan * vel_plan
@@ -126,7 +126,7 @@ class SmartCruiseControlVision:
         # ENTERING
         elif self.state == VisionState.entering:
           # Transition to Turning if current lateral acceleration is over the threshold.
-          if self.current_lat_acc >= _TURNING_LAT_ACC_TH:
+          if self.desired_lat_acc >= _TURNING_LAT_ACC_TH:
             self.state = VisionState.turning
           # Abort if the predicted lateral acceleration drops
           elif self.max_pred_lat_acc < _ABORT_ENTERING_PRED_LAT_ACC_TH:
@@ -135,16 +135,16 @@ class SmartCruiseControlVision:
         # TURNING
         elif self.state == VisionState.turning:
           # Transition to Leaving if current lateral acceleration drops below a threshold.
-          if self.current_lat_acc <= _LEAVING_LAT_ACC_TH:
+          if self.desired_lat_acc <= _LEAVING_LAT_ACC_TH:
             self.state = VisionState.leaving
 
         # LEAVING
         elif self.state == VisionState.leaving:
           # Transition back to Turning if current lateral acceleration goes back over the threshold.
-          if self.current_lat_acc >= _TURNING_LAT_ACC_TH:
+          if self.desired_lat_acc >= _TURNING_LAT_ACC_TH:
             self.state = VisionState.turning
           # Finish if current lateral acceleration goes below a threshold.
-          elif self.current_lat_acc < _FINISH_LAT_ACC_TH:
+          elif self.desired_lat_acc < _FINISH_LAT_ACC_TH:
             self.state = VisionState.enabled
 
     # DISABLED
@@ -173,7 +173,7 @@ class SmartCruiseControlVision:
     # TURNING
     elif self.state == VisionState.turning:
       # When turning, we provide a target acceleration that is comfortable for the lateral acceleration felt.
-      a_target = np.interp(self.current_lat_acc, _TURNING_ACC_BP, _TURNING_ACC_V)
+      a_target = np.interp(self.desired_lat_acc, _TURNING_ACC_BP, _TURNING_ACC_V)
     # LEAVING
     elif self.state == VisionState.leaving:
       # When leaving, we provide a comfortable acceleration to regain speed.
