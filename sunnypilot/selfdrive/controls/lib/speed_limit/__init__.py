@@ -9,8 +9,8 @@ LIMIT_MAX_MAP_DATA_AGE = 10.  # s Maximum time to hold to map data, then conside
 
 # Speed Limit Assist constants
 PCM_LONG_REQUIRED_MAX_SET_SPEED = {
-  True: (33.3333, 36.1111),  # km/h, (120, 130)
-  False: (31.2928, 35.7632),  # mph, (70, 80)
+  True: (22.2222, 36.1111),  # m/s, (80, 130) km/h
+  False: (22.352, 35.7632),  # m/s, (50, 80) mph
 }
 
 CONFIRM_SPEED_THRESHOLD = {
