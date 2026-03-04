@@ -1,3 +1,15 @@
+sunnypilot Version 2026.001.000 (2026-03-04)
+========================
+* What's Changed (sunnypilot/sunnypilot)
+  * Sync dzid26's vtb-sla for C3clone
+
+
+
+
+
+
+
+
 sunnypilot Version 2026.001.000 (2026-03-xx)
 ========================
 * What's Changed (sunnypilot/sunnypilot)
