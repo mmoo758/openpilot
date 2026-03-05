@@ -183,10 +183,14 @@ class SettingsLayoutSP(OP.SettingsLayout):
 
   def _handle_mouse_release(self, mouse_pos: MousePos) -> bool:
     # Check close button
-    if rl.check_collision_point_rec(mouse_pos, self._close_btn_rect):
+    close_btn_released = rl.check_collision_point_rec(mouse_pos, self._close_btn_rect)
+    if self._close_btn_pressed and close_btn_released:
       if self._close_callback:
         self._close_callback()
+      self._close_btn_pressed = False
       return True
+
+    self._close_btn_pressed = False
 
     # Check navigation buttons
     for panel_type, panel_info in self._panels.items():
