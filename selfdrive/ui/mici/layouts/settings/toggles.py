@@ -5,6 +5,7 @@ from openpilot.selfdrive.ui.mici.widgets.button import BigParamControl, BigMulti
 from openpilot.system.ui.lib.application import gui_app
 from openpilot.selfdrive.ui.layouts.settings.common import restart_needed_callback
 from openpilot.selfdrive.ui.ui_state import ui_state
+from openpilot.system.hardware import HARDWARE
 
 PERSONALITY_TO_INT = log.LongitudinalPersonality.schema.enumerants
 
@@ -23,7 +24,11 @@ class TogglesLayoutMici(NavScroller):
     self._long_active_with_gas = BigParamControl("long active with accel pedal", "LongitudinalActiveWithGas", toggle_callback=restart_needed_callback)
     enable_openpilot = BigParamControl("enable sunnypilot", "OpenpilotEnabledToggle", toggle_callback=restart_needed_callback)
 
-    self._scroller.add_widgets([
+    layout_toggle = None
+    if HARDWARE.get_device_type() in ("tici", "tizi", "pc"):
+      layout_toggle = BigParamControl("use compact ui layout", "UseMiciLayout")
+
+    scroller_items = [
       self._personality_toggle,
       self._experimental_btn,
       is_metric_toggle,
@@ -33,7 +38,12 @@ class TogglesLayoutMici(NavScroller):
       record_mic,
       self._long_active_with_gas,
       enable_openpilot,
-    ])
+    ]
+
+    if layout_toggle is not None:
+      scroller_items.append(layout_toggle)
+
+    self._scroller.add_widgets(scroller_items)
 
     # Toggle lists
     self._refresh_toggles = (
@@ -47,9 +57,14 @@ class TogglesLayoutMici(NavScroller):
       ("OpenpilotEnabledToggle", enable_openpilot),
     )
 
+    if layout_toggle is not None:
+      self._refresh_toggles += (("UseMiciLayout", layout_toggle),)
+
     enable_openpilot.set_enabled(lambda: not ui_state.engaged)
     record_front.set_enabled(False if ui_state.params.get_bool("RecordFrontLock") else (lambda: not ui_state.engaged))
     record_mic.set_enabled(lambda: not ui_state.engaged)
+    if layout_toggle is not None:
+      layout_toggle.set_enabled(lambda: not ui_state.engaged)
 
     if ui_state.params.get_bool("ShowDebugInfo"):
       gui_app.set_show_touches(True)
