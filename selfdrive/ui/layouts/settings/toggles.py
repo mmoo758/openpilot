@@ -8,6 +8,7 @@ from openpilot.system.ui.lib.application import gui_app
 from openpilot.system.ui.lib.multilang import tr, tr_noop
 from openpilot.system.ui.widgets import DialogResult
 from openpilot.selfdrive.ui.ui_state import ui_state
+from openpilot.system.hardware import HARDWARE
 
 if gui_app.sunnypilot_ui():
   from openpilot.system.ui.sunnypilot.widgets.list_view import toggle_item_sp as toggle_item
@@ -35,6 +36,7 @@ DESCRIPTIONS = {
   'RecordFront': tr_noop("Upload data from the driver facing camera and help improve the driver monitoring algorithm."),
   "IsMetric": tr_noop("Display speed in km/h instead of mph."),
   "RecordAudio": tr_noop("Record and store microphone audio while driving. The audio will be included in the dashcam video in comma connect."),
+  "UseMiciLayout": tr_noop("Use the compact UI layout (Comma 4)."),
 }
 
 
@@ -95,6 +97,14 @@ class TogglesLayout(Widget):
         False,
       ),
     }
+
+    if HARDWARE.get_device_type() in ("tici", "tizi", "pc"):
+      self._toggle_defs["UseMiciLayout"] = (
+        lambda: tr("Use Compact UI Layout"),
+        DESCRIPTIONS["UseMiciLayout"],
+        "settings.png",
+        False,
+      )
 
     self._long_personality_setting = multiple_button_item(
       lambda: tr("Driving Personality"),
@@ -208,6 +218,10 @@ class TogglesLayout(Widget):
     for toggle_def in self._toggle_defs:
       if self._toggle_defs[toggle_def][3] and toggle_def not in self._locked_toggles:
         self._toggles[toggle_def].action_item.set_enabled(not ui_state.engaged)
+
+    # Block compact layout switching while engaged to avoid mid-drive UI rebuilds
+    if "UseMiciLayout" in self._toggles and "UseMiciLayout" not in self._locked_toggles:
+      self._toggles["UseMiciLayout"].action_item.set_enabled(not ui_state.engaged)
 
   def _render(self, rect):
     self._scroller.render(rect)
