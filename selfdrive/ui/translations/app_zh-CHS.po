@@ -1316,6 +1316,9 @@ msgstr "自动 (默认)"
 msgid "Auto Lane Change by Blinker"
 msgstr "通过转向灯实现自动变道"
 
+msgid "Obstacle Detected in Blindspot"
+msgstr "盲区检测到障碍"
+
 msgid "Auto Lane Change: Delay with Blind Spot"
 msgstr "自动变道辅助：盲区有车时延迟"
 
@@ -2206,6 +2209,26 @@ msgstr "自定义踩刹车后车道保持状态"
 
 msgid "Stop and Go (Beta)"
 msgstr "停止与行驶辅助系统 (Beta)"
+
+msgid "Stop and Go Hack (Alpha)"
+msgstr "停止与行驶辅助系统 (Alpha)"
+
+msgid ""
+"sunnypilot Longitudinal Control must be available and "
+"enabled for your vehicle to use this feature."
+msgstr ""
+"要使用此功能，您的车辆必须启用 sunnypilot 纵向控制功能。"
+
+msgid ""
+"sunnypilot will allow some Toyota/Lexus cars to "
+"auto resume during stop and go traffic. "
+"This feature is only applicable to certain models "
+"that are able to use longitudinal control. "
+"This is an alpha feature. Use at your own risk."
+msgstr ""
+"sunnypilot 可让部分丰田/雷克萨斯车型在拥堵路况下自动重启行驶。"
+"该功能仅适用于支持纵向控制的特定车型。"
+"请注意这是测试版功能，使用风险自担。"
 
 msgid "Stop and Go for Manual Parking Brake (Beta)"
 msgstr "带手动驻车制动的停止与行驶辅助系统 (Beta)"
