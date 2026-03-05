@@ -18,6 +18,7 @@ from pathlib import Path
 from typing import NamedTuple
 from importlib.resources import as_file, files
 from openpilot.common.swaglog import cloudlog
+from openpilot.common.params import Params
 from openpilot.system.hardware import HARDWARE, PC
 from openpilot.system.ui.lib.multilang import multilang
 from openpilot.common.realtime import Ratekeeper
@@ -452,6 +453,19 @@ class GuiApplication(GuiApplicationExt):
     if tick_function in self._nav_stack_ticks:
       self._nav_stack_ticks.remove(tick_function)
 
+  def reset_navigation(self):
+    """Fully clear navigation state, hiding all stacked widgets and ticks."""
+    while self._nav_stack:
+      widget = self._nav_stack.pop()
+      try:
+        widget.hide_event()
+      except Exception:
+        cloudlog.exception("Failed while hiding widget during navigation reset")
+
+    self._nav_stack_ticks.clear()
+    self._mouse_events = []
+    self._mouse_history.clear()
+
   def set_should_render(self, should_render: bool):
     self._should_render = should_render
 
@@ -854,15 +868,65 @@ class GuiApplication(GuiApplicationExt):
 
   @staticmethod
   def _default_width() -> int:
-    return 2160 if GuiApplication.big_ui() else 536
+    device_type = HARDWARE.get_device_type()
+    return 2160 if device_type in ("tici", "tizi") or GuiApplication.big_ui() else 536
 
   @staticmethod
   def _default_height() -> int:
-    return 1080 if GuiApplication.big_ui() else 240
+    device_type = HARDWARE.get_device_type()
+    return 1080 if device_type in ("tici", "tizi") or GuiApplication.big_ui() else 240
 
   @staticmethod
   def big_ui() -> bool:
-    return HARDWARE.get_device_type() in ('tici', 'tizi') or BIG_UI
+    if BIG_UI:
+      return True
+
+    device_type = HARDWARE.get_device_type()
+    if device_type in ('tici', 'tizi', 'pc'):
+      try:
+        return not Params().get_bool("UseMiciLayout")
+      except Exception:
+        return True
+
+    return False
+
+  def resize_for_layout(self, big_ui: bool):
+    """Resize window for layout switches; keep tici/tizi or big_ui at full size."""
+    device_type = HARDWARE.get_device_type()
+    if device_type in ("tici", "tizi") or big_ui:
+      new_width = 2160
+      new_height = 1080
+    else:
+      new_width = 536
+      new_height = 240
+
+    if self._width == new_width and self._height == new_height:
+      self._nav_stack_widgets_to_render = 1 if big_ui else 2
+      return
+
+    self._width = new_width
+    self._height = new_height
+    self._nav_stack_widgets_to_render = 1 if big_ui else 2
+
+    self._scaled_width = int(self._width * self._scale)
+    self._scaled_height = int(self._height * self._scale)
+    self._scaled_width += self._scaled_width % 2
+    self._scaled_height += self._scaled_height % 2
+
+    rl.set_window_size(self._scaled_width, self._scaled_height)
+
+    # Only rebuild render targets when we actually use them
+    needs_render_texture = self._render_texture is not None or self._scale != 1.0 or BURN_IN_MODE or RECORD
+    if needs_render_texture:
+      if self._render_texture is not None:
+        rl.unload_render_texture(self._render_texture)
+      self._render_texture = rl.load_render_texture(self._width, self._height)
+      rl.set_texture_filter(self._render_texture.texture, rl.TextureFilter.TEXTURE_FILTER_BILINEAR)
+    else:
+      self._render_texture = None
+
+    if self._scale != 1.0:
+      rl.set_mouse_scale(1 / self._scale, 1 / self._scale)
 
 
 gui_app = GuiApplication()
