@@ -66,6 +66,8 @@ class SettingsLayout(Widget):
 
     self._font_medium = gui_app.font(FontWeight.MEDIUM)
     self._close_icon = gui_app.texture("icons/close2.png", CLOSE_ICON_SIZE, CLOSE_ICON_SIZE)
+    self._close_btn_rect = rl.Rectangle(0, 0, 0, 0)
+    self._close_btn_pressed = False
 
     # Callbacks
     self._close_callback: Callable | None = None
@@ -147,10 +149,14 @@ class SettingsLayout(Widget):
 
   def _handle_mouse_release(self, mouse_pos: MousePos) -> None:
     # Check close button
-    if rl.check_collision_point_rec(mouse_pos, self._close_btn_rect):
+    close_btn_released = rl.check_collision_point_rec(mouse_pos, self._close_btn_rect)
+    if self._close_btn_pressed and close_btn_released:
       if self._close_callback:
         self._close_callback()
+      self._close_btn_pressed = False
       return
+
+    self._close_btn_pressed = False
 
     # Check navigation buttons
     for panel_type, panel_info in self._panels.items():
@@ -163,6 +169,9 @@ class SettingsLayout(Widget):
       self._panels[self._current_panel].instance.hide_event()
       self._current_panel = panel_type
       self._panels[self._current_panel].instance.show_event()
+
+  def _handle_mouse_press(self, mouse_pos: MousePos) -> None:
+    self._close_btn_pressed = rl.check_collision_point_rec(mouse_pos, self._close_btn_rect)
 
   def show_event(self):
     super().show_event()
