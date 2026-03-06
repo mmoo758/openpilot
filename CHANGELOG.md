@@ -1,7 +1,8 @@
-sunnypilot Version 2026.001.000 (2026-03-04)
+sunnypilot Version 2026.001.000 (2026-03-06)
 ========================
 * What's Changed (sunnypilot/sunnypilot)
   * Sync dzid26's vtb-sla for C3clone
+  * 抄了DP的代码，大部分汉化（onroad可能有？，请反馈）
 
 
 
