@@ -1398,8 +1398,17 @@ msgstr "确认"
 msgid "Controls state of the device after boot/sleep."
 msgstr "设置设备在 启动/唤醒 后的状态。"
 
+msgid "Cooperative Steering"
+msgstr "协作转向(测试)"
+
 msgid "Cooperative Steering (Beta)"
 msgstr "协作转向(测试)"
+
+msgid "Converts light steering input into steering-wheel rotation."
+msgstr "将轻度转向输入转换为方向盘转动。"
+
+msgid "The faster you go, the stiffer the steering gets."
+msgstr "车速越高，转向阻尼越硬。"
 
 msgid "Country"
 msgstr "国家"
