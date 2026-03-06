@@ -256,7 +256,7 @@ msgstr "拒绝并卸载 openpilot"
 
 #: selfdrive/ui/layouts/settings/settings.py:67
 msgid "Developer"
-msgstr "开发者"
+msgstr "开发人员"
 
 #: selfdrive/ui/layouts/settings/settings.py:62
 msgid "Device"
@@ -859,7 +859,7 @@ msgstr "网络共享密码"
 
 #: selfdrive/ui/layouts/settings/settings.py:64
 msgid "Toggles"
-msgstr "切换"
+msgstr "设定"
 
 #: selfdrive/ui/layouts/settings/software.py:72
 #, python-format
@@ -1928,7 +1928,7 @@ msgid "Nudgeless"
 msgstr "自动"
 
 msgid "OSM"
-msgstr "OSM"
+msgstr "OSM地图"
 
 msgid "Off"
 msgstr "关闭"
@@ -2405,7 +2405,7 @@ msgstr ""
 "使用视觉路径预测来估算通过前方弯道时的合适车速。"
 
 msgid "Vehicle"
-msgstr "车型"
+msgstr "车辆型号"
 
 msgid "View the error log for sunnypilot crashes."
 msgstr "查看导致Sunnypilot崩溃的错误日志。"
