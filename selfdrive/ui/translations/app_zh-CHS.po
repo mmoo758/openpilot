@@ -1810,6 +1810,15 @@ msgstr "横向加速度系数"
 msgid "Lead Departure Alert (Beta)"
 msgstr "前车起步提示 (Beta)"
 
+msgid "GREEN\nLIGHT"
+msgstr "绿灯"
+
+msgid "LEAD VEHICLE\nDEPARTING"
+msgstr "前车起步"
+
+msgid "STOPPED"
+msgstr "等待中"
+
 msgid "Less Restrict Settings for Self-Tune (Beta)"
 msgstr "自学习调校宽松设置（测试版）"
 
