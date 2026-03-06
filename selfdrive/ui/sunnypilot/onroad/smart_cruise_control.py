@@ -57,11 +57,11 @@ class SmartCruiseControlRenderer(Widget):
 
     if self.long_override:
       color = COLORS.OVERRIDE
-      box_color = rl.Color(color.r, color.g, color.b, int(alpha * 255))
+      box_color = rl.Color(color.r, color.g, color.b, int(alpha * 200))
     else:
-      box_color = rl.Color(0, 255, 0, int(alpha * 255))
+      box_color = rl.Color(0, 255, 0, int(alpha * 200))
 
-    text_color = rl.Color(0, 0, 0, int(alpha * 255))
+    text_color = rl.Color(0, 0, 0, int(alpha * 200))
 
     screen_y = rect_height / 4 + y_offset
 
