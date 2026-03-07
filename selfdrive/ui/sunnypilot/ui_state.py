@@ -71,12 +71,11 @@ class UIStateSP:
     if timer_status == OnroadTimerStatus.PAUSE and self.onroad_brightness_timer != ONROAD_BRIGHTNESS_TIMER_PAUSED:
       self.onroad_brightness_timer = ONROAD_BRIGHTNESS_TIMER_PAUSED
     # Toggling from a previously inactive state or resetting an active timer
-    elif (self.onroad_brightness_timer_param >= 0 and self.onroad_brightness != OnroadBrightness.AUTO and
+    elif (self.onroad_brightness_timer_param >= 0 and
+          self.onroad_brightness != OnroadBrightness.AUTO and
+          self.onroad_brightness != OnroadBrightness.AUTO_DARK and  # 添加AUTO_DARK检查
           self.onroad_brightness_timer != ONROAD_BRIGHTNESS_TIMER_PAUSED) or timer_status == OnroadTimerStatus.RESUME:
-      if self.onroad_brightness == OnroadBrightness.AUTO_DARK:
-        self.onroad_brightness_timer = 15 * gui_app.target_fps
-      else:
-        self.onroad_brightness_timer = self.onroad_brightness_timer_param * gui_app.target_fps
+      self.onroad_brightness_timer = self.onroad_brightness_timer_param * gui_app.target_fps
 
   @property
   def onroad_brightness_timer_expired(self) -> bool:
@@ -160,8 +159,6 @@ class DeviceSP:
       return cur_brightness
 
     if _ui_state.onroad_brightness_timer != 0:
-      if _ui_state.onroad_brightness == OnroadBrightness.AUTO_DARK:
-        return max(30.0, cur_brightness)
       # For AUTO (Default) and Manual modes (while timer running), use standard brightness
       return cur_brightness
 
@@ -169,7 +166,8 @@ class DeviceSP:
     if _ui_state.onroad_brightness == OnroadBrightness.AUTO:
       return cur_brightness
     if _ui_state.onroad_brightness == OnroadBrightness.AUTO_DARK:
-      return cur_brightness
+      # Limit AUTO_DARK brightness range to 5-30
+      return max(5.0, min(30.0, cur_brightness))
     if _ui_state.onroad_brightness == OnroadBrightness.SCREEN_OFF:
       return 0.0
 
@@ -178,15 +176,11 @@ class DeviceSP:
 
   @staticmethod
   def set_min_onroad_brightness(_ui_state, min_brightness: int) -> int:
-    if _ui_state.onroad_brightness == OnroadBrightness.AUTO_DARK:
-      min_brightness = 10
-
     return min_brightness
 
   @staticmethod
   def wake_from_dimmed_onroad_brightness(_ui_state, evs) -> None:
-    if _ui_state.started and (_ui_state.onroad_brightness_timer_expired or _ui_state.onroad_brightness == OnroadBrightness.AUTO_DARK):
+    if _ui_state.started and _ui_state.onroad_brightness_timer_expired:
       if any(ev.left_down for ev in evs):
-        if _ui_state.onroad_brightness_timer_expired:
-          gui_app.mouse_events.clear()
+        gui_app.mouse_events.clear()
         _ui_state.reset_onroad_sleep_timer()
