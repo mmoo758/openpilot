@@ -1149,12 +1149,12 @@ msgstr "up"
 #: selfdrive/ui/layouts/settings/software.py:117
 #, python-format
 msgid "up to date, last checked never"
-msgstr "up to date, last checked never"
+msgstr "never checked"
 
 #: selfdrive/ui/layouts/settings/software.py:115
 #, python-format
 msgid "up to date, last checked {}"
-msgstr "up to date, last checked {}"
+msgstr "checked {}"
 
 #: selfdrive/ui/layouts/settings/software.py:109
 #, python-format
