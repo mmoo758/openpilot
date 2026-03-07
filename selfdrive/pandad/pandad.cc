@@ -37,7 +37,7 @@
 // Ignition:
 // - If any of the ignition sources in any panda is high, ignition is high
 
-#define MAX_IR_PANDA_VAL 50
+#define MAX_IR_PANDA_VAL 0
 #define CUTOFF_IL 400
 #define SATURATE_IL 1000
 
