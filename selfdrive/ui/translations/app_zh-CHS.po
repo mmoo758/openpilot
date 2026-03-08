@@ -1819,8 +1819,11 @@ msgstr "前车起步"
 msgid "STOPPED"
 msgstr "等待中"
 
-msgid "ALT. MEM. STO. DESIRED STEER"
-msgstr "海拔 内存占用 剩余存储 期望转向角"
+msgid ""
+"ALT. MEM. STO. DESIRED STEER"
+msgstr ""
+"海拔 内存占用 剩余存储 期望转向角 抄 代码 局部还有"
+"倒车"
 
 msgid "Less Restrict Settings for Self-Tune (Beta)"
 msgstr "自学习调校宽松设置（测试版）"
