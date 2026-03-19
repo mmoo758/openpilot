@@ -12,6 +12,7 @@ class ExpButton(Widget):
     self._params = Params()
     self._experimental_mode: bool = False
     self._engageable: bool = False
+    self._steering_angle: float = 0.0
 
     # State hold mechanism
     self._hold_duration = 2.0  # seconds
@@ -31,6 +32,7 @@ class ExpButton(Widget):
     selfdrive_state = ui_state.sm["selfdriveState"]
     self._experimental_mode = selfdrive_state.experimentalMode
     self._engageable = selfdrive_state.engageable or selfdrive_state.enabled
+    self._steering_angle = ui_state.sm["carState"].steeringAngleDeg
 
   def _handle_mouse_release(self, _):
     super()._handle_mouse_release(_)
@@ -50,7 +52,14 @@ class ExpButton(Widget):
 
     texture = self._txt_exp if self._held_or_actual_mode() else self._txt_wheel
     rl.draw_circle(center_x, center_y, self._rect.width / 2, self._black_bg)
-    rl.draw_texture_ex(texture, rl.Vector2(center_x - texture.width / 2, center_y - texture.height / 2), 0.0, 1.0, self._white_color)
+    # 总是使用旋转后的图像
+    if not self._held_or_actual_mode():
+      # 只在显示方向盘时应用旋转
+      rl.draw_texture_pro(texture, rl.Rectangle(0, 0, texture.width, texture.height),
+                          rl.Rectangle(center_x, center_y, texture.width, texture.height),
+                          rl.Vector2(texture.width / 2, texture.height / 2), -self._steering_angle, self._white_color)
+    else:
+      rl.draw_texture_ex(texture, rl.Vector2(center_x - texture.width / 2, center_y - texture.height / 2), 0.0, 1.0, self._white_color)
 
   def _held_or_actual_mode(self):
     now = time.monotonic()
