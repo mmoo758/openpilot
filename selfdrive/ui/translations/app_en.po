@@ -823,11 +823,11 @@ msgstr "up"
 
 #: openpilot/selfdrive/ui/layouts/settings/software.py
 msgid "up to date, last checked never"
-msgstr "up to date, last checked never"
+msgstr "never checked"
 
 #: openpilot/selfdrive/ui/layouts/settings/software.py
 msgid "up to date, last checked {}"
-msgstr "up to date, last checked {}"
+msgstr "checked {}"
 
 #: openpilot/selfdrive/ui/layouts/settings/software.py
 msgid "update available"
