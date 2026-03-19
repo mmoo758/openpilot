@@ -975,12 +975,12 @@ msgstr "up"
 #: openpilot/selfdrive/ui/layouts/settings/software.py:127
 #, python-format
 msgid "up to date, last checked never"
-msgstr "up to date, last checked never"
+msgstr "never checked"
 
 #: openpilot/selfdrive/ui/layouts/settings/software.py:125
 #, python-format
 msgid "up to date, last checked {}"
-msgstr "up to date, last checked {}"
+msgstr "checked {}"
 
 #: openpilot/selfdrive/ui/layouts/settings/software.py:119
 #, python-format
