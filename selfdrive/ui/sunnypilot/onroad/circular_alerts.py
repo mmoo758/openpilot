@@ -16,8 +16,8 @@ from openpilot.system.ui.lib.text_measure import measure_text_cached
 
 class CircularAlertsRenderer:
   def __init__(self):
-    self._green_light_alert_img = gui_app.texture("../../sunnypilot/selfdrive/assets/images/green_light.png", 250, 250)
-    self._lead_depart_alert_img = gui_app.texture("../../sunnypilot/selfdrive/assets/images/lead_depart.png", 250, 250)
+    self._green_light_alert_img = gui_app.texture("../../sunnypilot/selfdrive/assets/images/green_light.png", 420, 420)
+    self._lead_depart_alert_img = gui_app.texture("../../sunnypilot/selfdrive/assets/images/lead_depart.png", 420, 420)
 
     self._e2e_alert_display_timer = 0
     self._e2e_alert_frame = 0
@@ -40,8 +40,7 @@ class CircularAlertsRenderer:
     if not ui_state.started:
       self._standstill_elapsed_time = 0.0
 
-    self._allow_e2e_alerts = sm['selfdriveState'].alertSize == log.SelfdriveState.AlertSize.none and \
-                             sm.recv_frame['driverStateV2'] > ui_state.started_frame
+    self._allow_e2e_alerts = sm['selfdriveState'].alertSize == log.SelfdriveState.AlertSize.none
 
     if self._green_light_alert or self._lead_depart_alert:
       self._e2e_alert_display_timer = 3 * gui_app.target_fps
@@ -95,7 +94,7 @@ class CircularAlertsRenderer:
       frame_color = rl.Color(255, 255, 255, 75) if is_pulsing else rl.Color(0, 255, 0, 75)
 
     # Draw Circle
-    rl.draw_circle_v(center, e2e_alert_size, rl.Color(0, 0, 0, 190))
+    rl.draw_circle_v(center, e2e_alert_size, rl.Color(0, 0, 0, 128))
     # Draw Ring (Border)
     rl.draw_ring(center, e2e_alert_size - 7.5, e2e_alert_size + 7.5, 0, 360, 0, frame_color)
 
