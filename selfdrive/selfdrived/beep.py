@@ -19,6 +19,7 @@ class Beepd:
     self.current_alert = AudibleAlert.none
     self.beep_thread = None
     self.last_prompt_repeat_time = 0
+    self.volume = 0.1  # 添加音量控制，范围0.0-1.0，0.5表示50%音量
     self.enable_gpio()
     #self.startup_beep()
 
@@ -38,35 +39,58 @@ class Beepd:
                    stdout=subprocess.DEVNULL,
                    encoding='utf8')
 
-  def _beep(self, on):
-    val = "1" if on else "0"
-    subprocess.run(f"echo \"{val}\" | sudo tee /sys/class/gpio/gpio42/value",
-                   shell=True,
-                   stderr=subprocess.DEVNULL,
-                   stdout=subprocess.DEVNULL,
-                   encoding='utf8')
+  def _beep(self, on, duration=0.01):
+    if on:
+      # 使用PWM来控制音量
+      pwm_period = 0.001  # PWM周期1ms
+      on_time = pwm_period * self.volume
+      off_time = pwm_period - on_time
+
+      end_time = time.time() + duration
+      while time.time() < end_time:
+        val = "1"
+        subprocess.run(f"echo \"{val}\" | sudo tee /sys/class/gpio/gpio42/value",
+                       shell=True,
+                       stderr=subprocess.DEVNULL,
+                       stdout=subprocess.DEVNULL,
+                       encoding='utf8')
+        time.sleep(on_time)
+        val = "0"
+        subprocess.run(f"echo \"{val}\" | sudo tee /sys/class/gpio/gpio42/value",
+                       shell=True,
+                       stderr=subprocess.DEVNULL,
+                       stdout=subprocess.DEVNULL,
+                       encoding='utf8')
+        time.sleep(off_time)
+    else:
+      val = "0"
+      subprocess.run(f"echo \"{val}\" | sudo tee /sys/class/gpio/gpio42/value",
+                     shell=True,
+                     stderr=subprocess.DEVNULL,
+                     stdout=subprocess.DEVNULL,
+                     encoding='utf8')
 
   def engage(self):
-    self._beep(True)
+    self._beep(True, 0.01)
     time.sleep(0.01)
     self._beep(False)
 
   def disengage(self):
     for _ in range(2):
-      self._beep(True)
+      self._beep(True, 0.01)
       time.sleep(0.01)
       self._beep(False)
       time.sleep(0.01)
 
   def warning(self):
     for _ in range(3):
-      self._beep(True)
+      self._beep(True, 0.01)
       time.sleep(0.01)
       self._beep(False)
       time.sleep(0.01)
 
   #def startup_beep(self):
-    #self._beep(True)
+    #self._beep(True, 0.1)
     #time.sleep(0.1)
     #self._beep(False)
 
