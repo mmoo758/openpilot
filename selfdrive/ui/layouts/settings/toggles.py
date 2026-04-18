@@ -22,6 +22,10 @@ DESCRIPTIONS = {
     "Your attention is required at all times to use this feature."
   ),
   "DisengageOnAccelerator": tr_noop("When enabled, pressing the accelerator pedal will disengage sunnypilot."),
+  "LongitudinalActiveWithGas": tr_noop(
+    "When enabled, pressing the accelerator pedal will no longer suddenly command zero acceleration. " +
+    "This allows for a smoother transition when pressing the accelerator pedal while sunnypilot is engaged."
+  ),
   "LongitudinalPersonality": tr_noop(
     "Standard is recommended. In aggressive mode, sunnypilot will follow lead cars closer and be more aggressive with the gas and brake. " +
     "In relaxed mode sunnypilot will stay further away from lead cars. On supported cars, you can cycle through these personalities with " +
@@ -61,8 +65,14 @@ class TogglesLayout(Widget):
       "DisengageOnAccelerator": (
         lambda: tr("Disengage on Accelerator Pedal"),
         DESCRIPTIONS["DisengageOnAccelerator"],
-        "disengage_on_accelerator.png",
+        "accelerator_pedal.png",
         False,
+      ),
+      "LongitudinalActiveWithGas": (
+        lambda: tr("Long Active With Accelerator Pedal"),
+        DESCRIPTIONS["LongitudinalActiveWithGas"],
+        "accelerator_pedal.png",
+        True,
       ),
       "IsLdwEnabled": (
         lambda: tr("Enable Lane Departure Warnings"),
@@ -176,6 +186,16 @@ class TogglesLayout(Widget):
         self._toggles["ExperimentalMode"].action_item.set_enabled(True)
         self._toggles["ExperimentalMode"].set_description(e2e_description)
         self._long_personality_setting.action_item.set_enabled(True)
+
+        if ui_state.CP.longitudinalActiveWithGasAvailable:
+          self._toggles["LongitudinalActiveWithGas"].action_item.set_enabled(True)
+          self._toggles["LongitudinalActiveWithGas"].set_description(DESCRIPTIONS["LongitudinalActiveWithGas"])
+        else:
+          self._toggles["LongitudinalActiveWithGas"].action_item.set_enabled(False)
+          self._toggles["LongitudinalActiveWithGas"].action_item.set_enabled(False)
+          self._params.remove("LongitudinalActiveWithGas")
+          unavailable = tr("Long Active With Gas is unavailable on this car")
+          self._toggles["LongitudinalActiveWithGas"].set_description("<b>" + unavailable + "</b><br><br>" + DESCRIPTIONS["LongitudinalActiveWithGas"])
       else:
         # no long for now
         self._toggles["ExperimentalMode"].action_item.set_enabled(False)
@@ -194,8 +214,25 @@ class TogglesLayout(Widget):
             long_desc = tr("Enable the sunnypilot longitudinal control (alpha) toggle to allow Experimental mode.")
 
         self._toggles["ExperimentalMode"].set_description("<b>" + long_desc + "</b><br><br>" + e2e_description)
+
+        self._toggles["LongitudinalActiveWithGas"].action_item.set_enabled(False)
+        self._toggles["LongitudinalActiveWithGas"].action_item.set_state(False)
+        self._params.remove("LongitudinalActiveWithGas")
+
+        unavailable = tr("Experimental mode is currently unavailable on this car since the car's stock ACC is used for longitudinal control.")
+
+        long_desc = unavailable + " " + tr("sunnypilot longitudinal control may come in a future update.")
+        if ui_state.CP.alphaLongitudinalAvailable:
+          if self._is_release:
+            long_desc = unavailable + " " + tr("An alpha version of sunnypilot longitudinal control can be tested, along with " +
+                                               "Long Active With Accelerator Pedal, on non-release branches.")
+          else:
+            long_desc = tr("Enable the sunnypilot longitudinal control (alpha) toggle to allow Long Active Accelerator Pedal.")
+
+        self._toggles["LongitudinalActiveWithGas"].set_description("<b>" + long_desc + "</b><br><br>" + DESCRIPTIONS["LongitudinalActiveWithGas"])
     else:
       self._toggles["ExperimentalMode"].set_description(e2e_description)
+      self._toggles["LongitudinalActiveWithGas"].set_description(DESCRIPTIONS["LongitudinalActiveWithGas"])
 
     self._update_experimental_mode_icon()
 

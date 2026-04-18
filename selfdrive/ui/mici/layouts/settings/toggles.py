@@ -20,6 +20,7 @@ class TogglesLayoutMici(NavScroller):
     always_on_dm_toggle = BigParamControl("always-on driver monitor", "AlwaysOnDM")
     record_front = BigParamControl("record & upload driver camera", "RecordFront", toggle_callback=restart_needed_callback)
     record_mic = BigParamControl("record & upload mic audio", "RecordAudio", toggle_callback=restart_needed_callback)
+    self._long_active_with_gas = BigParamControl("long active with accel pedal", "LongitudinalActiveWithGas", toggle_callback=restart_needed_callback)
     enable_openpilot = BigParamControl("enable sunnypilot", "OpenpilotEnabledToggle", toggle_callback=restart_needed_callback)
 
     self._scroller.add_widgets([
@@ -30,6 +31,7 @@ class TogglesLayoutMici(NavScroller):
       always_on_dm_toggle,
       record_front,
       record_mic,
+      self._long_active_with_gas,
       enable_openpilot,
     ])
 
@@ -41,6 +43,7 @@ class TogglesLayoutMici(NavScroller):
       ("AlwaysOnDM", always_on_dm_toggle),
       ("RecordFront", record_front),
       ("RecordAudio", record_mic),
+      ("LongitudinalActiveWithGas", self._long_active_with_gas),
       ("OpenpilotEnabledToggle", enable_openpilot),
     )
 
@@ -75,12 +78,19 @@ class TogglesLayoutMici(NavScroller):
       if ui_state.has_longitudinal_control:
         self._experimental_btn.set_visible(True)
         self._personality_toggle.set_visible(True)
+        if ui_state.CP.longitudinalActiveWithGasAvailable:
+          self._long_active_with_gas.set_visible(True)
+        else:
+          self._long_active_with_gas.set_visible(False)
+          ui_state.params.remove("LongitudinalActiveWithGas")
       else:
         # no long for now
         self._experimental_btn.set_visible(False)
         self._experimental_btn.set_checked(False)
         self._personality_toggle.set_visible(False)
+        self._long_active_with_gas.set_visible(False)
         ui_state.params.remove("ExperimentalMode")
+        ui_state.params.remove("LongitudinalActiveWithGas")
 
     # Refresh toggles from params to mirror external changes
     for key, item in self._refresh_toggles:
