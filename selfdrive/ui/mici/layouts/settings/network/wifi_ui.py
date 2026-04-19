@@ -98,6 +98,7 @@ class WifiButton(BigButton):
     # Eager state (not sourced from Network)
     self._network_missing = False
     self._network_forgetting = False
+    self._network_disconnecting = False
     self._wrong_password = False
 
   def update_network(self, network: Network):
@@ -114,6 +115,10 @@ class WifiButton(BigButton):
   def network_forgetting(self) -> bool:
     return self._network_forgetting
 
+  @property
+  def network_disconnecting(self) -> bool:
+    return self._network_disconnecting
+
   def _forget_network(self):
     if self._network_forgetting:
       return
@@ -123,6 +128,16 @@ class WifiButton(BigButton):
 
   def on_forgotten(self):
     self._network_forgetting = False
+
+  def disconnect_network(self):
+    if self._network_disconnecting:
+      return
+
+    self._network_disconnecting = True
+    self._wifi_manager.disconnect_connection(self._network.ssid)
+
+  def on_disconnected(self):
+    self._network_disconnecting = False
 
   def set_network_missing(self, missing: bool):
     self._network_missing = missing
@@ -138,7 +153,7 @@ class WifiButton(BigButton):
 
   @property
   def _show_forget_btn(self):
-    if self._network.is_tethering or self._network_forgetting:
+    if self._network.is_tethering or self._network_forgetting or self._network_disconnecting:
       return False
 
     return (self._is_saved and not self._wrong_password) or self._is_connecting
@@ -163,7 +178,7 @@ class WifiButton(BigButton):
       sub_label_w = self.SUB_LABEL_WIDTH - (self._forget_btn.rect.width if self._show_forget_btn else 0)
       sub_label_height = self._sub_label.get_content_height(sub_label_w)
 
-      if self._is_connected and not self._network_forgetting:
+      if self._is_connected and not self._network_forgetting and not self._network_disconnecting:
         check_y = int(label_y - sub_label_height + (sub_label_height - self._check_txt.height) / 2)
         rl.draw_texture_ex(self._check_txt, rl.Vector2(sub_label_x, check_y), 0.0, 1.0, rl.Color(255, 255, 255, int(255 * 0.9 * 0.65)))
         sub_label_x += self._check_txt.width + 14
@@ -208,12 +223,16 @@ class WifiButton(BigButton):
     super()._update_state()
 
     if any((self._network_missing, self._is_connecting, self._is_connected, self._network_forgetting,
-            self._network.security_type == SecurityType.UNSUPPORTED)):
-      self.set_enabled(False)
+            self._network_disconnecting, self._network.security_type == SecurityType.UNSUPPORTED)):
+      # Tapping a connected non-tethering card disconnects, so keep it enabled
+      tap_to_disconnect = self._is_connected and not self._network.is_tethering and not self._network_disconnecting and not self._network_forgetting
+      self.set_enabled(tap_to_disconnect)
       self._sub_label.set_color(rl.Color(255, 255, 255, int(255 * 0.585)))
       self._sub_label.set_font_weight(FontWeight.ROMAN)
 
-      if self._network_forgetting:
+      if self._network_disconnecting:
+        self.set_value("disconnecting...")
+      elif self._network_forgetting:
         self.set_value("forgetting...")
       elif self._is_connecting:
         self.set_value("starting..." if self._network.is_tethering else "connecting...")
@@ -287,12 +306,16 @@ class WifiUIMici(NavScroller):
       need_auth=self._on_need_auth,
       forgotten=self._on_forgotten,
       networks_updated=self._on_network_updated,
+      disconnected=self._on_disconnected,
     )
 
   @property
   def any_network_forgetting(self) -> bool:
-    # TODO: deactivate before forget and add DISCONNECTING state
     return any(btn.network_forgetting for btn in self._scroller.items if isinstance(btn, WifiButton))
+
+  @property
+  def any_network_disconnecting(self) -> bool:
+    return any(btn.network_disconnecting for btn in self._scroller.items if isinstance(btn, WifiButton))
 
   def show_event(self):
     # Re-sort scroller items and update from latest scan results
@@ -344,6 +367,13 @@ class WifiUIMici(NavScroller):
       cloudlog.warning(f"Trying to connect to unknown network: {ssid}")
       return
 
+    if self._wifi_manager.connected_ssid == ssid and not network.is_tethering:
+      for btn in self._scroller.items:
+        if isinstance(btn, WifiButton) and btn.network.ssid == ssid:
+          btn.disconnect_network()
+          break
+      return
+
     if self._wifi_manager.is_connection_saved(network.ssid):
       self._wifi_manager.activate_connection(network.ssid)
     elif network.security_type == SecurityType.OPEN:
@@ -371,6 +401,12 @@ class WifiUIMici(NavScroller):
     for btn in self._scroller.items:
       if isinstance(btn, WifiButton) and btn.network.ssid == ssid:
         btn.on_forgotten()
+
+  def _on_disconnected(self):
+    # For eager UI disconnect (callback has no ssid — clear on whichever button held it)
+    for btn in self._scroller.items:
+      if isinstance(btn, WifiButton) and btn.network_disconnecting:
+        btn.on_disconnected()
 
   def _move_network_to_front(self, ssid: str | None, scroll: bool = False):
     # Move connecting/connected network to the front with animation
