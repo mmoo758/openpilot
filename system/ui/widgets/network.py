@@ -56,6 +56,7 @@ class UIState(IntEnum):
   NEEDS_AUTH = 2
   SHOW_FORGET_CONFIRM = 3
   FORGETTING = 4
+  DISCONNECTING = 5
 
 
 class NavButton(Widget):
@@ -287,6 +288,7 @@ class WifiManagerUI(Widget):
     self._state_network: Network | None = None  # for CONNECTING / NEEDS_AUTH / SHOW_FORGET_CONFIRM / FORGETTING
     self._password_retry: bool = False  # for NEEDS_AUTH
     self.btn_width: int = 200
+    self.disconnect_btn_width: int = 290
     self.scroll_panel = GuiScrollPanel()
     self.keyboard = Keyboard(max_text_size=MAX_PASSWORD_LENGTH, min_text_size=MIN_PASSWORD_LENGTH, show_password_toggle=True)
     self._load_icons()
@@ -294,6 +296,7 @@ class WifiManagerUI(Widget):
     self._networks: list[Network] = []
     self._networks_buttons: dict[str, Button] = {}
     self._forget_networks_buttons: dict[str, Button] = {}
+    self._disconnect_networks_buttons: dict[str, Button] = {}
 
     self._wifi_manager.add_callbacks(need_auth=self._on_need_auth,
                                      activated=self._on_activated,
@@ -371,7 +374,11 @@ class WifiManagerUI(Widget):
 
   def _draw_network_item(self, rect, network: Network):
     spacing = 50
-    ssid_rect = rl.Rectangle(rect.x, rect.y, rect.width - self.btn_width * 2, ITEM_HEIGHT)
+    is_connected = self._wifi_manager.connected_ssid == network.ssid
+    right_reserved = self.btn_width * 2
+    if is_connected:
+      right_reserved += self.disconnect_btn_width + spacing
+    ssid_rect = rl.Rectangle(rect.x, rect.y, rect.width - right_reserved, ITEM_HEIGHT)
     signal_icon_rect = rl.Rectangle(rect.x + rect.width - ICON_SIZE, rect.y + (ITEM_HEIGHT - ICON_SIZE) / 2, ICON_SIZE, ICON_SIZE)
     security_icon_rect = rl.Rectangle(signal_icon_rect.x - spacing - ICON_SIZE, rect.y + (ITEM_HEIGHT - ICON_SIZE) / 2, ICON_SIZE, ICON_SIZE)
 
@@ -384,6 +391,10 @@ class WifiManagerUI(Widget):
       if self._state_network.ssid == network.ssid:
         self._networks_buttons[network.ssid].set_enabled(False)
         status_text = tr("FORGETTING...")
+    elif self.state == UIState.DISCONNECTING and self._state_network:
+      if self._state_network.ssid == network.ssid:
+        self._networks_buttons[network.ssid].set_enabled(False)
+        status_text = tr("DISCONNECTING...")
     elif network.security_type == SecurityType.UNSUPPORTED:
       self._networks_buttons[network.ssid].set_enabled(False)
     else:
@@ -392,13 +403,23 @@ class WifiManagerUI(Widget):
     self._networks_buttons[network.ssid].render(ssid_rect)
 
     if status_text:
-      status_text_rect = rl.Rectangle(security_icon_rect.x - 410, rect.y, 410, ITEM_HEIGHT)
+      status_text_rect = rl.Rectangle(security_icon_rect.x - 520, rect.y, 520, ITEM_HEIGHT)
       gui_label(status_text_rect, status_text, font_size=48, alignment=rl.GuiTextAlignment.TEXT_ALIGN_CENTER)
     else:
+      forget_x = security_icon_rect.x - self.btn_width - spacing
+      if is_connected:
+        disconnect_btn_rect = rl.Rectangle(
+          forget_x - self.disconnect_btn_width - spacing,
+          rect.y + (ITEM_HEIGHT - 80) / 2,
+          self.disconnect_btn_width,
+          80,
+        )
+        self._disconnect_networks_buttons[network.ssid].render(disconnect_btn_rect)
+
       # If the network is saved, show the "Forget" button
       if self._wifi_manager.is_connection_saved(network.ssid):
         forget_btn_rect = rl.Rectangle(
-          security_icon_rect.x - self.btn_width - spacing,
+          forget_x,
           rect.y + (ITEM_HEIGHT - 80) / 2,
           self.btn_width,
           80,
@@ -419,6 +440,9 @@ class WifiManagerUI(Widget):
   def _forget_networks_buttons_callback(self, network):
     self.state = UIState.SHOW_FORGET_CONFIRM
     self._state_network = network
+
+  def _disconnect_networks_buttons_callback(self, network):
+    self.disconnect_network(network)
 
   def _draw_status_icon(self, rect, network: Network):
     """Draw the status icon based on network's connection state"""
@@ -455,6 +479,11 @@ class WifiManagerUI(Widget):
     self._state_network = network
     self._wifi_manager.forget_connection(network.ssid)
 
+  def disconnect_network(self, network: Network):
+    self.state = UIState.DISCONNECTING
+    self._state_network = network
+    self._wifi_manager.disconnect_connection(network.ssid)
+
   def _on_network_updated(self, networks: list[Network]):
     self._networks = networks
     for n in self._networks:
@@ -464,6 +493,9 @@ class WifiManagerUI(Widget):
       self._forget_networks_buttons[n.ssid] = Button(tr("Forget"), partial(self._forget_networks_buttons_callback, n), button_style=ButtonStyle.FORGET_WIFI,
                                                      font_size=45)
       self._forget_networks_buttons[n.ssid].set_touch_valid_callback(lambda: self.scroll_panel.is_touch_valid())
+      self._disconnect_networks_buttons[n.ssid] = Button(tr("Disconnect"), partial(self._disconnect_networks_buttons_callback, n),
+                                                         button_style=ButtonStyle.FORGET_WIFI, font_size=45)
+      self._disconnect_networks_buttons[n.ssid].set_touch_valid_callback(lambda: self.scroll_panel.is_touch_valid())
 
   def _on_need_auth(self, ssid):
     network = next((n for n in self._networks if n.ssid == ssid), None)
@@ -481,7 +513,7 @@ class WifiManagerUI(Widget):
       self.state = UIState.IDLE
 
   def _on_disconnected(self):
-    if self.state == UIState.CONNECTING:
+    if self.state in (UIState.CONNECTING, UIState.DISCONNECTING):
       self.state = UIState.IDLE
 
 
