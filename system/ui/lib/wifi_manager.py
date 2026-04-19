@@ -414,6 +414,7 @@ class WifiManager:
         return
 
       self._set_connecting(None)
+      self._enqueue_callbacks(self._disconnected)
 
     elif new_state in (NMDeviceState.PREPARE, NMDeviceState.CONFIG):
       epoch = self._user_epoch
@@ -708,6 +709,15 @@ class WifiManager:
         cloudlog.warning(f"Failed to activate connection for {ssid}: {reply}")
         # TODO: expose a failed connection state in the UI
         self._init_wifi_state()
+
+    if block:
+      worker()
+    else:
+      threading.Thread(target=worker, daemon=True).start()
+
+  def disconnect_connection(self, ssid: str, block: bool = False):
+    def worker():
+      self._deactivate_connection(ssid)
 
     if block:
       worker()
