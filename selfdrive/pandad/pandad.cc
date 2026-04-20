@@ -142,7 +142,6 @@ void fill_panda_state(cereal::PandaState::Builder &ps, cereal::PandaState::Panda
   ps.setSpiErrorCount(health.spi_error_count_pkt);
   ps.setSbu1Voltage(health.sbu1_voltage_mV / 1000.0f);
   ps.setSbu2Voltage(health.sbu2_voltage_mV / 1000.0f);
-  ps.setSoundOutputLevel(health.sound_output_level_pkt);
   ps.setControlsAllowedLateral(health.controls_allowed_lateral_pkt);
   ps.setControlsAllowedLongitudinal(health.controls_allowed_longitudinal_pkt);
 }
