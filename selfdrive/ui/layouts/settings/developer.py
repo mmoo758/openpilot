@@ -1,3 +1,8 @@
+import os
+import signal
+import subprocess
+
+from openpilot.common.basedir import BASEDIR
 from openpilot.common.params import Params
 from openpilot.selfdrive.ui.widgets.ssh_key import ssh_key_item
 from openpilot.selfdrive.ui.ui_state import ui_state
@@ -11,6 +16,9 @@ from openpilot.system.ui.widgets import DialogResult
 
 if gui_app.sunnypilot_ui():
   from openpilot.system.ui.sunnypilot.widgets.list_view import toggle_item_sp as toggle_item
+
+BRIDGE_PATH = os.path.join(BASEDIR, "cereal", "messaging", "bridge")
+_bridge_proc: subprocess.Popen | None = None
 
 # Description constants
 DESCRIPTIONS = {
@@ -64,6 +72,13 @@ class DeveloperLayout(Widget):
       enabled=ui_state.is_offroad,
     )
 
+    self._can_bridge_toggle = toggle_item(
+      lambda: tr("CAN Bridge"),
+      description="",
+      initial_state=_bridge_proc is not None and _bridge_proc.poll() is None,
+      callback=self._on_start_can_bridge,
+    )
+
     self._long_maneuver_toggle = toggle_item(
       lambda: tr("Longitudinal Maneuver Mode"),
       description="",
@@ -99,6 +114,7 @@ class DeveloperLayout(Widget):
       self._ssh_toggle,
       self._ssh_keys,
       self._joystick_toggle,
+      self._can_bridge_toggle,
       self._long_maneuver_toggle,
       self._lat_maneuver_toggle,
       self._alpha_long_toggle,
@@ -121,7 +137,7 @@ class DeveloperLayout(Widget):
 
     # Hide non-release toggles on release builds
     # TODO: we can do an onroad cycle, but alpha long toggle requires a deinit function to re-enable radar and not fault
-    for item in (self._joystick_toggle, self._long_maneuver_toggle, self._lat_maneuver_toggle, self._alpha_long_toggle):
+    for item in (self._joystick_toggle, self._can_bridge_toggle, self._long_maneuver_toggle, self._lat_maneuver_toggle, self._alpha_long_toggle):
       item.set_visible(not self._is_release)
 
     # CP gating
@@ -159,6 +175,12 @@ class DeveloperLayout(Widget):
     ):
       item.action_item.set_state(self._params.get_bool(key))
 
+    # CAN bridge state lives in the module-level process, not params
+    global _bridge_proc
+    if _bridge_proc is not None and _bridge_proc.poll() is not None:
+      _bridge_proc = None
+    self._can_bridge_toggle.action_item.set_state(_bridge_proc is not None)
+
   def _on_enable_ui_debug(self, state: bool):
     self._params.put_bool("ShowDebugInfo", state)
     gui_app.set_show_touches(state)
@@ -177,6 +199,16 @@ class DeveloperLayout(Widget):
     self._long_maneuver_toggle.action_item.set_state(False)
     self._params.put_bool("LateralManeuverMode", False)
     self._lat_maneuver_toggle.action_item.set_state(False)
+
+  def _on_start_can_bridge(self, state: bool):
+    global _bridge_proc
+    if state:
+      if _bridge_proc is None or _bridge_proc.poll() is not None:
+        _bridge_proc = subprocess.Popen([BRIDGE_PATH, "can"])
+    else:
+      if _bridge_proc is not None and _bridge_proc.poll() is None:
+        _bridge_proc.send_signal(signal.SIGTERM)
+        _bridge_proc = None
 
   def _on_long_maneuver_mode(self, state: bool):
     self._params.put_bool("LongitudinalManeuverMode", state)
