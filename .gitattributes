@@ -46,3 +46,4 @@ selfdrive/assets/training/step17.png -filter=lfs -diff=lfs -merge=lfs
 selfdrive/assets/training/step18.png -filter=lfs -diff=lfs -merge=lfs
 sunnypilot/selfdrive/assets/images/lead_depart.png -filter=lfs -diff=lfs -merge=lfs
 sunnypilot/selfdrive/assets/images/spinner_sunnypilot.png -filter=lfs -diff=lfs -merge=lfs
+system/hardware/tici/updater_magic -filter=lfs -diff=lfs -merge=lfs
