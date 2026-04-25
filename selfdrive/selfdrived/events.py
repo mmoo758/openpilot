@@ -235,6 +235,11 @@ EVENTS: dict[int, dict[str, Alert | AlertCallbackType]] = {
                                        "请确认前方道路畅通"),
   },
 
+  EventName.lateralManeuver: {
+    ET.WARNING: longitudinal_maneuver_alert,
+    ET.PERMANENT: NormalPermanentAlert("Lateral Maneuver Mode"),
+  },
+
   EventName.selfdriveInitializing: {
     ET.NO_ENTRY: NoEntryAlert("系统启动中"),
   },
