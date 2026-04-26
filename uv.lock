@@ -116,12 +116,12 @@ wheels = [
 [[package]]
 name = "bzip2"
 version = "1.0.8"
-source = { git = "https://github.com/commaai/dependencies.git?subdirectory=bzip2&rev=releases#9777ee38aa5ca9439843125392af38ed1262e500" }
+source = { git = "https://github.com/commaai/dependencies.git?subdirectory=bzip2&rev=release-bzip2#13755b73dbcda1b186641fcccce90d55f815d6bc" }
 
 [[package]]
 name = "capnproto"
 version = "1.0.1"
-source = { git = "https://github.com/commaai/dependencies.git?subdirectory=capnproto&rev=releases#9777ee38aa5ca9439843125392af38ed1262e500" }
+source = { git = "https://github.com/commaai/dependencies.git?subdirectory=capnproto&rev=release-capnproto#eba2fe8b8208b5408fbda1bc0104a91e4375aee3" }
 
 [[package]]
 name = "casadi"
