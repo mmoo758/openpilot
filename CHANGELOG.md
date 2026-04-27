@@ -1,3 +1,17 @@
+sunnypilot Version 2026.001.000 (2026-04-27)
+========================
+* 此版本C3、C3L及C3XL均可使用
+* 外接拦截器无法开启op纵向，以及HONDA、GM、HYUNDAI dbc不全，谨慎使用
+* 修改说明：
+  * sp master 同步至20260426#1817更新
+  * 抄了DP代码进行汉化，onroad界面提醒可能局部还会有“ ? ”
+  * 根据我的习惯调整了底部显示数据
+  * 修改onroad右上角方向盘跟转
+  * 增加变道时的道路边缘检测并默认开启
+  * ======
+
+
+
 sunnypilot Version 2026.001.000 (2026-03-xx)
 ========================
 * What's Changed (sunnypilot/sunnypilot)
