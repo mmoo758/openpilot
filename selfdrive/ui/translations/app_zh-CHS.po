@@ -1849,6 +1849,7 @@ msgstr ""
 "个人 配置值得 混合控制 故障 尝试 异常"
 "此版本C3、C3L及C3XL 均可使用 修改说明："
 "外接拦截器 无法开启 op纵向 模块 HONDA、GM、HYUNDAI dbc不全，谨慎使用 "
+"修改 Toyota 短按 变 长按"
 
 msgid "Less Restrict Settings for Self-Tune (Beta)"
 msgstr "自学习调校宽松设置（测试版）"
