@@ -131,6 +131,14 @@ msgstr "同意"
 msgid "Always-On Driver Monitoring"
 msgstr "始终启用驾驶员监控"
 
+#: openpilot/selfdrive/ui/layouts/settings/toggles.py
+msgid "Use Compact UI Layout"
+msgstr "使用Comma4界面"
+
+#: openpilot/selfdrive/ui/layouts/settings/toggles.py
+msgid "Use the compact UI layout (Comma 4)."
+msgstr "在设备屏幕上使用Comma4的紧凑型界面进行显示"
+
 #: selfdrive/ui/layouts/settings/toggles.py:186
 #, python-format
 msgid ""
@@ -468,11 +476,22 @@ msgstr ""
 "\n"
 "我跑什么软件有区别吗？有，只有上游 openpilot（及特定分支）可用于训练。"
 
-#: system/ui/widgets/network.py:458
-#: system/ui/widgets/network.py:326
+#: system/ui/widgets/network.py
 #, python-format
 msgid "Forget"
 msgstr "忘记"
+
+#: system/ui/widgets/network.py
+msgid "Disconnect"
+msgstr "断开连接"
+
+#: system/ui/widgets/network.py
+msgid "DISCONNECTING..."
+msgstr "正在断开..."
+
+#: system/ui/widgets/network.py
+msgid "CONNECT"
+msgstr "连接"
 
 #: system/ui/widgets/network.py:327
 #, python-format
@@ -518,6 +537,10 @@ msgstr "IP 地址"
 #, python-format
 msgid "Install Update"
 msgstr "安装更新"
+
+#: openpilot/selfdrive/ui/layouts/settings/developer.py
+msgid "CAN Bridge"
+msgstr "CAN桥接调试"
 
 #: openpilot/selfdrive/ui/layouts/settings/developer.py:56
 #, python-format
@@ -907,6 +930,32 @@ msgstr "上传车内摄像头数据，帮助改进驾驶员监控算法。"
 #, python-format
 msgid "Use Metric System"
 msgstr "使用公制单位"
+
+#: openpilot/selfdrive\ui\sunnypilot\layouts\settings\vehicle\brands\tesla.py
+msgid "MADS Screen Button"
+msgstr "MADS功能开关方式"
+
+#: openpilot/selfdrive\ui\sunnypilot\layouts\settings\vehicle\brands\tesla.py
+msgid "3 Finger"
+msgstr "3指"
+
+#: openpilot/selfdrive\ui\sunnypilot\layouts\settings\vehicle\brands\tesla.py
+msgid "4 Finger"
+msgstr "4指"
+
+#: openpilot/selfdrive\ui\sunnypilot\layouts\settings\vehicle\brands\tesla.py
+msgid "5 Finger"
+msgstr "5指"
+
+#: openpilot/selfdrive\ui\sunnypilot\layouts\settings\vehicle\brands\tesla.py
+msgid ""
+"Use a multi-finger press on the infotainment display as a MADS button.\n"
+"This allows the use of full MADS functionality when enabled.\n"
+"<b>Note: Setting this to Off may reset your MADS settings to default.</b>"
+msgstr ""
+"在特斯拉的显示屏上用手指进行触摸，作为MADS（单独的横向控制）功能开启或关闭的开关。\n"
+"这允许在启用时使用完整的MADS功能。\n"
+"<b>注意：将此设置设为 关闭 会将的MADS设置重置为默认值。</b>"
 
 #: openpilot/selfdrive/ui/layouts/sidebar.py:72
 #: openpilot/selfdrive/ui/layouts/sidebar.py:144
