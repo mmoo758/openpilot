@@ -2,7 +2,8 @@ sunnypilot Version 2026.001.000 (2026-04-28)
 ========================
 * 此版本C3、C3L及C3XL均可使用
 * 外接拦截器无法开启op纵向，以及HONDA、GM、HYUNDAI dbc不全，谨慎使用
-* 同步Dzid26 20260428 dev混控版本
+* 修改Toyota短按变长按
+* 同步Dzid26 20260428 dev混控版本（For Tesla）
 * 修改说明：
   * sp master 同步至20260428#1820更新
   * 抄了DP代码进行汉化，onroad界面提醒可能局部还会有“ ? ”
