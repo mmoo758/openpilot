@@ -1847,6 +1847,8 @@ msgstr ""
 "系​带齿条 胎​压 轮​档 关门 书​签 倒车 录像 驾驶"
 "脱齿 请倒车 环境 关系 驻车制动 启动横向 左右 至少"
 "个人 配置值得 混合控制 故障 尝试 异常"
+"此版本 仅限 C3XL 使用 修改说明："
+"外接拦截器 无法开启 op纵向 模块 HONDA、GM、HYUNDAI dbc不全，谨慎使用 "
 
 msgid "Less Restrict Settings for Self-Tune (Beta)"
 msgstr "自学习调校宽松设置（测试版）"
