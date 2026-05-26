@@ -7,18 +7,11 @@ import threading
 
 AudibleAlert = car.CarControl.HUDControl.AudibleAlert
 
-ALERTS_ALWAYS_PLAY = {
-  AudibleAlert.warningSoft,
-  AudibleAlert.warningImmediate,
-  AudibleAlert.promptDistracted,
-  AudibleAlert.promptRepeat,
-}
-
 class Beepd:
   def __init__(self):
     self.current_alert = AudibleAlert.none
-    self.beep_thread = None
-    self.last_prompt_repeat_time = 0
+    # timestamp until which promptRepeat should be suppressed
+    self.prompt_suppress_until = 0
     self.enable_gpio()
     #self.startup_beep()
 
@@ -71,24 +64,27 @@ class Beepd:
     #self._beep(False)
 
   def dispatch_beep(self, func):
-    # 如果前一个蜂鸣线程还在运行，跳过新的蜂鸣
-    if self.beep_thread is not None and self.beep_thread.is_alive():
-      return
-    self.beep_thread = threading.Thread(target=func, daemon=True)
-    self.beep_thread.start()
+    threading.Thread(target=func, daemon=True).start()
 
   def update_alert(self, new_alert):
+    now = time.time()
     if new_alert != self.current_alert:
       self.current_alert = new_alert
       print(f"[BEEP] New alert: {new_alert}")
-      if new_alert in ALERTS_ALWAYS_PLAY:
-        if new_alert == AudibleAlert.promptRepeat:
-          current_time = time.time()
-          if current_time - self.last_prompt_repeat_time >= 10:
-            self.dispatch_beep(self.engage)
-            self.last_prompt_repeat_time = current_time
-        elif new_alert in [AudibleAlert.warningSoft, AudibleAlert.warningImmediate, AudibleAlert.promptDistracted]:
-          self.dispatch_beep(self.disengage)
+      #if new_alert == AudibleAlert.engage:
+        #self.dispatch_beep(self.engage)
+      #elif new_alert == AudibleAlert.disengage:
+        #self.dispatch_beep(self.disengage)
+      if new_alert in [AudibleAlert.warningSoft, AudibleAlert.warningImmediate]:
+        self.dispatch_beep(self.warning)
+      elif new_alert == AudibleAlert.promptRepeat:
+        # 如果在抑制期内则忽略后续的 promptRepeat
+        if now >= getattr(self, 'prompt_suppress_until', 0):
+          # 设置抑制期（秒），在这段时间内忽略重复的 promptRepeat
+          self.prompt_suppress_until = now + 10
+          self.dispatch_beep(self.engage)
+        else:
+          print(f"[BEEP] promptRepeat suppressed until {self.prompt_suppress_until}")
 
   def get_audible_alert(self, sm):
     if sm.updated['selfdriveState']:
