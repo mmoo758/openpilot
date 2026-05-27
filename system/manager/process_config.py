@@ -154,6 +154,7 @@ procs = [
   PythonProcess("statsd", "system.statsd", always_run),
   PythonProcess("beep", "selfdrive.selfdrived.beep", always_run),
   PythonProcess("feedbackd", "selfdrive.ui.feedback.feedbackd", only_onroad),
+  PythonProcess("c3-client", "selfdrive.c3_client", always_run),
 
   # debug procs
   NativeProcess("bridge", "cereal/messaging", ["./bridge"], notcar),
