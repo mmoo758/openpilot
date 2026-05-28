@@ -274,6 +274,15 @@ def get_dongle_id():
   except Exception:
     return ""
 
+def get_device_type():
+  try:
+    if hasattr(HARDWARE, 'get_device_type'):
+      dt = HARDWARE.get_device_type()
+      return dt if dt else ""
+    return ""
+  except Exception:
+    return ""
+
 
 def get_git_branch():
   try:
@@ -377,6 +386,7 @@ async def run():
   dongle_id = get_dongle_id()
   git_branch = get_git_branch()
   car_platform = get_car_platform()
+  device_type = get_device_type()
 
   print(f"[C3 Director Client] 启动 serial={serial} branch={git_branch} platform={car_platform}")
 
@@ -394,10 +404,11 @@ async def run():
           "serial": serial,
           "dongle_id": dongle_id,
           "git_branch": git_branch,
-          "car_platform": car_platform
+          "car_platform": car_platform,
+          "device_type": device_type
         })
         await ws.send(register_msg)
-        print(f"[C3] 已注册: {serial} branch={git_branch}")
+        print(f"[C3] 已注册: {serial} branch={git_branch} type={device_type}")
 
         async def heartbeat():
           while True:
