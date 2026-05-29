@@ -18,7 +18,6 @@ class Beepd:
   def __init__(self):
     self.current_alert = AudibleAlert.none
     self.beep_thread = None
-    self.pending_beep = None
     self.last_prompt_repeat_time = 0
     self.enable_gpio()
     #self.startup_beep()
@@ -38,16 +37,6 @@ class Beepd:
                    stderr=subprocess.DEVNULL,
                    stdout=subprocess.DEVNULL,
                    encoding='utf8')
-
-  def _run_beep(self, func):
-    try:
-      func()
-    finally:
-      self.beep_thread = None
-      if self.pending_beep is not None:
-        next_beep = self.pending_beep
-        self.pending_beep = None
-        self.dispatch_beep(next_beep)
 
   def _beep(self, on):
     val = "1" if on else "0"
@@ -82,19 +71,16 @@ class Beepd:
     #self._beep(False)
 
   def dispatch_beep(self, func):
-    # 如果前一个蜂鸣线程还在运行，将新的蜂鸣请求排队
+    # 如果前一个蜂鸣线程还在运行，跳过新的蜂鸣
     if self.beep_thread is not None and self.beep_thread.is_alive():
-      self.pending_beep = func
       return
-    self.pending_beep = None
-    self.beep_thread = threading.Thread(target=self._run_beep, args=(func,), daemon=True)
+    self.beep_thread = threading.Thread(target=func, daemon=True)
     self.beep_thread.start()
 
   def update_alert(self, new_alert):
-    if new_alert != self.current_alert or new_alert == AudibleAlert.promptRepeat:
-      if new_alert != self.current_alert:
-        self.current_alert = new_alert
-        print(f"[BEEP] New alert: {new_alert}")
+    if new_alert != self.current_alert:
+      self.current_alert = new_alert
+      print(f"[BEEP] New alert: {new_alert}")
       if new_alert in ALERTS_ALWAYS_PLAY:
         if new_alert == AudibleAlert.promptRepeat:
           current_time = time.time()
