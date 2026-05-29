@@ -48,7 +48,7 @@ class Beepd:
 
   def engage(self):
     self._beep(True)
-    time.sleep(0.05)
+    time.sleep(0.01)
     self._beep(False)
 
   def disengage(self):
@@ -84,7 +84,7 @@ class Beepd:
       if new_alert in ALERTS_ALWAYS_PLAY:
         if new_alert == AudibleAlert.promptRepeat:
           current_time = time.time()
-          if current_time - self.last_prompt_repeat_time >= 10:
+          if current_time - self.last_prompt_repeat_time >= 15:
             self.dispatch_beep(self.engage)
             self.last_prompt_repeat_time = current_time
         elif new_alert in [AudibleAlert.warningSoft, AudibleAlert.warningImmediate, AudibleAlert.promptDistracted]:
