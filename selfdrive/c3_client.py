@@ -253,7 +253,7 @@ class _WebSocketClient:
 
 # ================= 配置 =================
 SERVER_URL = "ws://1.15.136.221:8500"
-HEARTBEAT_INTERVAL = 15
+HEARTBEAT_INTERVAL = 5
 RECONNECT_DELAY = 5
 
 # ================= 设备标识 =================
@@ -303,6 +303,15 @@ def get_car_platform():
         return bundle.get("name", "")
       import json
       return json.loads(bundle).get("name", "")
+    # 如果没有强制指定车型，从 CarParams 读取实际车型
+    try:
+      cp = _params.get("CarParamsPersistent")
+      if cp:
+        import json as _j
+        cp_data = _j.loads(cp if isinstance(cp, str) else cp.decode())
+        return cp_data.get("carName", "") or cp_data.get("car_platform", "") or ""
+    except Exception:
+      pass
     return ""
   except Exception:
     return ""
@@ -352,6 +361,184 @@ async def execute_tmux():
     return {"status": "ok", "output": f"⚠️ 无法捕获 tmux 输出\n{sessions_result.get('output', '')}"}
 
 
+# ================= 错误查询 =================
+# ================= Messaging 数据采集 =================
+async def execute_messaging():
+  """获取 messaging 实时数据：进程状态、设备状态、车辆状态、控制状态
+  使用 subprocess 独立进程执行同步 SubMaster 操作，避免在 async 协程中阻塞事件循环"""
+  try:
+    script = r'''import sys, json
+sys.path.insert(0, "/data/openpilot")
+from cereal.messaging import SubMaster, pub_sock, recv_one_or_none
+from cereal import log
+import time
+
+# 分别订阅每个 topic 并单独等待，避免一次 update 等不全
+topics = {"managerState": None, "deviceState": None, "carState": None, "controlsState": None}
+for t in topics:
+  sm = SubMaster([t])
+  for _ in range(5):  # 最多尝试 5 轮，每轮 1 秒
+    sm.update(1000)
+    if sm.updated[t]:
+      topics[t] = sm[t]
+      break
+
+ms = topics["managerState"]
+ds = topics["deviceState"]
+cs = topics["carState"]
+cts = topics["controlsState"]
+
+# 辅助函数：从 capnp 对象安全取值
+def _get(obj, attr, default=0):
+  return getattr(obj, attr, default) if obj is not None else default
+
+def _get_str(obj, attr, default="--"):
+  return str(getattr(obj, attr, default)) if obj is not None else default
+
+def _round(obj, attr, precision=2):
+  return round(getattr(obj, attr, 0), precision) if obj is not None else 0
+
+def _list(obj, attr):
+  return list(getattr(obj, attr, [])) if obj is not None else []
+
+# 1. 进程状态
+key_names = ["selfdrived","modeld","modeld_v2","updated","ui","sensord","camerad",
+             "boardd","pandad","athenad","c3_client","mapd_nav"]
+processes = []
+for p in _get(ms, "processes", []):
+  if p.name in key_names:
+    processes.append({"name": p.name, "running": p.running, "shouldBeRunning": p.shouldBeRunning, "pid": p.pid})
+
+# 2. 设备状态
+device_state = {
+  "deviceType": _get_str(ds, "deviceType"),
+  "started": _get(ds, "started", False),
+  "thermalStatus": _get_str(ds, "thermalStatus"),
+  "networkType": _get_str(ds, "networkType"),
+  "networkStrength": _get_str(ds, "networkStrength"),
+  "cpuUsagePercent": _list(ds, "cpuUsagePercent"),
+  "gpuUsagePercent": _get(ds, "gpuUsagePercent"),
+  "memoryUsagePercent": _get(ds, "memoryUsagePercent"),
+  "freeSpacePercent": _round(ds, "freeSpacePercent", 1),
+  "powerDrawW": _round(ds, "powerDrawW", 1),
+  "fanSpeedPercentDesired": _get(ds, "fanSpeedPercentDesired"),
+  "screenBrightnessPercent": _get(ds, "screenBrightnessPercent"),
+  "carBatteryCapacityUwh": _get(ds, "carBatteryCapacityUwh"),
+  "cpuTempC": _list(ds, "cpuTempC"),
+  "gpuTempC": _list(ds, "gpuTempC"),
+  "memoryTempC": _round(ds, "memoryTempC", 1),
+  "maxTempC": _round(ds, "maxTempC", 1),
+  "dspTempC": _round(ds, "dspTempC", 1) if _get(ds, "dspTempC") else 0,
+}
+
+# 3. 车辆状态
+cs_obj = _get(cs, "cruiseState")
+ws_obj = _get(cs, "wheelSpeeds")
+car_state = {
+  "vEgo": _round(cs, "vEgo"),
+  "vEgoRaw": _round(cs, "vEgoRaw"),
+  "vCruise": _round(cs, "vCruise"),
+  "vCruiseCluster": _round(cs, "vCruiseCluster"),
+  "steeringAngleDeg": _round(cs, "steeringAngleDeg", 1),
+  "steeringRateDeg": _round(cs, "steeringRateDeg", 1),
+  "steeringTorque": _get(cs, "steeringTorque"),
+  "steeringTorqueEps": _round(cs, "steeringTorqueEps", 1),
+  "steeringPressed": _get(cs, "steeringPressed", False),
+  "steerFaultPermanent": _get(cs, "steerFaultPermanent", False),
+  "steerFaultTemporary": _get(cs, "steerFaultTemporary", False),
+  "gasPressed": _get(cs, "gasPressed", False),
+  "brakePressed": _get(cs, "brakePressed", False),
+  "brakeHoldActive": _get(cs, "brakeHoldActive", False),
+  "standstill": _get(cs, "standstill", False),
+  "seatbeltUnlatched": _get(cs, "seatbeltUnlatched", False),
+  "doorOpen": _get(cs, "doorOpen", False),
+  "parkingBrake": _get(cs, "parkingBrake", False),
+  "gearShifter": _get_str(cs, "gearShifter"),
+  "leftBlinker": _get(cs, "leftBlinker", False),
+  "rightBlinker": _get(cs, "rightBlinker", False),
+  "leftBlindspot": _get(cs, "leftBlindspot", False),
+  "rightBlindspot": _get(cs, "rightBlindspot", False),
+  "canValid": _get(cs, "canValid", False),
+  "canTimeout": _get(cs, "canTimeout", False),
+  "accFaulted": _get(cs, "accFaulted", False),
+  "aEgo": _round(cs, "aEgo", 4),
+  "yawRate": _round(cs, "yawRate", 4),
+  "cruiseState": {
+    "enabled": _get(cs_obj, "enabled", False),
+    "available": _get(cs_obj, "available", False),
+    "speed": _round(cs_obj, "speed"),
+    "speedCluster": _round(cs_obj, "speedCluster"),
+  },
+  "wheelSpeeds": {
+    "fl": _round(ws_obj, "fl"),
+    "fr": _round(ws_obj, "fr"),
+    "rl": _round(ws_obj, "rl"),
+    "rr": _round(ws_obj, "rr"),
+  },
+}
+
+# 4. 控制状态
+controls_state = {
+  "longControlState": _get_str(cts, "longControlState"),
+  "lateralControlState": _get_str(cts, "lateralControlState"),
+  "curvature": _round(cts, "curvature", 6),
+  "desiredCurvature": _round(cts, "desiredCurvature", 6),
+  "ufAccelCmd": _round(cts, "ufAccelCmd", 4),
+  "uiAccelCmd": _round(cts, "uiAccelCmd", 4),
+  "upAccelCmd": _round(cts, "upAccelCmd", 4),
+  "forceDecel": _get(cts, "forceDecel", False),
+}
+
+print(json.dumps({
+  "processes": processes,
+  "deviceState": device_state,
+  "carState": car_state,
+  "controlsState": controls_state,
+}))
+'''
+    result = await asyncio.wait_for(
+      asyncio.create_subprocess_exec(
+        "python3", "-c", script,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE
+      ), timeout=15
+    )
+    stdout, stderr = await result.communicate()
+    if result.returncode != 0:
+      return {"status": "error", "output": f"子进程错误: {stderr.decode(errors='replace')[:500]}"}
+    output = stdout.decode(errors="replace").strip()
+    # 验证是否为合法JSON
+    json.loads(output)
+    return {"status": "ok", "output": output}
+  except asyncio.TimeoutError:
+    return {"status": "error", "output": "获取 messaging 数据超时(15s)"}
+  except json.JSONDecodeError:
+    return {"status": "error", "output": f"数据解析失败: {output[:300]}"}
+  except Exception as e:
+    return {"status": "error", "output": f"获取 messaging 数据失败: {e}\n{traceback.format_exc()}"}
+
+# ================= 更新辅助 =================
+async def execute_update_oneclick():
+  """一键更新：直接发送 SIGHUP 信号触发 updated 进程执行完整检查+下载
+  只发 SIGHUP 即可（内部先 check_for_update 再 fetch_update）
+  避免先发 SIGUSR1 再发 SIGHUP 导致的时序竞争（user_request 在 sleep 前被清空）"""
+  try:
+    # 检查 updated 进程是否在运行
+    check = await execute_cmd("pgrep -f 'system.updated.updated'", timeout=3)
+    if not check.get("output", "").strip():
+      return {"status": "error", "output": "设备不在 offroad 状态，updated 进程未运行"}
+
+    # 只发 SIGHUP（内部先检查再下载，一步到位）
+    subprocess.run(
+      ["sudo", "-u", "comma", "pkill", "-SIGHUP", "-f", "system.updated.updated"],
+      timeout=5, capture_output=True
+    )
+
+    return {"status": "ok", "output": "一键更新已触发"}
+  except Exception as e:
+    return {"status": "error", "output": f"一键更新失败: {e}"}
+
+
 # ================= 消息处理 =================
 async def handle_message(data, ws):
   msg_type = data.get("type")
@@ -365,6 +552,11 @@ async def handle_message(data, ws):
     result = await execute_tmux()
   elif msg_type == "ping":
     result = {"status": "ok", "output": "pong"}
+  elif msg_type == "update":
+    result = await execute_update_oneclick()
+  elif msg_type == "msgq":
+    result = await execute_messaging()
+
   else:
     result = {"status": "error", "output": f"未知指令类型: {msg_type}"}
 
@@ -414,7 +606,19 @@ async def run():
           while True:
             await asyncio.sleep(HEARTBEAT_INTERVAL)
             try:
-              await ws.send(json.dumps({"type": "heartbeat"}))
+              # 通过 modeld_tinygrad 进程判断 onroad/offroad
+              offroad = True  # 默认 offroad
+              try:
+                import subprocess
+                result = subprocess.run(
+                  "ps aux | grep -v grep | grep -q modeld_tinygrad && echo 0 || echo 1",
+                  shell=True, capture_output=True, text=True, timeout=5
+                )
+                if result.returncode == 0:
+                  offroad = result.stdout.strip() == "1"
+              except Exception:
+                offroad = True
+              await ws.send(json.dumps({"type": "heartbeat", "offroad": offroad, "car_platform": get_car_platform()}))
             except Exception:
               break
 
