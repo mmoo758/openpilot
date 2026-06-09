@@ -10,6 +10,8 @@ AudibleAlert = car.CarControl.HUDControl.AudibleAlert
 class Beepd:
   def __init__(self):
     self.current_alert = AudibleAlert.none
+    # timestamp until which promptRepeat should be suppressed
+    self.prompt_suppress_until = 0
     self.enable_gpio()
     #self.startup_beep()
 
@@ -65,6 +67,7 @@ class Beepd:
     threading.Thread(target=func, daemon=True).start()
 
   def update_alert(self, new_alert):
+    now = time.time()
     if new_alert != self.current_alert:
       self.current_alert = new_alert
       print(f"[BEEP] New alert: {new_alert}")
@@ -75,7 +78,13 @@ class Beepd:
       if new_alert in [AudibleAlert.warningSoft, AudibleAlert.warningImmediate]:
         self.dispatch_beep(self.warning)
       elif new_alert == AudibleAlert.promptRepeat:
-        self.dispatch_beep(self.engage)
+        # 如果在抑制期内则忽略后续的 promptRepeat
+        if now >= getattr(self, 'prompt_suppress_until', 0):
+          # 设置抑制期（秒），在这段时间内忽略重复的 promptRepeat
+          self.prompt_suppress_until = now + 10
+          self.dispatch_beep(self.engage)
+        else:
+          print(f"[BEEP] promptRepeat suppressed until {self.prompt_suppress_until}")
 
   def get_audible_alert(self, sm):
     if sm.updated['selfdriveState']:
