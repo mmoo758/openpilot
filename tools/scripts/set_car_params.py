@@ -15,7 +15,8 @@ if __name__ == "__main__":
   else:
     CP = car.CarParams.new_message()
     CP.openpilotLongitudinalControl = True
-    CP.alphaLongitudinalAvailable = False
+    CP.alphaLongitudinalAvailable = True
+    CP.longitudinalActiveWithGasAvailable = True
 
   cp_bytes = CP.to_bytes()
   for p in ("CarParams", "CarParamsCache", "CarParamsPersistent"):
