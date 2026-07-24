@@ -35,6 +35,7 @@ class ModelConstants:
   LANE_LINES_WIDTH = 2
   ROAD_EDGES_WIDTH = 2
   PLAN_WIDTH = 15
+  ACTION_WIDTH = 2  # deep-RL action head: (desired curvature, desired accel); raw slice is 2 mu + 2 std
   DESIRE_PRED_WIDTH = 8
   LAT_PLANNER_SOLUTION_WIDTH = 4
   DESIRED_CURV_WIDTH = 1

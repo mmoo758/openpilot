@@ -116,7 +116,10 @@ class ModelCache:
 
 class ModelFetcher:
   """Handles fetching and caching of model data from remote source"""
-  MODEL_URL = "https://raw.githubusercontent.com/sunnypilot/sunnypilot-models/refs/heads/gh-pages/docs/driving_models_v17.json"
+  # Self-hosted index: every bundle from sunnypilot's driving_models_v17.json (which still serve
+  # their artifacts from sunnypilot's own hosting) plus our models at index 1000+.
+  # Regenerate with release/ci/build_models_json.py to pick up new upstream models.
+  MODEL_URL = "https://cdn.amyjeanes.com/sunnypilot/driving_models_v1.json"
 
   def __init__(self, params: Params):
     self.params = params
