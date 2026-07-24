@@ -197,7 +197,10 @@ def make_supercombo_input_queues(input_shapes, frame_skip, device):
     if len(shape) == 3 and shape[1] > 1:
       if key.startswith('desire'):
         numpy_keys[key] = np.zeros(shape[2], dtype=np.float32)
-        queue_keys[f'{key}_q'] = Tensor(
+        # always 'desire_q', matching make_split_input_queues and run_supercombo's signature.
+        # Naming it f'{key}_q' broke any model whose desire input isn't literally 'desire'
+        # (deep-RL models call it 'desire_pulse') with a missing-argument TypeError.
+        queue_keys['desire_q'] = Tensor(
           np.zeros((frame_skip * shape[1], shape[0], shape[2]), dtype=np.float32),
           device=device).contiguous().realize()
       elif key == 'features_buffer':
