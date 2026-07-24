@@ -87,8 +87,18 @@ class Parser:
     outs[name] = pred_mu_final.reshape(final_shape)
     outs[name + '_stds'] = pred_std_final.reshape(final_shape)
 
+  def is_mhp(self, outs, name, shape):
+    """Whether an output is multi-hypothesis. A single-hypothesis head is exactly 2*shape wide
+    (mu + std); anything else carries the per-hypothesis weights of an MHP head. Deep-RL combined
+    models emit single-hypothesis plan/lead where the older supercombo emitted MHP."""
+    if self.check_missing(outs, name):
+      return False
+    return outs[name].shape[1] != 2 * shape
+
   def parse_outputs(self, outs: dict[str, np.ndarray]) -> dict[str, np.ndarray]:
-    self.parse_mdn('plan', outs, in_N=ModelConstants.PLAN_MHP_N, out_N=ModelConstants.PLAN_MHP_SELECTION,
+    plan_mhp = self.is_mhp(outs, 'plan', ModelConstants.IDX_N * ModelConstants.PLAN_WIDTH)
+    plan_in_N, plan_out_N = (ModelConstants.PLAN_MHP_N, ModelConstants.PLAN_MHP_SELECTION) if plan_mhp else (0, 0)
+    self.parse_mdn('plan', outs, in_N=plan_in_N, out_N=plan_out_N,
                    out_shape=(ModelConstants.IDX_N,ModelConstants.PLAN_WIDTH))
     self.parse_mdn('lane_lines', outs, in_N=0, out_N=0, out_shape=(ModelConstants.NUM_LANE_LINES,ModelConstants.IDX_N,ModelConstants.LANE_LINES_WIDTH))
     self.parse_mdn('road_edges', outs, in_N=0, out_N=0, out_shape=(ModelConstants.NUM_ROAD_EDGES,ModelConstants.IDX_N,ModelConstants.LANE_LINES_WIDTH))
@@ -97,8 +107,12 @@ class Parser:
     if 'sim_pose' in outs:
       self.parse_mdn('sim_pose', outs, in_N=0, out_N=0, out_shape=(ModelConstants.POSE_WIDTH,))
     self.parse_mdn('wide_from_device_euler', outs, in_N=0, out_N=0, out_shape=(ModelConstants.WIDE_FROM_DEVICE_WIDTH,))
-    self.parse_mdn('lead', outs, in_N=ModelConstants.LEAD_MHP_N, out_N=ModelConstants.LEAD_MHP_SELECTION,
-                   out_shape=(ModelConstants.LEAD_TRAJ_LEN,ModelConstants.LEAD_WIDTH))
+    lead_mhp = self.is_mhp(outs, 'lead',
+                           ModelConstants.LEAD_MHP_SELECTION * ModelConstants.LEAD_TRAJ_LEN * ModelConstants.LEAD_WIDTH)
+    lead_in_N, lead_out_N = (ModelConstants.LEAD_MHP_N, ModelConstants.LEAD_MHP_SELECTION) if lead_mhp else (0, 0)
+    lead_out_shape = (ModelConstants.LEAD_TRAJ_LEN, ModelConstants.LEAD_WIDTH) if lead_mhp else \
+      (ModelConstants.LEAD_MHP_SELECTION, ModelConstants.LEAD_TRAJ_LEN, ModelConstants.LEAD_WIDTH)
+    self.parse_mdn('lead', outs, in_N=lead_in_N, out_N=lead_out_N, out_shape=lead_out_shape)
     if 'lat_planner_solution' in outs:
       self.parse_mdn('lat_planner_solution', outs, in_N=0, out_N=0, out_shape=(ModelConstants.IDX_N,ModelConstants.LAT_PLANNER_SOLUTION_WIDTH))
     if 'desired_curvature' in outs:
