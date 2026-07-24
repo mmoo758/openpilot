@@ -22,6 +22,34 @@ REQUIRED_SELECTOR_VERSION = 15
 # It also sorts them to the top of the selector, which orders by index descending.
 CUSTOM_INDEX_BASE = 1000
 
+# Rebel Legion (commaai/openpilot#38164, merged 2026-07-23, reverted the next day by #38449).
+# The ONNX is hosted at cdn.amyjeanes.com/sunnypilot/rebel-legion-2026-07-23/driving_supercombo.onnx
+# (sha256 15e563da...6766419d). Compiling it needs a comma 3X -- see the header of this file's
+# commit message for the command. Uncomment and fill in the pkl's sha256 once compiled.
+#
+# REBEL_LEGION = {
+#   "short_name": "RL",
+#   "display_name": "Rebel Legion (July 23, 2026)",
+#   "is_20hz": True,
+#   "ref": "2895346746634d7eec0ee749f946c87039948a25",
+#   "environment": "development",
+#   "runner": "tinygrad",
+#   "minimum_selector_version": str(REQUIRED_SELECTOR_VERSION),
+#   "generation": "12",
+#   # comma shipped this model with LAT_SMOOTH_SECONDS/LONG_SMOOTH_SECONDS both at 0.1
+#   "overrides": {"folder": "RL Models", "lat": ".1", "long": ".1"},
+#   "models": [{
+#     "type": "supercombo",
+#     "artifact": {
+#       "file_name": "driving_rl_tinygrad.pkl",
+#       "download_uri": {
+#         "url": "https://cdn.amyjeanes.com/sunnypilot/rebel-legion-2026-07-23/driving_rl_tinygrad.pkl",
+#         "sha256": "TODO: sha256sum of the compiled pkl",
+#       },
+#     },
+#   }],
+# }
+
 CUSTOM_BUNDLES = [
   {
     "short_name": "DT",
