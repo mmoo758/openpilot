@@ -94,10 +94,10 @@ CUSTOM_BUNDLES = [
     "runner": "tinygrad",
     "minimum_selector_version": str(REQUIRED_SELECTOR_VERSION),
     "generation": "12",
-    # Not Rebel Legion's 0.1/0.1: those came with the RL branch a month later. This model's own
-    # branch is master, which runs LAT/LONG_SMOOTH_SECONDS at 0.0/0.3 -- the settings comma's
-    # process replay and model review evaluated it under.
-    "overrides": {"folder": "Master Models", "lat": ".0", "long": ".3"},
+    # Not Rebel Legion's 0.1/0.1: those came with the RL branch a month later. This PR branches
+    # off master and touches nothing but the ONNX, so master's LAT/LONG_SMOOTH_SECONDS of
+    # 0.0/0.3 apply -- the settings comma's process replay and model review evaluated it under.
+    "overrides": {"folder": "RL Models", "lat": ".0", "long": ".3"},
     "models": [
       {
         # Same interface as Rebel Legion -- identical input shapes and output slices, 2580 wide
