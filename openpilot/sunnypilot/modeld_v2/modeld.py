@@ -216,6 +216,10 @@ class ModelState(ModelStateBase):
       model_output = raw_outputs.numpy().flatten()
       sliced = {k: model_output[np.newaxis, v] for k, v in self.vision_output_slices.items()}
       outputs = self.parser.parse_outputs(sliced)
+      # hand the recurrent state back for the next frame; run_supercombo rolls it into feat_q
+      # there rather than here, so the queue write stays inside the JIT's live graph.
+      if 'prev_feat' in self.numpy_inputs:
+        self.numpy_inputs['prev_feat'][:] = model_output[self.vision_output_slices['hidden_state']]
     else:
       vision_output = raw_outputs[0].numpy().flatten()
       vision_sliced = {k: vision_output[np.newaxis, v] for k, v in self.vision_output_slices.items()}

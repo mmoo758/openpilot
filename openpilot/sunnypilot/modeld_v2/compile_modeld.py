@@ -204,9 +204,20 @@ def make_supercombo_input_queues(input_shapes, frame_skip, device):
           np.zeros((frame_skip * shape[1], shape[0], shape[2]), dtype=np.float32),
           device=device).contiguous().realize()
       elif key == 'features_buffer':
+        # frame_skip * shape[1], not the split path's frame_skip * (shape[1] - 1) + 1. A split
+        # model's vision half runs first, so its current-frame feature is available to the policy
+        # and belongs in the sampled window. A supercombo only produces its hidden_state *after*
+        # the forward pass, so features_buffer holds past features only and the model appends the
+        # current one itself. The extra frame_skip - 1 slots keep the newest entry that
+        # run_supercombo rolls in out of the sampled window, leaving it at frame_skip frames back:
+        # ages of frame_skip, 2*frame_skip, ... as trained. Undersizing it fed ages of
+        # 1, frame_skip + 1, ... instead -- every feature 3 frames too recent at frame_skip 4.
         queue_keys['feat_q'] = Tensor(
-          np.zeros((frame_skip * (shape[1] - 1) + 1, shape[0], shape[2]), dtype=np.float32),
+          np.zeros((frame_skip * shape[1], shape[0], shape[2]), dtype=np.float32),
           device=device).contiguous().realize()
+        # host-side handoff for the recurrent state: ModelState.run copies each frame's
+        # hidden_state output in here, and run_supercombo rolls it into feat_q on the next frame.
+        numpy_keys['prev_feat'] = np.zeros((shape[0], shape[2]), dtype=np.float32)
       else:
         numpy_keys[key] = np.zeros(shape, dtype=np.float32)
     elif len(shape) == 2:
@@ -229,7 +240,7 @@ def make_supercombo_input_queues(input_shapes, frame_skip, device):
 
 
 def make_run_supercombo(model_runner, nv12: NV12Frame, model_w, model_h,
-                        features_slice, frame_skip, input_shapes, prepare_only=False):
+                        frame_skip, input_shapes, prepare_only=False):
   frame_prepare = make_frame_prepare(nv12, model_w, model_h)
   sample_skip_fn = partial(sample_skip, frame_skip=frame_skip)
   sample_desire_fn = partial(sample_desire, frame_skip=frame_skip)
@@ -246,6 +257,8 @@ def make_run_supercombo(model_runner, nv12: NV12Frame, model_w, model_h,
                      frame, big_frame, **kwargs):
     desire = kwargs.get(desire_key)
     traffic_convention = kwargs.get('traffic_convention')
+    # the previous frame's hidden_state, written back host-side by ModelState.run
+    prev_feat = kwargs['prev_feat']
     tfm = kwargs['tfm']
     big_tfm = kwargs['big_tfm']
 
@@ -253,7 +266,8 @@ def make_run_supercombo(model_runner, nv12: NV12Frame, model_w, model_h,
     big_tfm = big_tfm.to(Device.DEFAULT)
     desire = desire.to(Device.DEFAULT)
     traffic_convention = traffic_convention.to(Device.DEFAULT)
-    Tensor.realize(tfm, big_tfm, desire, traffic_convention)
+    prev_feat = prev_feat.to(Device.DEFAULT)
+    Tensor.realize(tfm, big_tfm, desire, traffic_convention, prev_feat)
 
     img = shift_and_sample(img_q, frame_prepare(frame, tfm).unsqueeze(0), sample_skip_fn)
     big_img = shift_and_sample(big_img_q, frame_prepare(big_frame, big_tfm).unsqueeze(0), sample_skip_fn)
@@ -262,7 +276,12 @@ def make_run_supercombo(model_runner, nv12: NV12Frame, model_w, model_h,
       return img, big_img
 
     desire_buf = shift_and_sample(desire_q, desire.reshape(1, 1, -1), sample_desire_fn)
-    feat_buf = sample_skip_fn(feat_q)
+    # Roll the recurrent state in *before* the forward pass, so the queue write is part of the
+    # graph that produces features_buffer. Doing it afterwards from model_out -- as this used to --
+    # leaves the assign contributing to no output, and TinyJit(prune=True) drops it: feat_q stayed
+    # all zeros for the model's entire life, so deep-RL models ran with no temporal context and
+    # commanded roughly a third of the curvature their own plan head asked for.
+    feat_buf = shift_and_sample(feat_q, prev_feat.reshape(1, 1, -1), sample_skip_fn)
 
     inputs = {road_img_key: img, wide_img_key: big_img,
               desire_key: desire_buf, 'features_buffer': feat_buf,
@@ -271,12 +290,7 @@ def make_run_supercombo(model_runner, nv12: NV12Frame, model_w, model_h,
       if k in kwargs:
         inputs[k] = kwargs[k].to(Device.DEFAULT)
 
-    model_out = next(iter(model_runner(inputs).values())).cast('float32')
-
-    new_feat = model_out[:, features_slice].reshape(1, -1).unsqueeze(0)
-    shift_and_sample(feat_q, new_feat, sample_skip_fn)
-
-    return model_out
+    return next(iter(model_runner(inputs).values())).cast('float32')
 
   return run_supercombo
 
@@ -341,11 +355,10 @@ def compile_supercombo(nv12: NV12Frame, model_w, model_h, prepare_only, frame_sk
                        model_runner, metadata):
   print(f"Compiling combined supercombo JIT for {nv12.width}x{nv12.height} (prepare_only={prepare_only})...")
 
-  features_slice = metadata['output_slices']['hidden_state']
   input_shapes = metadata['input_shapes']
 
   _run = make_run_supercombo(model_runner, nv12, model_w, model_h,
-                             features_slice, frame_skip, input_shapes, prepare_only)
+                             frame_skip, input_shapes, prepare_only)
   run_jit = TinyJit(_run, prune=True)
 
   input_queues, npy = make_supercombo_input_queues(input_shapes, frame_skip, Device.DEFAULT)
