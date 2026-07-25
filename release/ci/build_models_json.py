@@ -115,6 +115,36 @@ CUSTOM_BUNDLES = [
       }
     ],
   },
+  {
+    # commaai/openpilot branch `good-lat-no-change-long`, pushed 2026-07-25. No PR, so this is
+    # pinned to the branch head and the ONNX is mirrored on the CDN -- an unreferenced branch can
+    # be deleted or rebased out from under us at any time.
+    "index": 1002,
+    "short_name": "GLNCL",
+    "display_name": "Good Lat, No Change Long (July 25, 2026)",
+    "is_20hz": True,
+    "ref": "ccca9e06ec5f1a543aeb7a0481e96bf8bbc04788",
+    "environment": "development",
+    "runner": "tinygrad",
+    "minimum_selector_version": str(REQUIRED_SELECTOR_VERSION),
+    "generation": "12",
+    # The branch's one code change is LAT_SMOOTH_SECONDS 0.0 -> 0.1, long left at master's 0.3 --
+    # which is the "good lat, no change long" the name is about. Neither Rebel Legion's 0.1/0.1
+    # nor master's 0.0/0.3.
+    "overrides": {"folder": "RL Models", "lat": ".1", "long": ".3"},
+    "models": [
+      {
+        "type": "supercombo",
+        "artifact": {
+          "file_name": "driving_glncl_tinygrad.pkl",
+          "download_uri": {
+            "url": f"{CDN}/good-lat-no-change-long-2026-07-25/driving_glncl_tinygrad.pkl",
+            "sha256": "fb6256858e3808ca859d580c513b830c5500fb02f88f54617e057f0c77e063e8",
+          },
+        },
+      }
+    ],
+  },
 ]
 
 
