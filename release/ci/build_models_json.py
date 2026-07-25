@@ -67,11 +67,14 @@ CUSTOM_BUNDLES = [
     "models": [
       {
         "type": "supercombo",
+        # v2: rebuilt after the supercombo recurrent-state fix. The v1 pkl ran with feat_q
+        # permanently zeroed (TinyJit pruned the queue write) and commanded 48% of the correct
+        # lateral action. Renamed rather than replaced in place so no client can keep a cached v1.
         "artifact": {
-          "file_name": "driving_rl_tinygrad.pkl",
+          "file_name": "driving_rl_v2_tinygrad.pkl",
           "download_uri": {
-            "url": f"{CDN}/rebel-legion-2026-07-23/driving_rl_tinygrad.pkl",
-            "sha256": "0ebc267d34033c96d2ae105127e4f08417d590dbe751b088efadf8e6711506ac",
+            "url": f"{CDN}/rebel-legion-2026-07-23/driving_rl_v2_tinygrad.pkl",
+            "sha256": "9eb0e9d13427a1195d7ec873633ce7259009706c1f9c9b0f6520fd0311d0f4b7",
           },
         },
       }
