@@ -47,11 +47,12 @@ RECOMPILED = {
 
 # Models with no upstream bundle to inherit from. Index 1000+ so upstream indices can never
 # collide -- `index` is selection identity in the manager, not just sort order -- and so they
-# sort to the top of the selector, which orders by index descending.
-CUSTOM_INDEX_BASE = 1000
-
+# sort to the top of the selector, which orders by index descending. Spelled out per bundle
+# rather than derived from list position, so reordering this list can never silently hand a
+# user's selected model a different index.
 CUSTOM_BUNDLES = [
   {
+    "index": 1000,
     # commaai/openpilot#38164, merged 2026-07-23 and reverted the next day by #38449.
     # Compiled from the ONNX at that commit; needs tinygrad >= ef37830d to build at all.
     "short_name": "RL",
@@ -75,6 +76,40 @@ CUSTOM_BUNDLES = [
           "download_uri": {
             "url": f"{CDN}/rebel-legion-2026-07-23/driving_rl_v2_tinygrad.pkl",
             "sha256": "9eb0e9d13427a1195d7ec873633ce7259009706c1f9c9b0f6520fd0311d0f4b7",
+          },
+        },
+      }
+    ],
+  },
+  {
+    # commaai/openpilot#38233 "Deeper, Longer, Better?" -- an ONNX-only swap on a master branch,
+    # still open (and going stale) as of 2026-07-25, so it is pinned to the PR head rather than
+    # a merge commit. The ONNX is mirrored next to the pkl on the CDN in case the branch goes.
+    "index": 1001,
+    "short_name": "DLB",
+    "display_name": "Deeper Longer Better (June 24, 2026)",
+    "is_20hz": True,
+    "ref": "a720e61e9c9bab19b6d213c540c3346da3b500b1",
+    "environment": "development",
+    "runner": "tinygrad",
+    "minimum_selector_version": str(REQUIRED_SELECTOR_VERSION),
+    "generation": "12",
+    # Not Rebel Legion's 0.1/0.1: those came with the RL branch a month later. This model's own
+    # branch is master, which runs LAT/LONG_SMOOTH_SECONDS at 0.0/0.3 -- the settings comma's
+    # process replay and model review evaluated it under.
+    "overrides": {"folder": "Master Models", "lat": ".0", "long": ".3"},
+    "models": [
+      {
+        # Same interface as Rebel Legion -- identical input shapes and output slices, 2580 wide
+        # with an `action` head -- so it runs the same supercombo path, frame_skip 4 and all.
+        # Master's own supercombo is 2576 wide with no `action` head and has its curvature
+        # derived from the plan; this one is steered straight off the action output.
+        "type": "supercombo",
+        "artifact": {
+          "file_name": "driving_dlb_tinygrad.pkl",
+          "download_uri": {
+            "url": f"{CDN}/deeper-longer-better-2026-06-24/driving_dlb_tinygrad.pkl",
+            "sha256": "57c5a21b8a64d3c476d25a73ae3a29179bcbfd82c2d91e1206ec66a2f85e9861",
           },
         },
       }
@@ -116,8 +151,7 @@ def main() -> int:
     bundles.append(rehost(by_short[short_name], artifact))
     print(f"  rehosted {by_short[short_name]['index']:>4}: {by_short[short_name]['display_name']}")
 
-  for offset, bundle in enumerate(CUSTOM_BUNDLES):
-    bundle = {**bundle, "index": CUSTOM_INDEX_BASE + offset}
+  for bundle in CUSTOM_BUNDLES:
     bundles.append(bundle)
     print(f"  custom   {bundle['index']:>4}: {bundle['display_name']}")
 
