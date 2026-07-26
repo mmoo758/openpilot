@@ -145,6 +145,35 @@ CUSTOM_BUNDLES = [
       }
     ],
   },
+  {
+    # commaai/openpilot branch `get-your-hopes-up`, pushed 2026-07-26. Branch only, no PR, so `ref`
+    # pins the head and the ONNX is mirrored on the CDN. Same smoothing changes as
+    # good-lat-no-change-long -- the difference between the two is purely the checkpoint, this one
+    # being e77ceb63-f56f-4db4-a7e7-680b9ac944a2/400.
+    "index": 1003,
+    "short_name": "GYHU",
+    "display_name": "Get Your Hopes Up (July 26, 2026)",
+    "is_20hz": True,
+    "ref": "574735edc6e1aafdc2a69395f9a32e7f5cc4b62b",
+    "environment": "development",
+    "runner": "tinygrad",
+    "minimum_selector_version": str(REQUIRED_SELECTOR_VERSION),
+    "generation": "12",
+    # LAT_SMOOTH_SECONDS 0.0 -> 0.1 over its master base, long left alone at 0.3.
+    "overrides": {"folder": "RL Models", "lat": ".1", "long": ".3"},
+    "models": [
+      {
+        "type": "supercombo",
+        "artifact": {
+          "file_name": "driving_gyhu_tinygrad.pkl",
+          "download_uri": {
+            "url": f"{CDN}/get-your-hopes-up-2026-07-26/driving_gyhu_tinygrad.pkl",
+            "sha256": "7b115b8a03b9b33611a9f9ec1a3bd16996fe3b8cad08a9d9abb9b490752ddc20",
+          },
+        },
+      }
+    ],
+  },
 ]
 
 
