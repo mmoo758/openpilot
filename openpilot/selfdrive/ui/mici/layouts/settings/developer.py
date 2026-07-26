@@ -4,6 +4,7 @@ import subprocess
 from collections.abc import Callable
 
 from openpilot.common.basedir import BASEDIR
+from openpilot.common.swaglog import cloudlog
 from openpilot.common.time_helpers import system_time_valid
 from openpilot.system.ui.widgets.scroller import NavScroller
 from openpilot.selfdrive.ui.mici.widgets.button import BigButton, BigToggle, BigParamControl, BigCircleParamControl, GreyBigButton
@@ -13,7 +14,7 @@ from openpilot.selfdrive.ui.layouts.settings.common import restart_needed_callba
 from openpilot.selfdrive.ui.ui_state import ui_state
 from openpilot.selfdrive.ui.widgets.ssh_key import SshKeyFetcher
 
-BRIDGE_PATH = os.path.join(BASEDIR, "cereal", "messaging", "bridge")
+BRIDGE_PATH = os.path.join(BASEDIR, "openpilot", "cereal", "messaging", "bridge")
 _bridge_proc: subprocess.Popen | None = None
 
 class AlphaLongConfirmPage(NavScroller):
@@ -184,7 +185,12 @@ class DeveloperLayoutMici(NavScroller):
     global _bridge_proc
     if state:
       if _bridge_proc is None or _bridge_proc.poll() is not None:
-        _bridge_proc = subprocess.Popen([BRIDGE_PATH, "can"])
+        try:
+          _bridge_proc = subprocess.Popen([BRIDGE_PATH, "can"])
+        except OSError:
+          cloudlog.exception("failed to start CAN bridge")
+          _bridge_proc = None
+          self._can_bridge_toggle.set_checked(False)
     else:
       if _bridge_proc is not None and _bridge_proc.poll() is None:
         _bridge_proc.send_signal(signal.SIGTERM)

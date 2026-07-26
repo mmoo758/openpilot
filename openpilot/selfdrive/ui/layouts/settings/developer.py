@@ -4,6 +4,7 @@ import subprocess
 
 from openpilot.common.basedir import BASEDIR
 from openpilot.common.params import Params
+from openpilot.common.swaglog import cloudlog
 from openpilot.selfdrive.ui.widgets.ssh_key import ssh_key_item
 from openpilot.selfdrive.ui.ui_state import ui_state
 from openpilot.system.ui.widgets import Widget
@@ -17,7 +18,7 @@ from openpilot.system.ui.widgets import DialogResult
 if gui_app.sunnypilot_ui():
   from openpilot.system.ui.sunnypilot.widgets.list_view import toggle_item_sp as toggle_item
 
-BRIDGE_PATH = os.path.join(BASEDIR, "cereal", "messaging", "bridge")
+BRIDGE_PATH = os.path.join(BASEDIR, "openpilot", "cereal", "messaging", "bridge")
 _bridge_proc: subprocess.Popen | None = None
 
 # Description constants
@@ -199,7 +200,12 @@ class DeveloperLayout(Widget):
     global _bridge_proc
     if state:
       if _bridge_proc is None or _bridge_proc.poll() is not None:
-        _bridge_proc = subprocess.Popen([BRIDGE_PATH, "can"])
+        try:
+          _bridge_proc = subprocess.Popen([BRIDGE_PATH, "can"])
+        except OSError:
+          cloudlog.exception("failed to start CAN bridge")
+          _bridge_proc = None
+          self._can_bridge_toggle.action_item.set_state(False)
     else:
       if _bridge_proc is not None and _bridge_proc.poll() is None:
         _bridge_proc.send_signal(signal.SIGTERM)
