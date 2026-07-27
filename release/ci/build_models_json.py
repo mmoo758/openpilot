@@ -174,6 +174,36 @@ CUSTOM_BUNDLES = [
       }
     ],
   },
+  {
+    # commaai/openpilot#38475 "Rebellious Hope model", opened 2026-07-27 and still open, so `ref`
+    # pins the PR head rather than a merge commit and the ONNX is mirrored on the CDN. Third model
+    # in a row carrying the same one-line code change as good-lat-no-change-long and
+    # get-your-hopes-up; what differs is the checkpoint, here
+    # d0c60276-564d-4b97-a59c-f1ab853d8c26/400.
+    "index": 1004,
+    "short_name": "RHOPE",
+    "display_name": "Rebellious Hope (July 27, 2026)",
+    "is_20hz": True,
+    "ref": "99a17f6ebb14180fbbe70ad57a6b4e0cdd6d8da1",
+    "environment": "development",
+    "runner": "tinygrad",
+    "minimum_selector_version": str(REQUIRED_SELECTOR_VERSION),
+    "generation": "12",
+    # LAT_SMOOTH_SECONDS 0.0 -> 0.1 over its master base, long left alone at 0.3.
+    "overrides": {"folder": "RL Models", "lat": ".1", "long": ".3"},
+    "models": [
+      {
+        "type": "supercombo",
+        "artifact": {
+          "file_name": "driving_rhope_tinygrad.pkl",
+          "download_uri": {
+            "url": f"{CDN}/rebellious-hope-2026-07-27/driving_rhope_tinygrad.pkl",
+            "sha256": "7c5da8ce9fff024bae3ff208be20e53722cc738a28a6dcd7ee859e0fe88378fc",
+          },
+        },
+      }
+    ],
+  },
 ]
 
 
